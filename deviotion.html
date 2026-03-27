@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>매일묵상 링크모음</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ssu-blue: #003087;
+    --ssu-blue-mid: #1a4fa0;
+    --ssu-blue-light: #e8eef7;
+    --ssu-accent: #c8a84b;
+    --text-main: #1a1a2e;
+    --text-sub: #5a6073;
+    --text-muted: #9ba3b8;
+    --border: #dde2ee;
+    --bg: #f5f7fc;
+    --white: #ffffff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--text-main);
+    min-height: 100vh;
+    font-size: 10px;
+  }
+  .topbar {
+    background: var(--ssu-blue);
+    padding: 0 32px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .topbar-brand { display: flex; align-items: center; gap: 10px; }
+  .brand-mark { width: 28px; height: 28px; }
+  .brand-name { color: #fff; font-size: 13px; font-weight: 700; letter-spacing: 0.04em; }
+  .brand-sub { color: rgba(255,255,255,0.55); font-size: 10px; font-weight: 300; margin-left: 4px; letter-spacing: 0.06em; }
+  .topbar-date { color: rgba(255,255,255,0.5); font-size: 10px; font-weight: 300; letter-spacing: 0.06em; }
+  .hero {
+    background: var(--white);
+    border-bottom: 2px solid var(--ssu-blue);
+    padding: 28px 32px 22px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .hero-title { font-size: 22px; font-weight: 700; color: var(--ssu-blue); letter-spacing: -0.02em; line-height: 1.15; }
+  .hero-title span { display: block; font-size: 11px; font-weight: 400; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+  .hero-verse { text-align: right; font-size: 10px; color: var(--text-sub); line-height: 1.7; font-weight: 300; }
+  .hero-verse strong { color: var(--ssu-blue); font-weight: 500; }
+  .main { max-width: 720px; margin: 0 auto; padding: 28px 20px 48px; }
+  .section { margin-bottom: 24px; }
+  .section-label {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 10px; font-weight: 500; color: var(--ssu-blue);
+    letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 10px; padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-label::before { content: ''; width: 3px; height: 12px; background: var(--ssu-accent); border-radius: 2px; flex-shrink: 0; }
+  .link-card {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--white); border: 1px solid var(--border); border-radius: 6px;
+    padding: 14px 18px; text-decoration: none; color: inherit;
+    transition: border-color 0.18s, box-shadow 0.18s, transform 0.18s;
+    margin-bottom: 8px;
+  }
+  .link-card:hover { border-color: var(--ssu-blue-mid); box-shadow: 0 3px 14px rgba(0,48,135,0.10); transform: translateY(-1px); }
+  .link-card:hover .card-arrow { opacity: 1; transform: translateX(0); }
+  .card-icon { width: 34px; height: 34px; border-radius: 6px; background: var(--ssu-blue-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .card-icon svg { width: 16px; height: 16px; }
+  .card-info { flex: 1; min-width: 0; }
+  .card-name { font-size: 12px; font-weight: 500; color: var(--text-main); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-url { font-size: 10px; color: var(--text-muted); font-weight: 300; }
+  .card-badge { font-size: 9px; font-weight: 500; color: var(--ssu-blue); background: var(--ssu-blue-light); border-radius: 3px; padding: 2px 7px; letter-spacing: 0.04em; flex-shrink: 0; }
+  .card-arrow { color: var(--ssu-blue-mid); font-size: 14px; opacity: 0; transform: translateX(-4px); transition: opacity 0.18s, transform 0.18s; flex-shrink: 0; margin-left: 4px; }
+  .footer { background: var(--ssu-blue); padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+  .footer-copy { font-size: 9px; color: rgba(255,255,255,0.45); font-weight: 300; letter-spacing: 0.06em; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">
+    <svg class="brand-mark" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="14" cy="14" r="13" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+      <line x1="14" y1="6" x2="14" y2="22" stroke="#c8a84b" stroke-width="2" stroke-linecap="round"/>
+      <line x1="7" y1="12" x2="21" y2="12" stroke="#c8a84b" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <span class="brand-name">YB Family 매일묵상<span class="brand-sub">Daily Devotion</span></span>
+  </div>
+  <span class="topbar-date" id="today-date"></span>
+</div>
+
+<div class="hero">
+  <div class="hero-title">
+    <span>YB Family Devotion Links</span>
+    YB Family 매일묵상
+  </div>
+  <div class="hero-verse">
+    "주의 말씀은 내 발에 등이요<br>
+    내 길에 빛이니이다"<br>
+    <strong>— 시편 119:105</strong>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="section">
+    <div class="section-label">성경 묵상 · Bible Reading</div>
+    <a class="link-card" href="https://sum.su.or.kr" target="_blank" rel="noopener">
+      <div class="card-icon"><svg viewBox="0 0 20 20" fill="none"><rect x="3" y="2" width="12" height="16" rx="1.5" stroke="#003087" stroke-width="1.3"/><line x1="6.5" y1="7" x2="11.5" y2="7" stroke="#003087" stroke-width="1.1" stroke-linecap="round"/><line x1="6.5" y1="9.5" x2="11.5" y2="9.5" stroke="#003087" stroke-width="1.1" stroke-linecap="round"/><line x1="6.5" y1="12" x2="10" y2="12" stroke="#003087" stroke-width="1.1" stroke-linecap="round"/></svg></div>
+      <div class="card-info"><div class="card-name">매일성경</div><div class="card-url">sum.su.or.kr</div></div>
+      <span class="card-badge">성서유니온</span><span class="card-arrow">→</span>
+    </a>
+    <a class="link-card" href="https://utmost.org/updated/today/" target="_blank" rel="noopener">
+      <div class="card-icon"><svg viewBox="0 0 20 20" fill="none"><path d="M10 5C10 5 7 4 4 5V16C7 15 10 16 10 16V5Z" stroke="#003087" stroke-width="1.2" stroke-linejoin="round"/><path d="M10 5C10 5 13 4 16 5V16C13 15 10 16 10 16V5Z" stroke="#003087" stroke-width="1.2" stroke-linejoin="round"/><line x1="10" y1="5" x2="10" y2="16" stroke="#003087" stroke-width="0.9" stroke-dasharray="1.5 1.5"/></svg></div>
+      <div class="card-info"><div class="card-name">주님은 나의 최고봉</div><div class="card-url">utmost.org/updated/today</div></div>
+      <span class="card-badge">My Utmost</span><span class="card-arrow">→</span>
+    </a>
+    <a class="link-card" href="https://prs.app" target="_blank" rel="noopener">
+      <div class="card-icon"><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.5" stroke="#003087" stroke-width="1.3"/><line x1="10" y1="4" x2="10" y2="7" stroke="#003087" stroke-width="1.3" stroke-linecap="round"/><line x1="10" y1="8" x2="10" y2="12" stroke="#003087" stroke-width="1.6" stroke-linecap="round"/><line x1="10" y1="13" x2="10" y2="16" stroke="#003087" stroke-width="1.3" stroke-linecap="round"/><line x1="6.5" y1="7" x2="13.5" y2="7" stroke="#003087" stroke-width="1.1" stroke-linecap="round"/></svg></div>
+      <div class="card-info"><div class="card-name">Public Reading of Scripture</div><div class="card-url">prs.app</div></div>
+      <span class="card-badge">PRS</span><span class="card-arrow">→</span>
+    </a>
+  </div>
+
+  <div class="section">
+    <div class="section-label">갈릴리침례교회 · GBC Seoul</div>
+    <a class="link-card" href="https://sites.google.com/view/gbc-seoul/weekly-bulletin" target="_blank" rel="noopener">
+      <div class="card-icon"><svg viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="14" height="14" rx="1.5" stroke="#003087" stroke-width="1.3"/><line x1="6" y1="7" x2="14" y2="7" stroke="#003087" stroke-width="1.1" stroke-linecap="round"/><line x1="6" y1="10" x2="14" y2="10" stroke="#003087" stroke-width="1.1" stroke-linecap="round"/><line x1="6" y1="13" x2="10" y2="13" stroke="#003087" stroke-width="1.1" stroke-linecap="round"/></svg></div>
+      <div class="card-info"><div class="card-name">주보</div><div class="card-url">sites.google.com/view/gbc-seoul/weekly-bulletin</div></div>
+      <span class="card-badge">Weekly</span><span class="card-arrow">→</span>
+    </a>
+    <a class="link-card" href="http://tiny.cc/GBCG" target="_blank" rel="noopener">
+      <div class="card-icon"><svg viewBox="0 0 20 20" fill="none"><rect x="2" y="5" width="12" height="9" rx="1.5" stroke="#003087" stroke-width="1.2"/><path d="M14 9l4-3v8l-4-3V9z" stroke="#003087" stroke-width="1.2" stroke-linejoin="round"/></svg></div>
+      <div class="card-info"><div class="card-name">주일예배 실황</div><div class="card-url">tiny.cc/GBCG</div></div>
+      <span class="card-badge">Live</span><span class="card-arrow">→</span>
+    </a>
+    <a class="link-card" href="https://docs.google.com/document/d/1Ctk9KslIXyj0Gs5h8KPPkVsbRB5lk2fpm0yZAKUQG6I/edit?tab=t.0" target="_blank" rel="noopener">
+      <div class="card-icon"><svg viewBox="0 0 20 20" fill="none"><path d="M10 3C10 3 5 6 5 11a5 5 0 0010 0c0-5-5-8-5-8z" stroke="#003087" stroke-width="1.2" stroke-linejoin="round"/><line x1="10" y1="8" x2="10" y2="13" stroke="#003087" stroke-width="1.3" stroke-linecap="round"/><line x1="7.5" y1="10.5" x2="12.5" y2="10.5" stroke="#003087" stroke-width="1.1" stroke-linecap="round"/></svg></div>
+      <div class="card-info"><div class="card-name">매일저녁 기도제목</div><div class="card-url">docs.google.com</div></div>
+      <span class="card-badge">기도</span><span class="card-arrow">→</span>
+    </a>
+    <a class="link-card" href="https://docs.google.com/document/d/1gIhexZ1f_TW2bs71XydSmQ4LOfLR9Vw7t5_TsXEkUKU/edit?tab=t.0" target="_blank" rel="noopener">
+      <div class="card-icon"><svg viewBox="0 0 20 20" fill="none"><path d="M5 3h7l4 4v10a1 1 0 01-1 1H5a1 1 0 01-1-1V4a1 1 0 011-1z" stroke="#003087" stroke-width="1.2" stroke-linejoin="round"/><path d="M12 3v4h4" stroke="#003087" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><line x1="7" y1="10" x2="13" y2="10" stroke="#003087" stroke-width="1.1" stroke-linecap="round"/><line x1="7" y1="13" x2="11" y2="13" stroke="#003087" stroke-width="1.1" stroke-linecap="round"/></svg></div>
+      <div class="card-info"><div class="card-name">PLM 전체</div><div class="card-url">docs.google.com</div></div>
+      <span class="card-badge">Docs</span><span class="card-arrow">→</span>
+    </a>
+    <a class="link-card" href="https://docs.google.com/document/d/1Ctk9KslIXyj0Gs5h8KPPkVsbRB5lk2fpm0yZAKUQG6I/edit?tab=t.0" target="_blank" rel="noopener">
+      <div class="card-icon"><svg viewBox="0 0 20 20" fill="none"><path d="M5 3h7l4 4v10a1 1 0 01-1 1H5a1 1 0 01-1-1V4a1 1 0 011-1z" stroke="#003087" stroke-width="1.2" stroke-linejoin="round"/><path d="M12 3v4h4" stroke="#003087" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><line x1="7" y1="10" x2="13" y2="10" stroke="#003087" stroke-width="1.1" stroke-linecap="round"/><line x1="7" y1="13" x2="10" y2="13" stroke="#003087" stroke-width="1.1" stroke-linecap="round"/></svg></div>
+      <div class="card-info"><div class="card-name">PLM 요약</div><div class="card-url">docs.google.com</div></div>
+      <span class="card-badge">Docs</span><span class="card-arrow">→</span>
+    </a>
+  </div>
+
+</div>
+
+<div class="footer">
+  <span class="footer-copy">YOUNGBAE KIM</span>
+</div>
+
+<script>
+  const d = new Date();
+  const days = ['일','월','화','수','목','금','토'];
+  document.getElementById('today-date').textContent =
+    d.getFullYear() + '. ' +
+    String(d.getMonth()+1).padStart(2,'0') + '. ' +
+    String(d.getDate()).padStart(2,'0') + ' (' + days[d.getDay()] + ')';
+</script>
+</body>
+</html>
+```
+
+---
+
+붙여넣기 후 **Commit changes** → **Settings → Pages → Branch: main / root → Save** 하시면
+```
+https://Youngbaekim.github.io/devotion/devotion.html
