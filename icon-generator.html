@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>아이콘 생성기</title></head>
+<body style="background:#1a1a2e;display:flex;flex-direction:column;align-items:center;padding:2rem;gap:1.5rem;font-family:sans-serif">
+<h2 style="color:#fff;font-size:16px;margin:0">아이콘 생성 — 각 버튼을 눌러 저장하세요</h2>
+
+<canvas id="c192" width="192" height="192" style="display:none"></canvas>
+<canvas id="c512" width="512" height="512" style="display:none"></canvas>
+
+<div style="display:flex;gap:12px">
+  <button onclick="download(192)" style="background:#2d5a8e;color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px">icon-192.png 저장</button>
+  <button onclick="download(512)" style="background:#2d5a8e;color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px">icon-512.png 저장</button>
+</div>
+
+<canvas id="preview" width="192" height="192" style="border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,0.4)"></canvas>
+<p style="color:#aaa;font-size:12px">미리보기</p>
+
+<script>
+function drawIcon(ctx, size) {
+  const s = size;
+  const r = s * 0.18;
+
+  // Background gradient
+  const grad = ctx.createRadialGradient(s*0.4, s*0.35, 0, s*0.5, s*0.5, s*0.7);
+  grad.addColorStop(0, '#2d5a8e');
+  grad.addColorStop(1, '#1a1a2e');
+  ctx.fillStyle = grad;
+  roundRect(ctx, 0, 0, s, s, r);
+  ctx.fill();
+
+  // Cross symbol
+  const cx = s * 0.5;
+  const cy = s * 0.44;
+  const cw = s * 0.08;
+  const ch = s * 0.38;
+  const hw = s * 0.32;
+  const hh = s * 0.08;
+  const hy = cy - ch * 0.18;
+
+  ctx.fillStyle = 'rgba(255,255,255,0.92)';
+  // Vertical bar
+  roundRect(ctx, cx - cw/2, cy - ch/2, cw, ch, cw*0.4);
+  ctx.fill();
+  // Horizontal bar
+  roundRect(ctx, cx - hw/2, hy - hh/2, hw, hh, hh*0.4);
+  ctx.fill();
+
+  // Korean text
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  ctx.font = `${s*0.108}px 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('매일묵상', cx, cy + ch * 0.62);
+
+  // Subtle glow ring
+  ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+  ctx.lineWidth = s * 0.015;
+  ctx.beginPath();
+  ctx.arc(cx, s*0.44, s*0.3, 0, Math.PI*2);
+  ctx.stroke();
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.lineTo(x+w-r, y);
+  ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+  ctx.lineTo(x+w, y+h-r);
+  ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+  ctx.lineTo(x+r, y+h);
+  ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+  ctx.lineTo(x, y+r);
+  ctx.quadraticCurveTo(x, y, x+r, y);
+  ctx.closePath();
+}
+
+function download(size) {
+  const canvas = document.getElementById('c' + size);
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, size, size);
+  drawIcon(ctx, size);
+  const a = document.createElement('a');
+  a.download = 'icon-' + size + '.png';
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+}
+
+// Draw preview
+const pCtx = document.getElementById('preview').getContext('2d');
+drawIcon(pCtx, 192);
+</script>
+</body>
+</html>

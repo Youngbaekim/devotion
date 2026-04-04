@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>매일묵상 PWA 설치 가이드</title>
+<style>
+  body { font-family: -apple-system, 'Noto Sans KR', sans-serif; background: #f5f5f5; margin: 0; padding: 2rem 1rem; color: #333; }
+  .card { background: #fff; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  h1 { font-size: 20px; margin: 0 0 4px; color: #1a1a2e; }
+  h2 { font-size: 15px; font-weight: 600; margin: 0 0 12px; color: #2d5a8e; }
+  .step { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+  .num { background: #2d5a8e; color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; margin-top: 2px; }
+  .step-text { font-size: 14px; line-height: 1.6; }
+  code { background: #f0f4f8; border: 1px solid #d0dde8; border-radius: 6px; padding: 0.8rem 1rem; display: block; font-size: 12px; line-height: 1.7; white-space: pre-wrap; word-break: break-all; margin: 8px 0; color: #1a3a5c; font-family: 'Courier New', monospace; }
+  .tag { color: #0066cc; }
+  .attr { color: #008000; }
+  .val { color: #cc2200; }
+  .note { background: #fff8e1; border-left: 3px solid #f0a500; padding: 0.7rem 1rem; border-radius: 0 8px 8px 0; font-size: 13px; color: #7a5a00; margin-top: 8px; }
+  .badge { display: inline-block; background: #e8f0fe; color: #1a56c4; font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1>매일묵상 앱 바로가기 설치</h1>
+  <p style="font-size:13px;color:#666;margin:0">GitHub Repository에 아래 파일 3개를 추가하면<br>스마트폰 바탕화면에 앱처럼 설치됩니다.</p>
+</div>
+
+<div class="card">
+  <h2>📁 추가할 파일 목록</h2>
+  <div class="step">
+    <div class="num">1</div>
+    <div class="step-text"><strong>manifest.json</strong> — 앱 이름·색상·아이콘 정의</div>
+  </div>
+  <div class="step">
+    <div class="num">2</div>
+    <div class="step-text"><strong>sw.js</strong> — 서비스워커 (오프라인 지원)</div>
+  </div>
+  <div class="step">
+    <div class="num">3</div>
+    <div class="step-text"><strong>icon-192.png / icon-512.png</strong> — 앱 아이콘 이미지</div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>📝 index.html &lt;head&gt;에 추가할 코드</h2>
+  <p style="font-size:13px;color:#666;margin-bottom:8px">기존 &lt;head&gt; 태그 안에 아래 4줄을 복사·붙여넣기 하세요.</p>
+<code><span class="tag">&lt;link</span> <span class="attr">rel=</span><span class="val">"manifest"</span> <span class="attr">href=</span><span class="val">"/devotion/manifest.json"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">name=</span><span class="val">"apple-mobile-web-app-capable"</span> <span class="attr">content=</span><span class="val">"yes"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">name=</span><span class="val">"apple-mobile-web-app-status-bar-style"</span> <span class="attr">content=</span><span class="val">"black-translucent"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">name=</span><span class="val">"apple-mobile-web-app-title"</span> <span class="attr">content=</span><span class="val">"매일묵상"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">name=</span><span class="val">"theme-color"</span> <span class="attr">content=</span><span class="val">"#2d5a8e"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">rel=</span><span class="val">"apple-touch-icon"</span> <span class="attr">href=</span><span class="val">"/devotion/icon-192.png"</span><span class="tag">&gt;</span></code>
+</div>
+
+<div class="card">
+  <h2>⚙️ &lt;/body&gt; 직전에 추가할 코드</h2>
+  <p style="font-size:13px;color:#666;margin-bottom:8px">서비스워커 등록 스크립트입니다.</p>
+<code><span class="tag">&lt;script&gt;</span>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/devotion/sw.js');
+  }
+<span class="tag">&lt;/script&gt;</span></code>
+</div>
+
+<div class="card">
+  <h2>📱 설치 방법</h2>
+  <p style="font-size:13px;color:#666;margin-bottom:12px">파일 업로드 후 아래 방법으로 설치하세요.</p>
+
+  <div class="step">
+    <div class="num" style="background:#555">🍎</div>
+    <div class="step-text">
+      <strong>iPhone (Safari)</strong><br>
+      Safari에서 사이트 열기 → 하단 <span class="badge">공유</span> 버튼 → <span class="badge">홈 화면에 추가</span>
+    </div>
+  </div>
+  <div class="step">
+    <div class="num" style="background:#34a853">▲</div>
+    <div class="step-text">
+      <strong>Android (Chrome)</strong><br>
+      Chrome에서 사이트 열기 → 우상단 메뉴(⋮) → <span class="badge">홈 화면에 추가</span>
+    </div>
+  </div>
+
+  <div class="note">설치 완료 시 주소 표시줄 없는 전체화면 앱으로 실행됩니다 🙏</div>
+</div>
+
+</body>
+</html>
