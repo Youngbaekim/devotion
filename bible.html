@@ -1,106 +1,122 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>YB 다본문 성경</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;500&family=Nanum+Myeongjo:wght@400;700&family=Nanum+Gothic&display=swap">
+<title>YB 1426 다본문 성경</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;500;700;900&family=Nanum+Myeongjo:wght@400;700&family=Nanum+Gothic&display=swap">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Noto Sans KR',sans-serif;background:#f3f4f6;height:100vh;overflow:hidden;display:flex;flex-direction:column}
+body{font-family:'Noto Sans KR',sans-serif;background:#f3f4f6;height:100dvh;overflow:hidden;display:flex;flex-direction:column}
 
-#header{padding:7px 14px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;gap:10px;background:#fff;flex-shrink:0}
-.header-title{font-size:15px;font-weight:900;font-family:'Noto Sans KR','Malgun Gothic',sans-serif;color:#111827;white-space:nowrap;flex-shrink:0;letter-spacing:-0.3px}
-.header-mid{display:flex;align-items:center;gap:7px;flex:1;flex-wrap:wrap}
-.ctrl-label{font-size:11px;color:#9ca3af;white-space:nowrap}
-.hdr-sel{font-size:12px;padding:3px 6px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#374151;cursor:pointer;outline:none}
-
-.size-wrap{display:flex;align-items:center;gap:2px}
-.size-val{font-size:13px;font-weight:600;min-width:24px;text-align:center;color:#374151}
-.size-btn{width:20px;height:20px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#6b7280;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;padding:0;line-height:1}
-.size-btn:hover{background:#f3f4f6}
-
-#add-panel-btn{display:flex;align-items:center;gap:4px;padding:5px 13px;border-radius:6px;border:none;background:#4f46e5;color:#fff;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background 0.15s;font-family:'Noto Sans KR',sans-serif}
+/* ── Header ── */
+#header{padding:6px 12px;border-bottom:1px solid #e5e7eb;background:#fff;flex-shrink:0;display:flex;flex-direction:column;gap:4px}
+.hdr-row1{display:flex;align-items:center;gap:8px}
+.hdr-row2{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.header-title{font-size:15px;font-weight:900;font-family:'Noto Sans KR',sans-serif;color:#111827;white-space:nowrap;flex:1;letter-spacing:-0.3px}
+.cl{font-size:11px;color:#9ca3af;white-space:nowrap}
+.hsel{font-size:12px;padding:3px 6px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#374151;cursor:pointer;outline:none}
+.swrap{display:flex;align-items:center;gap:2px}
+.sval{font-size:13px;font-weight:600;min-width:22px;text-align:center;color:#374151}
+.sbtn{width:22px;height:22px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#6b7280;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;padding:0;line-height:1}
+.sbtn:hover{background:#f3f4f6}
+#add-panel-btn{display:flex;align-items:center;gap:4px;padding:5px 13px;border-radius:6px;border:none;background:#4f46e5;color:#fff;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:'Noto Sans KR',sans-serif}
 #add-panel-btn:hover{background:#4338ca}
 #add-panel-btn:disabled{background:#a5b4fc;cursor:not-allowed}
-#add-panel-btn .plus-icon{font-size:16px;line-height:1}
 
-#panels-wrap{flex:1;display:flex;overflow-x:auto;overflow-y:hidden;min-height:0}
+/* ── Panels ── */
+#panels-wrap{flex:1;display:flex;overflow-x:auto;overflow-y:hidden;min-height:0;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory}
 #panels-wrap::-webkit-scrollbar{height:5px}
 #panels-wrap::-webkit-scrollbar-track{background:#f3f4f6}
 #panels-wrap::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:3px}
-#panels-wrap::-webkit-scrollbar-thumb:hover{background:#9ca3af}
 #panels{display:flex;height:100%;width:100%}
 
-.panel{flex:1;min-width:460px;display:flex;flex-direction:column;border-right:1px solid #e5e7eb;background:#fff;height:100%}
+.panel{flex:1;min-width:min(460px,92vw);display:flex;flex-direction:column;border-right:1px solid #e5e7eb;background:#fff;height:100%;scroll-snap-align:start}
 .panel-bar{padding:6px 8px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;gap:4px;flex-wrap:wrap;background:#f9fafb;flex-shrink:0;position:relative}
-.panel-text{flex:1;overflow-y:auto;padding:18px 20px}
+.panel-text{flex:1;overflow-y:auto;padding:16px 16px;-webkit-overflow-scrolling:touch}
 .panel-text::-webkit-scrollbar{width:4px}
 .panel-text::-webkit-scrollbar-thumb{background:#e5e7eb;border-radius:2px}
 
+/* Bar controls */
 select,button{font-family:'Noto Sans KR',sans-serif}
-.bar-sel{font-size:11px;padding:2px 4px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#374151;cursor:pointer;outline:none}
-.book-sel{flex:1;min-width:76px;font-size:12px;padding:2px 4px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#374151;cursor:pointer;outline:none}
-.arr-btn{font-size:13px;padding:2px 7px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#6b7280;cursor:pointer}
+.bar-sel{font-size:11px;padding:3px 5px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#374151;cursor:pointer;outline:none}
+.book-sel{flex:1;min-width:76px;font-size:12px;padding:3px 5px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#374151;cursor:pointer;outline:none}
+.arr-btn{font-size:14px;padding:3px 9px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#6b7280;cursor:pointer}
 .arr-btn:hover{background:#f3f4f6}
-.ch-btn{font-size:13px;font-weight:600;min-width:28px;padding:2px 5px;border-radius:4px;border:1px solid #c7d2fe;background:#eef2ff;color:#4f46e5;cursor:pointer}
+.ch-btn{font-size:13px;font-weight:600;min-width:30px;padding:3px 6px;border-radius:4px;border:1px solid #c7d2fe;background:#eef2ff;color:#4f46e5;cursor:pointer}
 .ch-btn:hover{background:#e0e7ff}
-.close-btn{font-size:12px;padding:2px 7px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#9ca3af;cursor:pointer;margin-left:auto}
-.close-btn:hover{background:#fee2e2;color:#ef4444;border-color:#fca5a5}
+.close-btn{font-size:12px;padding:3px 8px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#9ca3af;cursor:pointer;margin-left:auto}
+.close-btn:hover{background:#fee2e2;color:#ef4444}
 
-.ch-dropdown{position:absolute;top:calc(100% + 2px);left:0;z-index:300;background:#fff;border:1px solid #d1d5db;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,0.13);padding:6px;display:grid;grid-template-columns:repeat(6,1fr);gap:3px;max-height:220px;overflow-y:auto;min-width:180px}
+/* Chapter dropdown */
+.ch-dropdown{position:absolute;top:calc(100% + 2px);left:0;z-index:300;background:#fff;border:1px solid #d1d5db;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,0.15);padding:6px;display:grid;grid-template-columns:repeat(6,1fr);gap:3px;max-height:220px;overflow-y:auto;min-width:185px}
 .ch-dropdown::-webkit-scrollbar{width:4px}
 .ch-dropdown::-webkit-scrollbar-thumb{background:#e5e7eb;border-radius:2px}
-.ch-item{font-size:12px;padding:4px 2px;text-align:center;border-radius:4px;cursor:pointer;color:#374151;transition:all 0.1s}
+.ch-item{font-size:13px;padding:5px 2px;text-align:center;border-radius:4px;cursor:pointer;color:#374151;transition:all 0.1s}
 .ch-item:hover{background:#eef2ff;color:#4f46e5}
 .ch-item.cur{background:#4f46e5;color:#fff;font-weight:600}
 
+/* Verses */
 .ch-label{font-size:10px;color:#9ca3af;letter-spacing:3px;margin-bottom:14px;font-family:sans-serif}
 .verse-row{display:flex;gap:9px;padding:0 5px;cursor:pointer;border-left:2px solid transparent;transition:background 0.12s}
 .verse-row:hover{background:#f5f5f5}
 .verse-row.hl{background:#fef9ec;border-left-color:#f59e0b}
 .verse-row.rtl{flex-direction:row-reverse;border-left:none;border-right:2px solid transparent}
 .verse-row.rtl.hl{border-right-color:#f59e0b;border-left:none}
-.verse-num{font-size:10px;font-weight:700;min-width:18px;color:#f59e0b;font-family:monospace;flex-shrink:0;direction:ltr}
+.verse-num{font-size:10px;font-weight:700;min-width:18px;color:#f59e0b;font-family:monospace;flex-shrink:0;padding-top:3px}
 .verse-body{flex:1}
 .verse-text{color:#000}
 .verse-text sup{font-size:0.7em;color:#6366f1;font-weight:700;vertical-align:super}
 .verse-text i{font-style:italic}
-.verse-row.hl .verse-text{color:#000}
 .footnote{color:#555;margin-top:4px;padding-left:8px;border-left:2px solid #e5e7eb;line-height:1.6}
 .footnote sup{font-size:0.75em;color:#6366f1;font-weight:700;vertical-align:super}
-.footnote i{font-style:italic}
 
+/* Loading / Error */
 .loading{text-align:center;padding:60px 0;color:#9ca3af;font-size:13px}
 .spinner{font-size:22px;margin-bottom:10px;display:inline-block;animation:spin 1.5s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .err-msg{color:#ef4444;font-size:13px;padding:24px;line-height:1.8;text-align:center}
+
+/* ── Mobile ── */
+@media(max-width:600px){
+  #header{padding:5px 10px;gap:3px}
+  .header-title{font-size:13px}
+  #add-panel-btn{font-size:12px;padding:4px 10px}
+  .hsel{font-size:11px;padding:2px 5px}
+  .sval{font-size:12px}
+  .sbtn{width:20px;height:20px;font-size:11px}
+  .panel{min-width:min(460px,100vw)}
+  .panel-text{padding:12px 12px}
+  .arr-btn{padding:4px 10px;font-size:15px}
+  .ch-btn{min-width:32px;padding:4px 6px;font-size:14px}
+  .bar-sel,.book-sel{font-size:12px;padding:3px 5px}
+  .ch-item{font-size:14px;padding:6px 2px}
+}
 </style>
 </head>
 <body>
 
 <div id="header">
-  <span class="header-title">YB 1426 다본문 성경</span>
-  <div class="header-mid">
-    <span class="ctrl-label">폰트</span>
-    <select class="hdr-sel" id="font-sel">
+  <div class="hdr-row1">
+    <span class="header-title">YB 1426 다본문 성경</span>
+    <button id="add-panel-btn" onclick="addPanel()">＋ 추가</button>
+  </div>
+  <div class="hdr-row2">
+    <span class="cl">폰트</span>
+    <select class="hsel" id="font-sel">
       <option value="'Noto Sans KR',sans-serif" selected>노토산스</option>
       <option value="'Noto Serif KR',serif">노토세리프</option>
       <option value="'Nanum Myeongjo',serif">나눔명조</option>
       <option value="'Nanum Gothic',sans-serif">나눔고딕</option>
       <option value="Georgia,serif">Georgia</option>
     </select>
-    <span class="ctrl-label">크기</span>
-    <div class="size-wrap">
-      <button class="size-btn" id="size-down" title="작게">▼</button>
-      <span class="size-val" id="size-val">15</span>
-      <button class="size-btn" id="size-up" title="크게">▲</button>
+    <span class="cl">크기</span>
+    <div class="swrap">
+      <button class="sbtn" id="size-down">▼</button>
+      <span class="sval" id="size-val">15</span>
+      <button class="sbtn" id="size-up">▲</button>
     </div>
   </div>
-  <button id="add-panel-btn" onclick="addPanel()">
-    <span class="plus-icon">＋</span> 성경추가
-  </button>
 </div>
 
 <div id="panels-wrap">
@@ -112,19 +128,17 @@ const OT=[["genesis","창세기",50,1],["exodus","출애굽기",40,2],["leviticu
 const NT=[["matthew","마태복음",28,40],["mark","마가복음",16,41],["luke","누가복음",24,42],["john","요한복음",21,43],["acts","사도행전",28,44],["romans","로마서",16,45],["1corinthians","고린도전서",16,46],["2corinthians","고린도후서",13,47],["galatians","갈라디아서",6,48],["ephesians","에베소서",6,49],["philippians","빌립보서",4,50],["colossians","골로새서",4,51],["1thessalonians","데살로니가전서",5,52],["2thessalonians","데살로니가후서",3,53],["1timothy","디모데전서",6,54],["2timothy","디모데후서",4,55],["titus","디도서",3,56],["philemon","빌레몬서",1,57],["hebrews","히브리서",13,58],["james","야고보서",5,59],["1peter","베드로전서",5,60],["2peter","베드로후서",3,61],["1john","요한일서",5,62],["2john","요한이서",1,63],["3john","요한삼서",1,64],["jude","유다서",1,65],["revelation","요한계시록",22,66]];
 const BMAP={};
 [...OT,...NT].forEach(([id,ko,ch,num])=>{BMAP[id]={ko,ch,num}});
-
 const API_MAP={"1samuel":"1+samuel","2samuel":"2+samuel","1kings":"1+kings","2kings":"2+kings","1chronicles":"1+chronicles","2chronicles":"2+chronicles","songofsolomon":"song+of+solomon","1corinthians":"1+corinthians","2corinthians":"2+corinthians","1thessalonians":"1+thessalonians","2thessalonians":"2+thessalonians","1timothy":"1+timothy","2timothy":"2+timothy","1peter":"1+peter","2peter":"2+peter","1john":"1+john","2john":"2+john","3john":"3+john"};
-
 const TRANS=[
-  {id:'kor',     l:'개역개정', scope:'all', src:'local',   fid:'kor'},
-  {id:'saebeon', l:'새번역',   scope:'all', src:'local',   fid:'saebeon'},
-  {id:'esv',     l:'ESV',      scope:'all', src:'local',   fid:'esv'},
-  {id:'niv',     l:'NIV',      scope:'all', src:'local',   fid:'niv'},
-  {id:'kjv',     l:'KJV',      scope:'all', src:'bibleapi',fid:null},
-  {id:'asv',     l:'ASV',      scope:'all', src:'bibleapi',fid:null},
-  {id:'web',     l:'WEB',      scope:'all', src:'bibleapi',fid:null},
-  {id:'WLC',     l:'히브리어', scope:'ot',  src:'bolls',   fid:null},
-  {id:'SBLGNT',  l:'헬라어',   scope:'nt',  src:'bolls',   fid:null},
+  {id:'kor',    l:'개역개정',scope:'all',src:'local',  fid:'kor'},
+  {id:'saebeon',l:'새번역',  scope:'all',src:'local',  fid:'saebeon'},
+  {id:'esv',    l:'ESV',     scope:'all',src:'local',  fid:'esv'},
+  {id:'niv',    l:'NIV',     scope:'all',src:'local',  fid:'niv'},
+  {id:'kjv',    l:'KJV',     scope:'all',src:'bibleapi',fid:null},
+  {id:'asv',    l:'ASV',     scope:'all',src:'bibleapi',fid:null},
+  {id:'web',    l:'WEB',     scope:'all',src:'bibleapi',fid:null},
+  {id:'WLC',    l:'히브리어',scope:'ot', src:'bolls',  fid:null},
+  {id:'SBLGNT', l:'헬라어',  scope:'nt', src:'bolls',  fid:null},
 ];
 
 const cache={};
@@ -135,58 +149,47 @@ async function fetchVerses(bookId,chapter,transId){
     if(!cache[key]){
       const url=tr.fid==='kor'?`bible/${bookId}.json`:`bible/${bookId}_${tr.fid}.json`;
       const r=await fetch(url);
-      if(!r.ok) throw new Error(`${url} 없음 — GitHub bible/ 폴더에 JSON 파일을 업로드하세요.`);
+      if(!r.ok)throw new Error(`${url} 없음 — bible/ 폴더 JSON 파일을 확인하세요.`);
       cache[key]=await r.json();
     }
     return cache[key].chapters[chapter]||[];
   }
   if(tr.src==='bolls'){
     const key=`${transId}_${bookId}_${chapter}`;
-    if(cache[key]) return cache[key];
+    if(cache[key])return cache[key];
     const r=await fetch(`https://bolls.life/get-text/${transId}/${BMAP[bookId].num}/${chapter}/`);
-    if(!r.ok) throw new Error('bolls.life 응답 오류');
-    const data=await r.json();
-    cache[key]=data.map(v=>({n:v.verse,t:v.text,f:''}));
+    if(!r.ok)throw new Error('bolls.life 응답 오류');
+    cache[key]=(await r.json()).map(v=>({n:v.verse,t:v.text,f:''}));
     return cache[key];
   }
-  const apiId=API_MAP[bookId]||bookId;
-  const r=await fetch(`https://bible-api.com/${apiId}+${chapter}?translation=${transId}`);
+  const ai=API_MAP[bookId]||bookId;
+  const r=await fetch(`https://bible-api.com/${ai}+${chapter}?translation=${transId}`);
   const d=await r.json();
-  if(d.error) throw new Error(d.error);
+  if(d.error)throw new Error(d.error);
   return d.verses.map(v=>({n:v.verse,t:v.text.replace(/\n/g,' ').trim(),f:''}));
 }
 
-// Global style state
-let gFont="'Noto Sans KR',sans-serif";
-let gSize=15;
+let gFont="'Noto Sans KR',sans-serif",gSize=15;
 const LH=1.9;
-const MIN_SIZE=10, MAX_SIZE=24;
-
 document.getElementById('font-sel').onchange=e=>{gFont=e.target.value;applyGlobal();};
-document.getElementById('size-up').onclick=()=>{if(gSize<MAX_SIZE){gSize++;document.getElementById('size-val').textContent=gSize;applyGlobal();}};
-document.getElementById('size-down').onclick=()=>{if(gSize>MIN_SIZE){gSize--;document.getElementById('size-val').textContent=gSize;applyGlobal();}};
-
+document.getElementById('size-up').onclick=()=>{if(gSize<24){gSize++;document.getElementById('size-val').textContent=gSize;applyGlobal();}};
+document.getElementById('size-down').onclick=()=>{if(gSize>10){gSize--;document.getElementById('size-val').textContent=gSize;applyGlobal();}};
+function vMB(){return Math.round(gSize*(LH-1)*0.45)+'px';}
+function vPT(){return Math.round(gSize*0.14)+'px';}
+function vFN(){return Math.round(gSize*0.84)+'px';}
 function applyGlobal(){
-  const mb=verseMargin()+'px';
-  const pt=versePT()+'px';
-  const fns=Math.round(gSize*0.84)+'px';
-  document.querySelectorAll('.verse-text').forEach(el=>{el.style.fontFamily=gFont;el.style.fontSize=gSize+'px';el.style.lineHeight=LH;});
-  document.querySelectorAll('.footnote').forEach(el=>{el.style.fontFamily=gFont;el.style.fontSize=fns;});
-  document.querySelectorAll('.verse-row').forEach(el=>{el.style.marginBottom=mb;});
-  document.querySelectorAll('.verse-num').forEach(el=>{el.style.paddingTop=pt;});
+  document.querySelectorAll('.verse-text').forEach(e=>{e.style.fontFamily=gFont;e.style.fontSize=gSize+'px';e.style.lineHeight=LH;});
+  document.querySelectorAll('.footnote').forEach(e=>{e.style.fontFamily=gFont;e.style.fontSize=vFN();});
+  document.querySelectorAll('.verse-row').forEach(e=>{e.style.marginBottom=vMB();});
+  document.querySelectorAll('.verse-num').forEach(e=>{e.style.paddingTop=vPT();});
 }
-function verseMargin(){return Math.round(gSize*(LH-1)*0.45);}
-function versePT(){return Math.round(gSize*0.14);}
 
-// Panels
-let pid=0;
-const panels=[];
+let pid=0;const panels=[];
 
 function createPanel(){
-  if(panels.length>=6) return;
+  if(panels.length>=6)return;
   const id=++pid;
   const state={bookId:'john',chapter:3,trans:'kor',hl:new Set(),chOpen:false};
-
   const el=document.createElement('div');el.className='panel';
   const bar=document.createElement('div');bar.className='panel-bar';
   const textDiv=document.createElement('div');textDiv.className='panel-text';
@@ -198,9 +201,9 @@ function createPanel(){
 
   function availBooks(){
     const tr=TRANS.find(t=>t.id===state.trans);
-    if(tr.scope==='ot') return {ot:OT,nt:[]};
-    if(tr.scope==='nt') return {ot:[],nt:NT};
-    return {ot:OT,nt:NT};
+    if(tr.scope==='ot')return{ot:OT,nt:[]};
+    if(tr.scope==='nt')return{ot:[],nt:NT};
+    return{ot:OT,nt:NT};
   }
 
   function renderDropdown(){
@@ -219,7 +222,7 @@ function createPanel(){
   }
 
   function renderBar(){
-    const {ot,nt}=availBooks();
+    const{ot,nt}=availBooks();
     bar.innerHTML=`
       <select class="bar-sel trans-sel">
         ${TRANS.map(t=>`<option value="${t.id}"${t.id===state.trans?' selected':''}>${t.l}</option>`).join('')}
@@ -237,8 +240,7 @@ function createPanel(){
     `;
     bar.querySelector('.trans-sel').onchange=e=>{
       state.trans=e.target.value;
-      const {ot,nt}=availBooks();
-      const all=[...ot,...nt];
+      const{ot,nt}=availBooks();const all=[...ot,...nt];
       if(!all.find(([bid])=>bid===state.bookId)){state.bookId=all[0][0];state.chapter=1;}
       state.chOpen=false;renderBar();load();
     };
@@ -246,29 +248,24 @@ function createPanel(){
     bar.querySelector('.prev-btn').onclick=e=>{e.stopPropagation();if(state.chapter>1){state.chapter--;state.chOpen=false;renderBar();load();}};
     bar.querySelector('.next-btn').onclick=e=>{e.stopPropagation();const mx=BMAP[state.bookId].ch;if(state.chapter<mx){state.chapter++;state.chOpen=false;renderBar();load();}};
     bar.querySelector('.ch-btn').onclick=e=>{e.stopPropagation();state.chOpen=!state.chOpen;renderDropdown();};
-    const cb=bar.querySelector('.close-btn');
-    if(cb)cb.onclick=()=>removePanel(id);
+    const cb=bar.querySelector('.close-btn');if(cb)cb.onclick=()=>removePanel(id);
     if(state.chOpen)renderDropdown();
     textDiv.style.direction=state.trans==='WLC'?'rtl':'ltr';
   }
 
   async function load(){
-    const mb=verseMargin()+'px';
-    const pt=versePT()+'px';
-    const fns=Math.round(gSize*0.84)+'px';
     textDiv.innerHTML=`<div class="loading"><div class="spinner">✦</div><br>불러오는 중...</div>`;
-    const {bookId,chapter,trans}=state;
-    const isRTL=trans==='WLC';
+    const{bookId,chapter,trans}=state;const isRTL=trans==='WLC';
     try{
       const verses=await fetchVerses(bookId,chapter,trans);
       if(!verses.length){textDiv.innerHTML=`<div class="err-msg">${chapter}장 데이터가 없습니다.</div>`;return;}
       textDiv.innerHTML=`<div class="ch-label">${BMAP[bookId].ko} ${chapter}</div>`+
         verses.map(({n,t,f})=>`
-          <div class="verse-row${state.hl.has(n)?' hl':''}${isRTL?' rtl':''}" data-v="${n}" style="margin-bottom:${mb}">
-            <span class="verse-num" style="padding-top:${pt}">${n}</span>
+          <div class="verse-row${state.hl.has(n)?' hl':''}${isRTL?' rtl':''}" data-v="${n}" style="margin-bottom:${vMB()}">
+            <span class="verse-num" style="padding-top:${vPT()}">${n}</span>
             <div class="verse-body">
               <div class="verse-text" style="font-family:${gFont};font-size:${gSize}px;line-height:${LH}">${t}</div>
-              ${f?`<div class="footnote" style="font-family:${gFont};font-size:${fns}">${f}</div>`:''}
+              ${f?`<div class="footnote" style="font-family:${gFont};font-size:${vFN()}">${f}</div>`:''}
             </div>
           </div>`).join('');
       textDiv.querySelectorAll('.verse-row').forEach(row=>{
@@ -280,13 +277,12 @@ function createPanel(){
   }
 
   document.getElementById('panels').appendChild(el);
-  panels.push({id,el,renderBar,load});
+  panels.push({id,el,renderBar});
   updateUI();renderBar();load();
 }
 
 function removePanel(id){
-  const idx=panels.findIndex(p=>p.id===id);
-  if(idx===-1)return;
+  const idx=panels.findIndex(p=>p.id===id);if(idx===-1)return;
   panels[idx].el.remove();panels.splice(idx,1);updateUI();
 }
 function addPanel(){createPanel();}
