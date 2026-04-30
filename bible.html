@@ -39,11 +39,12 @@ body{font-family:'Noto Sans KR',sans-serif;background:#f3f4f6;height:100dvh;over
 
 /* Bar controls */
 select,button{font-family:'Noto Sans KR',sans-serif}
-.bar-sel{font-size:11px;padding:3px 5px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#374151;cursor:pointer;outline:none}
-.book-sel{flex:1;min-width:76px;font-size:12px;padding:3px 5px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#374151;cursor:pointer;outline:none}
-.arr-btn{font-size:14px;padding:3px 9px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#6b7280;cursor:pointer}
+.panel-bar{justify-content:flex-start}
+.bar-sel{font-size:17px;padding:4px 8px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#374151;cursor:pointer;outline:none;flex-shrink:0}
+.book-sel{width:165px;flex:none;font-size:17px;padding:4px 7px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#374151;cursor:pointer;outline:none;flex-shrink:0}
+.arr-btn{font-size:21px;padding:4px 13px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#6b7280;cursor:pointer;line-height:1}
 .arr-btn:hover{background:#f3f4f6}
-.ch-btn{font-size:13px;font-weight:600;min-width:30px;padding:3px 6px;border-radius:4px;border:1px solid #c7d2fe;background:#eef2ff;color:#4f46e5;cursor:pointer}
+.ch-btn{font-size:17px;font-weight:600;min-width:44px;padding:4px 8px;border-radius:4px;border:1px solid #c7d2fe;background:#eef2ff;color:#4f46e5;cursor:pointer;line-height:1}
 .ch-btn:hover{background:#e0e7ff}
 .close-btn{font-size:12px;padding:3px 8px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#9ca3af;cursor:pointer;margin-left:auto}
 .close-btn:hover{background:#fee2e2;color:#ef4444}
@@ -87,9 +88,10 @@ select,button{font-family:'Noto Sans KR',sans-serif}
   .sbtn{width:20px;height:20px;font-size:11px}
   .panel{min-width:min(460px,100vw)}
   .panel-text{padding:12px 12px}
-  .arr-btn{padding:4px 10px;font-size:15px}
-  .ch-btn{min-width:32px;padding:4px 6px;font-size:14px}
-  .bar-sel,.book-sel{font-size:12px;padding:3px 5px}
+  .bar-sel{font-size:15px;padding:4px 6px}
+  .book-sel{width:140px;font-size:15px}
+  .arr-btn{font-size:18px;padding:4px 11px}
+  .ch-btn{font-size:15px;min-width:40px}
   .ch-item{font-size:14px;padding:6px 2px}
 }
 </style>
