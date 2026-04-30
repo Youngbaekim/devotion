@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>성경 묵상</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;500&display=swap">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans KR',sans-serif;background:#f3f4f6;height:100vh;overflow:hidden;display:flex;flex-direction:column}
+#header{padding:10px 16px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;background:#fff;flex-shrink:0}
+.header-title{font-size:15px;font-weight:600;font-family:'Noto Serif KR',serif;color:#111827;display:flex;align-items:center;gap:8px}
+.count-label{font-size:11px;color:#9ca3af;letter-spacing:1px}
+#panels{flex:1;display:flex;overflow:hidden;min-height:0}
+.panel{flex:1;min-width:220px;display:flex;flex-direction:column;border-right:1px solid #e5e7eb;background:#fff;overflow:hidden}
+.panel-bar{padding:8px 10px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;gap:5px;flex-wrap:wrap;background:#f9fafb;min-height:44px;flex-shrink:0}
+.panel-text{flex:1;overflow-y:auto;padding:18px 16px}
+.panel-text::-webkit-scrollbar{width:4px}
+.panel-text::-webkit-scrollbar-thumb{background:#e5e7eb;border-radius:2px}
+#add-wrap{display:flex;align-items:center;justify-content:center;padding:0 10px;flex-shrink:0;background:#f3f4f6}
+.add-btn{width:34px;height:34px;border-radius:50%;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;border:1px solid #d1d5db;background:#fff;color:#6b7280;transition:background 0.15s;line-height:1}
+.add-btn:hover{background:#f3f4f6}
+select,button{font-family:'Noto Sans KR',sans-serif}
+select{font-size:12px;padding:3px 6px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#374151;cursor:pointer;outline:none}
+.ctrl-btn{font-size:13px;padding:2px 8px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#6b7280;cursor:pointer;transition:background 0.12s}
+.ctrl-btn:hover{background:#f3f4f6}
+.nav-ch{display:flex;align-items:center;gap:3px}
+.ch-num{font-size:13px;font-weight:500;min-width:26px;text-align:center;color:#374151}
+.memo-btn{font-size:12px;padding:3px 8px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#6b7280;cursor:pointer;transition:all 0.12s}
+.memo-btn.active{background:#fef3c7;color:#d97706;border-color:#fcd34d}
+.close-btn{font-size:13px;padding:2px 7px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#9ca3af;cursor:pointer}
+.ch-label{font-size:10px;color:#9ca3af;letter-spacing:3px;margin-bottom:16px;font-family:sans-serif;text-transform:uppercase}
+.verse-row{display:flex;gap:10px;margin-bottom:7px;padding:5px 7px;border-radius:5px;cursor:pointer;border-left:2px solid transparent;transition:background 0.12s}
+.verse-row:hover{background:#f9fafb}
+.verse-row.hl{background:#fef9ec;border-left-color:#f59e0b}
+.verse-num{font-size:10px;font-weight:700;min-width:18px;color:#f59e0b;padding-top:4px;font-family:monospace;flex-shrink:0}
+.verse-text{line-height:1.9;color:#4b5563;font-family:'Noto Serif KR','Nanum Myeongjo',Georgia,serif;transition:color 0.12s}
+.verse-row.hl .verse-text{color:#111827}
+.loading{text-align:center;padding:50px 0;color:#9ca3af;font-size:13px}
+.spinner{font-size:22px;margin-bottom:8px;display:inline-block;animation:spin 1.5s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error-msg{color:#ef4444;text-align:center;padding:24px;font-size:13px;line-height:1.7}
+.memo-area{border-top:1px solid #e5e7eb;padding:10px 12px;background:#f9fafb;flex-shrink:0}
+.memo-label{font-size:10px;color:#9ca3af;letter-spacing:2px;margin-bottom:6px}
+.memo-area textarea{width:100%;height:82px;resize:none;font-size:13px;padding:7px 10px;font-family:'Noto Serif KR',serif;line-height:1.7;border:1px solid #d1d5db;border-radius:4px;outline:none;background:#fff;color:#374151}
+</style>
+</head>
+<body>
+<div id="header">
+  <div class="header-title">✦ 성경 묵상 <span style="font-size:11px;font-weight:400;color:#9ca3af;font-family:sans-serif;">개역개정</span></div>
+  <span class="count-label" id="count-label">패널 1 / 5</span>
+</div>
+<div id="panels">
+  <div id="add-wrap">
+    <button class="add-btn" onclick="addPanel()" title="패널 추가">+</button>
+  </div>
+</div>
+<script>
+const OT=[['genesis','창세기',50],['exodus','출애굽기',40],['leviticus','레위기',27],['numbers','민수기',36],['deuteronomy','신명기',34],['joshua','여호수아',24],['judges','사사기',21],['ruth','룻기',4],['1samuel','사무엘상',31],['2samuel','사무엘하',24],['1kings','열왕기상',22],['2kings','열왕기하',25],['1chronicles','역대상',29],['2chronicles','역대하',36],['ezra','에스라',10],['nehemiah','느헤미야',13],['esther','에스더',10],['job','욥기',42],['psalms','시편',150],['proverbs','잠언',31],['ecclesiastes','전도서',12],['songofsolomon','아가',8],['isaiah','이사야',66],['jeremiah','예레미야',52],['lamentations','애가',5],['ezekiel','에스겔',48],['daniel','다니엘',12],['hosea','호세아',14],['joel','요엘',3],['amos','아모스',9],['obadiah','오바댜',1],['jonah','요나',4],['micah','미가',7],['nahum','나훔',3],['habakkuk','하박국',3],['zephaniah','스바냐',3],['haggai','학개',2],['zechariah','스가랴',14],['malachi','말라기',4]];
+const NT=[['matthew','마태복음',28],['mark','마가복음',16],['luke','누가복음',24],['john','요한복음',21],['acts','사도행전',28],['romans','로마서',16],['1corinthians','고린도전서',16],['2corinthians','고린도후서',13],['galatians','갈라디아서',6],['ephesians','에베소서',6],['philippians','빌립보서',4],['colossians','골로새서',4],['1thessalonians','데살로니가전서',5],['2thessalonians','데살로니가후서',3],['1timothy','디모데전서',6],['2timothy','디모데후서',4],['titus','디도서',3],['philemon','빌레몬서',1],['hebrews','히브리서',13],['james','야고보서',5],['1peter','베드로전서',5],['2peter','베드로후서',3],['1john','요한일서',5],['2john','요한이서',1],['3john','요한삼서',1],['jude','유다서',1],['revelation','요한계시록',22]];
+const BMAP={};
+[...OT,...NT].forEach(([id,ko,ch])=>{BMAP[id]={ko,ch}});
+
+const cache={};
+async function fetchBook(id){
+  if(cache[id]) return cache[id];
+  const r=await fetch(`bible/${id}.json`);
+  if(!r.ok) throw new Error(`${BMAP[id]?.ko} 파일 없음 (bible/${id}.json)`);
+  const data=await r.json();
+  cache[id]=data;
+  return data;
+}
+
+let pid=0;
+const panels=[];
+
+function createPanel(){
+  if(panels.length>=5) return;
+  const id=++pid;
+  const state={bookId:'john',chapter:3,hl:new Set(),memoOpen:false};
+  const el=document.createElement('div');el.className='panel';
+  const bar=document.createElement('div');bar.className='panel-bar';
+  const textDiv=document.createElement('div');textDiv.className='panel-text';
+  el.appendChild(bar);el.appendChild(textDiv);
+
+  function memoKey(){return `bm_${state.bookId}_${state.chapter}`;}
+
+  function renderBar(){
+    const hasMemo=!!(localStorage.getItem(memoKey())||'');
+    bar.innerHTML=`
+      <select class="book-sel" style="flex:1;min-width:80px">
+        <optgroup label="구약">${OT.map(([bid,bko])=>`<option value="${bid}"${bid===state.bookId?' selected':''}>${bko}</option>`).join('')}</optgroup>
+        <optgroup label="신약">${NT.map(([bid,bko])=>`<option value="${bid}"${bid===state.bookId?' selected':''}>${bko}</option>`).join('')}</optgroup>
+      </select>
+      <div class="nav-ch">
+        <button class="ctrl-btn prev-ch">‹</button>
+        <span class="ch-num">${state.chapter}</span>
+        <button class="ctrl-btn next-ch">›</button>
+      </div>
+      <button class="memo-btn${state.memoOpen?' active':''}">✏ 묵상</button>
+      ${panels.length>1?`<button class="close-btn">✕</button>`:''}
+    `;
+    bar.querySelector('.book-sel').onchange=e=>{state.bookId=e.target.value;state.chapter=1;renderBar();load();};
+    bar.querySelector('.prev-ch').onclick=()=>{if(state.chapter>1){state.chapter--;renderBar();load();}};
+    bar.querySelector('.next-ch').onclick=()=>{const mx=BMAP[state.bookId].ch;if(state.chapter<mx){state.chapter++;renderBar();load();}};
+    bar.querySelector('.memo-btn').onclick=()=>{state.memoOpen=!state.memoOpen;renderMemo();renderBar();};
+    const cb=bar.querySelector('.close-btn');
+    if(cb)cb.onclick=()=>removePanel(id);
+  }
+
+  function renderMemo(){
+    let ma=el.querySelector('.memo-area');
+    if(state.memoOpen){
+      if(!ma){ma=document.createElement('div');ma.className='memo-area';el.appendChild(ma);}
+      const saved=localStorage.getItem(memoKey())||'';
+      ma.innerHTML=`<div class="memo-label">묵상 노트</div><textarea placeholder="말씀을 묵상하며...">${saved}</textarea>`;
+      ma.querySelector('textarea').oninput=e=>localStorage.setItem(memoKey(),e.target.value);
+    } else {if(ma)ma.remove();}
+  }
+
+  async function load(){
+    const narrow=panels.length>3;
+    const fs=narrow?'13px':'15px';
+    textDiv.innerHTML=`<div class="loading"><div class="spinner">✦</div><div>불러오는 중...</div></div>`;
+    const {bookId,chapter}=state;
+    try{
+      const data=await fetchBook(bookId);
+      const verses=data.chapters[chapter]||[];
+      if(!verses.length){textDiv.innerHTML=`<div class="error-msg">${chapter}장 데이터가 없습니다.</div>`;return;}
+      textDiv.innerHTML=`<div class="ch-label">${data.name} ${chapter}</div>`+
+        verses.map(({n,t})=>`<div class="verse-row${state.hl.has(n)?' hl':''}" data-v="${n}">
+          <span class="verse-num">${n}</span>
+          <span class="verse-text" style="font-size:${fs}">${t}</span>
+        </div>`).join('');
+      textDiv.querySelectorAll('.verse-row').forEach(row=>{
+        row.onclick=()=>{const v=+row.dataset.v;state.hl.has(v)?state.hl.delete(v):state.hl.add(v);row.classList.toggle('hl');};
+      });
+    }catch(e){
+      textDiv.innerHTML=`<div class="error-msg">${e.message}<br><br><small>bible/ 폴더의 JSON 파일이 필요합니다.<br>converter.html로 먼저 변환해 주세요.</small></div>`;
+    }
+  }
+
+  const addWrap=document.getElementById('add-wrap');
+  document.getElementById('panels').insertBefore(el,addWrap);
+  panels.push({id,el,renderBar,load});
+  updateUI();renderBar();load();
+}
+
+function removePanel(id){
+  const idx=panels.findIndex(p=>p.id===id);
+  if(idx===-1)return;
+  panels[idx].el.remove();panels.splice(idx,1);updateUI();
+}
+function addPanel(){createPanel();}
+function updateUI(){
+  document.getElementById('count-label').textContent=`패널 ${panels.length} / 5`;
+  document.getElementById('add-wrap').style.display=panels.length<5?'flex':'none';
+  panels.forEach(p=>p.renderBar());
+}
+createPanel();
+</script>
+</body>
+</html>
