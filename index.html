@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -25,220 +24,39 @@
     --bg: #f5f7fc;
     --white: #ffffff;
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--bg);
-    font-family: 'Noto Sans KR', sans-serif;
-    color: var(--text-main);
-    min-height: 100vh;
-    font-size: 10px;
-  }
-
-  /* ── Top bar ── */
-  .topbar {
-    background: var(--ssu-blue);
-    padding: 0 32px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .topbar-brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .brand-mark {
-    width: 28px;
-    height: 28px;
-  }
-  .brand-name {
-    color: #fff;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-  }
-  .brand-sub {
-    color: rgba(255,255,255,0.55);
-    font-size: 10px;
-    font-weight: 300;
-    margin-left: 4px;
-    letter-spacing: 0.06em;
-  }
-  .topbar-date {
-    color: rgba(255,255,255,0.5);
-    font-size: 10px;
-    font-weight: 300;
-    letter-spacing: 0.06em;
-  }
-
-  /* ── Hero band ── */
-  .hero {
-    background: var(--white);
-    border-bottom: 2px solid var(--ssu-blue);
-    padding: 28px 32px 22px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-  }
-  .hero-title {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--ssu-blue);
-    letter-spacing: -0.02em;
-    line-height: 1.15;
-  }
-  .hero-title span {
-    display: block;
-    font-size: 11px;
-    font-weight: 400;
-    color: var(--text-muted);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-  .hero-verse {
-    text-align: right;
-    font-size: 10px;
-    color: var(--text-sub);
-    line-height: 1.7;
-    font-weight: 300;
-  }
-  .hero-verse strong {
-    color: var(--ssu-blue);
-    font-weight: 500;
-  }
-
-  /* ── Main layout ── */
-  .main {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 28px 20px 48px;
-  }
-
-  /* ── Section ── */
+  body { background: var(--bg); font-family: 'Noto Sans KR', sans-serif; color: var(--text-main); min-height: 100vh; font-size: 10px; }
+  .topbar { background: var(--ssu-blue); padding: 0 32px; height: 48px; display: flex; align-items: center; justify-content: space-between; }
+  .topbar-brand { display: flex; align-items: center; gap: 10px; }
+  .brand-mark { width: 28px; height: 28px; }
+  .brand-name { color: #fff; font-size: 13px; font-weight: 700; letter-spacing: 0.04em; }
+  .brand-sub { color: rgba(255,255,255,0.55); font-size: 10px; font-weight: 300; margin-left: 4px; letter-spacing: 0.06em; }
+  .topbar-date { color: rgba(255,255,255,0.5); font-size: 10px; font-weight: 300; letter-spacing: 0.06em; }
+  .hero { background: var(--white); border-bottom: 2px solid var(--ssu-blue); padding: 28px 32px 22px; display: flex; align-items: flex-end; justify-content: space-between; }
+  .hero-title { font-size: 22px; font-weight: 700; color: var(--ssu-blue); letter-spacing: -0.02em; line-height: 1.15; }
+  .hero-title span { display: block; font-size: 11px; font-weight: 400; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+  .hero-verse { text-align: right; font-size: 10px; color: var(--text-sub); line-height: 1.7; font-weight: 300; }
+  .hero-verse strong { color: var(--ssu-blue); font-weight: 500; }
+  .main { max-width: 720px; margin: 0 auto; padding: 28px 20px 48px; }
   .section { margin-bottom: 24px; }
-
-  .section-label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--ssu-blue);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-  }
-  .section-label::before {
-    content: '';
-    width: 3px;
-    height: 12px;
-    background: var(--ssu-accent);
-    border-radius: 2px;
-    flex-shrink: 0;
-  }
-
-  /* ── Link card ── */
-  .link-card {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 14px 18px;
-    text-decoration: none;
-    color: inherit;
-    transition: border-color 0.18s, box-shadow 0.18s, transform 0.18s;
-    margin-bottom: 8px;
-  }
-  .link-card:hover {
-    border-color: var(--ssu-blue-mid);
-    box-shadow: 0 3px 14px rgba(0,48,135,0.10);
-    transform: translateY(-1px);
-  }
+  .section-label { display: flex; align-items: center; gap: 8px; font-size: 10px; font-weight: 500; color: var(--ssu-blue); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .section-label::before { content: ''; width: 3px; height: 12px; background: var(--ssu-accent); border-radius: 2px; flex-shrink: 0; }
+  .link-card { display: flex; align-items: center; gap: 14px; background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 14px 18px; text-decoration: none; color: inherit; transition: border-color 0.18s, box-shadow 0.18s, transform 0.18s; margin-bottom: 8px; }
+  .link-card:hover { border-color: var(--ssu-blue-mid); box-shadow: 0 3px 14px rgba(0,48,135,0.10); transform: translateY(-1px); }
   .link-card:hover .card-arrow { opacity: 1; transform: translateX(0); }
-
-  .card-icon {
-    width: 34px;
-    height: 34px;
-    border-radius: 6px;
-    background: var(--ssu-blue-light);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
+  .card-icon { width: 34px; height: 34px; border-radius: 6px; background: var(--ssu-blue-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .card-icon svg { width: 16px; height: 16px; }
-
   .card-info { flex: 1; min-width: 0; }
-  .card-name {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-main);
-    margin-bottom: 2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .card-url {
-    font-size: 10px;
-    color: var(--text-muted);
-    font-weight: 300;
-  }
-
-  .card-badge {
-    font-size: 9px;
-    font-weight: 500;
-    color: var(--ssu-blue);
-    background: var(--ssu-blue-light);
-    border-radius: 3px;
-    padding: 2px 7px;
-    letter-spacing: 0.04em;
-    flex-shrink: 0;
-  }
-
-  .card-arrow {
-    color: var(--ssu-blue-mid);
-    font-size: 14px;
-    opacity: 0;
-    transform: translateX(-4px);
-    transition: opacity 0.18s, transform 0.18s;
-    flex-shrink: 0;
-    margin-left: 4px;
-  }
-
-  /* ── Footer ── */
-  .footer {
-    background: var(--ssu-blue);
-    padding: 16px 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .footer-copy {
-    font-size: 9px;
-    color: rgba(255,255,255,0.45);
-    font-weight: 300;
-    letter-spacing: 0.06em;
-  }
-  .footer-dot {
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: var(--ssu-accent);
-    opacity: 0.7;
-  }
+  .card-name { font-size: 12px; font-weight: 500; color: var(--text-main); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-url { font-size: 10px; color: var(--text-muted); font-weight: 300; }
+  .card-badge { font-size: 9px; font-weight: 500; color: var(--ssu-blue); background: var(--ssu-blue-light); border-radius: 3px; padding: 2px 7px; letter-spacing: 0.04em; flex-shrink: 0; }
+  .card-arrow { color: var(--ssu-blue-mid); font-size: 14px; opacity: 0; transform: translateX(-4px); transition: opacity 0.18s, transform 0.18s; flex-shrink: 0; margin-left: 4px; }
+  .footer { background: var(--ssu-blue); padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+  .footer-copy { font-size: 9px; color: rgba(255,255,255,0.45); font-weight: 300; letter-spacing: 0.06em; }
 </style>
 </head>
 <body>
 
-<!-- Top bar -->
 <div class="topbar">
   <div class="topbar-brand">
     <svg class="brand-mark" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -251,7 +69,6 @@
   <span class="topbar-date" id="today-date"></span>
 </div>
 
-<!-- Hero -->
 <div class="hero">
   <div class="hero-title">
     <span>YB Family Devotion Links</span>
@@ -264,12 +81,28 @@
   </div>
 </div>
 
-<!-- Main -->
 <div class="main">
 
   <!-- 성경 묵상 -->
   <div class="section">
     <div class="section-label">성경 묵상 · Bible Reading</div>
+
+    <!-- 0. bible.html -->
+    <a class="link-card" href="https://youngbaekim.github.io/devotion/bible.html" target="_blank" rel="noopener">
+      <div class="card-icon">
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 3L3 7v10h14V7L10 3z" stroke="#003087" stroke-width="1.3" stroke-linejoin="round"/>
+          <line x1="10" y1="3" x2="10" y2="17" stroke="#003087" stroke-width="0.9" stroke-dasharray="1.5 1.5"/>
+          <line x1="3" y1="7" x2="17" y2="7" stroke="#003087" stroke-width="1.1" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="card-info">
+        <div class="card-name">성경 읽기</div>
+        <div class="card-url">youngbaekim.github.io/devotion/bible.html</div>
+      </div>
+      <span class="card-badge">Bible</span>
+      <span class="card-arrow">→</span>
+    </a>
 
     <!-- 1. 매일성경 -->
     <a class="link-card" href="https://sum.su.or.kr" target="_blank" rel="noopener">
@@ -324,6 +157,7 @@
       <span class="card-badge">PRS</span>
       <span class="card-arrow">→</span>
     </a>
+
     <!-- 4. 날기새 묵상음악 -->
     <a class="link-card" href="https://www.youtube.com/watch?v=KXYv86R-FOs&list=RDKXYv86R-FOs&start_radio=1&t=1985s" target="_blank" rel="noopener">
       <div class="card-icon">
@@ -345,7 +179,6 @@
   <div class="section">
     <div class="section-label">갈릴리침례교회 · GBC Seoul</div>
 
-    <!-- 주보 -->
     <a class="link-card" href="https://sites.google.com/view/gbc-seoul/weekly-bulletin" target="_blank" rel="noopener">
       <div class="card-icon">
         <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -363,7 +196,6 @@
       <span class="card-arrow">→</span>
     </a>
 
-    <!-- 주일예배 실황 -->
     <a class="link-card" href="http://tiny.cc/GBCG" target="_blank" rel="noopener">
       <div class="card-icon">
         <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -379,7 +211,6 @@
       <span class="card-arrow">→</span>
     </a>
 
-    <!-- 매일저녁 기도제목 -->
     <a class="link-card" href="https://docs.google.com/presentation/d/1e7QPGVYzv1CLCIYHRw1tiesDpoqU6A0ALT4LecVfxAQ/edit?slide=id.g3ce20adb31c_1_0#slide=id.g3ce20adb31c_1_0" target="_blank" rel="noopener">
       <div class="card-icon">
         <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -396,7 +227,6 @@
       <span class="card-arrow">→</span>
     </a>
 
-    <!-- PLM 전체 -->
     <a class="link-card" href="https://docs.google.com/document/d/1gIhexZ1f_TW2bs71XydSmQ4LOfLR9Vw7t5_TsXEkUKU/edit?tab=t.0" target="_blank" rel="noopener">
       <div class="card-icon">
         <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -413,16 +243,12 @@
       <span class="card-badge">Docs</span>
       <span class="card-arrow">→</span>
     </a>
-
-    <!-- PLM 요약 -->
-    
   </div>
 
-  <!-- YB기타 -->
+  <!-- 기타 링크 -->
   <div class="section">
     <div class="section-label">기타 링크</div>
 
-    <!-- 숭실대 생협 -->
     <a class="link-card" href="https://soongguri.com/" target="_blank" rel="noopener">
       <div class="card-icon">
         <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -434,35 +260,32 @@
       </div>
       <div class="card-info">
         <div class="card-name">Soongguri</div>
-        <div class="card-url">https://soongguri.com/</div>
+        <div class="card-url">soongguri.com</div>
       </div>
       <span class="card-badge">생협</span>
       <span class="card-arrow">→</span>
     </a>
 
-   <!-- Tichu -->
     <a class="link-card" href="https://youngbaekim.github.io/Tichu/" target="_blank" rel="noopener">
       <div class="card-icon">
         <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="3" y="2" width="12" height="16" rx="1.5" stroke="#003087" stroke-width="1.3"/>
-          <line x1="6.5" y1="7" x2="11.5" y2="7" stroke="#003087" stroke-width="1.1" stroke-linecap="round"/>
-          <line x1="6.5" y1="9.5" x2="11.5" y2="9.5" stroke="#003087" stroke-width="1.1" stroke-linecap="round"/>
-          <line x1="6.5" y1="12" x2="10" y2="12" stroke="#003087" stroke-width="1.1" stroke-linecap="round"/>
+          <rect x="2" y="3" width="10" height="14" rx="1.5" stroke="#003087" stroke-width="1.2"/>
+          <rect x="8" y="3" width="10" height="14" rx="1.5" stroke="#003087" stroke-width="1.2"/>
+          <line x1="10" y1="8" x2="14" y2="8" stroke="#003087" stroke-width="1.1" stroke-linecap="round"/>
+          <line x1="10" y1="11" x2="14" y2="11" stroke="#003087" stroke-width="1.1" stroke-linecap="round"/>
         </svg>
       </div>
       <div class="card-info">
         <div class="card-name">Tichu & Crokinole</div>
-        <div class="card-url">https://youngbaekim.github.io/Tichu/</div>
+        <div class="card-url">youngbaekim.github.io/Tichu</div>
       </div>
       <span class="card-badge">Scoreboard</span>
       <span class="card-arrow">→</span>
     </a>
+  </div>
 
-    
-  </div> 
 </div>
 
-<!-- Footer -->
 <div class="footer">
   <span class="footer-copy">YOUNGBAE KIM</span>
 </div>
@@ -476,11 +299,11 @@
     String(d.getDate()).padStart(2,'0') + ' (' + days[d.getDay()] + ')';
 </script>
 
-  <script>
+<script>
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/devotion/sw.js');
   }
-  </script>
-  
+</script>
+
 </body>
 </html>
