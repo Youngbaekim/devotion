@@ -1,163 +1,181 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>성경 묵상</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;500&display=swap">
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Noto Sans KR',sans-serif;background:#f3f4f6;height:100vh;overflow:hidden;display:flex;flex-direction:column}
-#header{padding:10px 16px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;background:#fff;flex-shrink:0}
-.header-title{font-size:15px;font-weight:600;font-family:'Noto Serif KR',serif;color:#111827;display:flex;align-items:center;gap:8px}
-.count-label{font-size:11px;color:#9ca3af;letter-spacing:1px}
-#panels{flex:1;display:flex;overflow:hidden;min-height:0}
-.panel{flex:1;min-width:220px;display:flex;flex-direction:column;border-right:1px solid #e5e7eb;background:#fff;overflow:hidden}
-.panel-bar{padding:8px 10px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;gap:5px;flex-wrap:wrap;background:#f9fafb;min-height:44px;flex-shrink:0}
-.panel-text{flex:1;overflow-y:auto;padding:18px 16px}
-.panel-text::-webkit-scrollbar{width:4px}
-.panel-text::-webkit-scrollbar-thumb{background:#e5e7eb;border-radius:2px}
-#add-wrap{display:flex;align-items:center;justify-content:center;padding:0 10px;flex-shrink:0;background:#f3f4f6}
-.add-btn{width:34px;height:34px;border-radius:50%;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;border:1px solid #d1d5db;background:#fff;color:#6b7280;transition:background 0.15s;line-height:1}
-.add-btn:hover{background:#f3f4f6}
-select,button{font-family:'Noto Sans KR',sans-serif}
-select{font-size:12px;padding:3px 6px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#374151;cursor:pointer;outline:none}
-.ctrl-btn{font-size:13px;padding:2px 8px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#6b7280;cursor:pointer;transition:background 0.12s}
-.ctrl-btn:hover{background:#f3f4f6}
-.nav-ch{display:flex;align-items:center;gap:3px}
-.ch-num{font-size:13px;font-weight:500;min-width:26px;text-align:center;color:#374151}
-.memo-btn{font-size:12px;padding:3px 8px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#6b7280;cursor:pointer;transition:all 0.12s}
-.memo-btn.active{background:#fef3c7;color:#d97706;border-color:#fcd34d}
-.close-btn{font-size:13px;padding:2px 7px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#9ca3af;cursor:pointer}
-.ch-label{font-size:10px;color:#9ca3af;letter-spacing:3px;margin-bottom:16px;font-family:sans-serif;text-transform:uppercase}
-.verse-row{display:flex;gap:10px;margin-bottom:7px;padding:5px 7px;border-radius:5px;cursor:pointer;border-left:2px solid transparent;transition:background 0.12s}
-.verse-row:hover{background:#f9fafb}
-.verse-row.hl{background:#fef9ec;border-left-color:#f59e0b}
-.verse-num{font-size:10px;font-weight:700;min-width:18px;color:#f59e0b;padding-top:4px;font-family:monospace;flex-shrink:0}
-.verse-text{line-height:1.9;color:#4b5563;font-family:'Noto Serif KR','Nanum Myeongjo',Georgia,serif;transition:color 0.12s}
-.verse-row.hl .verse-text{color:#111827}
-.loading{text-align:center;padding:50px 0;color:#9ca3af;font-size:13px}
-.spinner{font-size:22px;margin-bottom:8px;display:inline-block;animation:spin 1.5s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.error-msg{color:#ef4444;text-align:center;padding:24px;font-size:13px;line-height:1.7}
-.memo-area{border-top:1px solid #e5e7eb;padding:10px 12px;background:#f9fafb;flex-shrink:0}
-.memo-label{font-size:10px;color:#9ca3af;letter-spacing:2px;margin-bottom:6px}
-.memo-area textarea{width:100%;height:82px;resize:none;font-size:13px;padding:7px 10px;font-family:'Noto Serif KR',serif;line-height:1.7;border:1px solid #d1d5db;border-radius:4px;outline:none;background:#fff;color:#374151}
-</style>
-</head>
-<body>
-<div id="header">
-  <div class="header-title">✦ 성경 묵상 <span style="font-size:11px;font-weight:400;color:#9ca3af;font-family:sans-serif;">개역개정</span></div>
-  <span class="count-label" id="count-label">패널 1 / 5</span>
-</div>
-<div id="panels">
-  <div id="add-wrap">
-    <button class="add-btn" onclick="addPanel()" title="패널 추가">+</button>
-  </div>
-</div>
-<script>
-const OT=[['genesis','창세기',50],['exodus','출애굽기',40],['leviticus','레위기',27],['numbers','민수기',36],['deuteronomy','신명기',34],['joshua','여호수아',24],['judges','사사기',21],['ruth','룻기',4],['1samuel','사무엘상',31],['2samuel','사무엘하',24],['1kings','열왕기상',22],['2kings','열왕기하',25],['1chronicles','역대상',29],['2chronicles','역대하',36],['ezra','에스라',10],['nehemiah','느헤미야',13],['esther','에스더',10],['job','욥기',42],['psalms','시편',150],['proverbs','잠언',31],['ecclesiastes','전도서',12],['songofsolomon','아가',8],['isaiah','이사야',66],['jeremiah','예레미야',52],['lamentations','애가',5],['ezekiel','에스겔',48],['daniel','다니엘',12],['hosea','호세아',14],['joel','요엘',3],['amos','아모스',9],['obadiah','오바댜',1],['jonah','요나',4],['micah','미가',7],['nahum','나훔',3],['habakkuk','하박국',3],['zephaniah','스바냐',3],['haggai','학개',2],['zechariah','스가랴',14],['malachi','말라기',4]];
-const NT=[['matthew','마태복음',28],['mark','마가복음',16],['luke','누가복음',24],['john','요한복음',21],['acts','사도행전',28],['romans','로마서',16],['1corinthians','고린도전서',16],['2corinthians','고린도후서',13],['galatians','갈라디아서',6],['ephesians','에베소서',6],['philippians','빌립보서',4],['colossians','골로새서',4],['1thessalonians','데살로니가전서',5],['2thessalonians','데살로니가후서',3],['1timothy','디모데전서',6],['2timothy','디모데후서',4],['titus','디도서',3],['philemon','빌레몬서',1],['hebrews','히브리서',13],['james','야고보서',5],['1peter','베드로전서',5],['2peter','베드로후서',3],['1john','요한일서',5],['2john','요한이서',1],['3john','요한삼서',1],['jude','유다서',1],['revelation','요한계시록',22]];
+import { useState, useEffect, useRef, useCallback } from "react";
+
+const OT=[["genesis","창세기",50],["exodus","출애굽기",40],["leviticus","레위기",27],["numbers","민수기",36],["deuteronomy","신명기",34],["joshua","여호수아",24],["judges","사사기",21],["ruth","룻기",4],["1samuel","사무엘상",31],["2samuel","사무엘하",24],["1kings","열왕기상",22],["2kings","열왕기하",25],["1chronicles","역대상",29],["2chronicles","역대하",36],["ezra","에스라",10],["nehemiah","느헤미야",13],["esther","에스더",10],["job","욥기",42],["psalms","시편",150],["proverbs","잠언",31],["ecclesiastes","전도서",12],["songofsolomon","아가",8],["isaiah","이사야",66],["jeremiah","예레미야",52],["lamentations","애가",5],["ezekiel","에스겔",48],["daniel","다니엘",12],["hosea","호세아",14],["joel","요엘",3],["amos","아모스",9],["obadiah","오바댜",1],["jonah","요나",4],["micah","미가",7],["nahum","나훔",3],["habakkuk","하박국",3],["zephaniah","스바냐",3],["haggai","학개",2],["zechariah","스가랴",14],["malachi","말라기",4]];
+const NT=[["matthew","마태복음",28],["mark","마가복음",16],["luke","누가복음",24],["john","요한복음",21],["acts","사도행전",28],["romans","로마서",16],["1corinthians","고린도전서",16],["2corinthians","고린도후서",13],["galatians","갈라디아서",6],["ephesians","에베소서",6],["philippians","빌립보서",4],["colossians","골로새서",4],["1thessalonians","데살로니가전서",5],["2thessalonians","데살로니가후서",3],["1timothy","디모데전서",6],["2timothy","디모데후서",4],["titus","디도서",3],["philemon","빌레몬서",1],["hebrews","히브리서",13],["james","야고보서",5],["1peter","베드로전서",5],["2peter","베드로후서",3],["1john","요한일서",5],["2john","요한이서",1],["3john","요한삼서",1],["jude","유다서",1],["revelation","요한계시록",22]];
 const BMAP={};
 [...OT,...NT].forEach(([id,ko,ch])=>{BMAP[id]={ko,ch}});
 
+const API_MAP={genesis:"genesis",exodus:"exodus",leviticus:"leviticus",numbers:"numbers",deuteronomy:"deuteronomy",joshua:"joshua",judges:"judges",ruth:"ruth","1samuel":"1+samuel","2samuel":"2+samuel","1kings":"1+kings","2kings":"2+kings","1chronicles":"1+chronicles","2chronicles":"2+chronicles",ezra:"ezra",nehemiah:"nehemiah",esther:"esther",job:"job",psalms:"psalms",proverbs:"proverbs",ecclesiastes:"ecclesiastes",songofsolomon:"song+of+solomon",isaiah:"isaiah",jeremiah:"jeremiah",lamentations:"lamentations",ezekiel:"ezekiel",daniel:"daniel",hosea:"hosea",joel:"joel",amos:"amos",obadiah:"obadiah",jonah:"jonah",micah:"micah",nahum:"nahum",habakkuk:"habakkuk",zephaniah:"zephaniah",haggai:"haggai",zechariah:"zechariah",malachi:"malachi",matthew:"matthew",mark:"mark",luke:"luke",john:"john",acts:"acts",romans:"romans","1corinthians":"1+corinthians","2corinthians":"2+corinthians",galatians:"galatians",ephesians:"ephesians",philippians:"philippians",colossians:"colossians","1thessalonians":"1+thessalonians","2thessalonians":"2+thessalonians","1timothy":"1+timothy","2timothy":"2+timothy",titus:"titus",philemon:"philemon",hebrews:"hebrews",james:"james","1peter":"1+peter","2peter":"2+peter","1john":"1+john","2john":"2+john","3john":"3+john",jude:"jude",revelation:"revelation"};
+const TRANS=[{id:"kor",l:"개역개정"},{id:"kjv",l:"KJV"},{id:"asv",l:"ASV"},{id:"web",l:"WEB"}];
+const FONTS=[{id:"'Noto Serif KR',serif",l:"노토세리프"},{id:"'Georgia',serif",l:"Georgia"},{id:"'Noto Sans KR',sans-serif",l:"노토산스"},{id:"monospace",l:"Mono"}];
+const SIZES=[12,13,14,15,16,17,18];
+
 const cache={};
-async function fetchBook(id){
-  if(cache[id]) return cache[id];
-  const r=await fetch(`bible/${id}.json`);
-  if(!r.ok) throw new Error(`${BMAP[id]?.ko} 파일 없음 (bible/${id}.json)`);
-  const data=await r.json();
-  cache[id]=data;
-  return data;
-}
-
-let pid=0;
-const panels=[];
-
-function createPanel(){
-  if(panels.length>=5) return;
-  const id=++pid;
-  const state={bookId:'john',chapter:3,hl:new Set(),memoOpen:false};
-  const el=document.createElement('div');el.className='panel';
-  const bar=document.createElement('div');bar.className='panel-bar';
-  const textDiv=document.createElement('div');textDiv.className='panel-text';
-  el.appendChild(bar);el.appendChild(textDiv);
-
-  function memoKey(){return `bm_${state.bookId}_${state.chapter}`;}
-
-  function renderBar(){
-    const hasMemo=!!(localStorage.getItem(memoKey())||'');
-    bar.innerHTML=`
-      <select class="book-sel" style="flex:1;min-width:80px">
-        <optgroup label="구약">${OT.map(([bid,bko])=>`<option value="${bid}"${bid===state.bookId?' selected':''}>${bko}</option>`).join('')}</optgroup>
-        <optgroup label="신약">${NT.map(([bid,bko])=>`<option value="${bid}"${bid===state.bookId?' selected':''}>${bko}</option>`).join('')}</optgroup>
-      </select>
-      <div class="nav-ch">
-        <button class="ctrl-btn prev-ch">‹</button>
-        <span class="ch-num">${state.chapter}</span>
-        <button class="ctrl-btn next-ch">›</button>
-      </div>
-      <button class="memo-btn${state.memoOpen?' active':''}">✏ 묵상</button>
-      ${panels.length>1?`<button class="close-btn">✕</button>`:''}
-    `;
-    bar.querySelector('.book-sel').onchange=e=>{state.bookId=e.target.value;state.chapter=1;renderBar();load();};
-    bar.querySelector('.prev-ch').onclick=()=>{if(state.chapter>1){state.chapter--;renderBar();load();}};
-    bar.querySelector('.next-ch').onclick=()=>{const mx=BMAP[state.bookId].ch;if(state.chapter<mx){state.chapter++;renderBar();load();}};
-    bar.querySelector('.memo-btn').onclick=()=>{state.memoOpen=!state.memoOpen;renderMemo();renderBar();};
-    const cb=bar.querySelector('.close-btn');
-    if(cb)cb.onclick=()=>removePanel(id);
-  }
-
-  function renderMemo(){
-    let ma=el.querySelector('.memo-area');
-    if(state.memoOpen){
-      if(!ma){ma=document.createElement('div');ma.className='memo-area';el.appendChild(ma);}
-      const saved=localStorage.getItem(memoKey())||'';
-      ma.innerHTML=`<div class="memo-label">묵상 노트</div><textarea placeholder="말씀을 묵상하며...">${saved}</textarea>`;
-      ma.querySelector('textarea').oninput=e=>localStorage.setItem(memoKey(),e.target.value);
-    } else {if(ma)ma.remove();}
-  }
-
-  async function load(){
-    const narrow=panels.length>3;
-    const fs=narrow?'13px':'15px';
-    textDiv.innerHTML=`<div class="loading"><div class="spinner">✦</div><div>불러오는 중...</div></div>`;
-    const {bookId,chapter}=state;
-    try{
-      const data=await fetchBook(bookId);
-      const verses=data.chapters[chapter]||[];
-      if(!verses.length){textDiv.innerHTML=`<div class="error-msg">${chapter}장 데이터가 없습니다.</div>`;return;}
-      textDiv.innerHTML=`<div class="ch-label">${data.name} ${chapter}</div>`+
-        verses.map(({n,t})=>`<div class="verse-row${state.hl.has(n)?' hl':''}" data-v="${n}">
-          <span class="verse-num">${n}</span>
-          <span class="verse-text" style="font-size:${fs}">${t}</span>
-        </div>`).join('');
-      textDiv.querySelectorAll('.verse-row').forEach(row=>{
-        row.onclick=()=>{const v=+row.dataset.v;state.hl.has(v)?state.hl.delete(v):state.hl.add(v);row.classList.toggle('hl');};
-      });
-    }catch(e){
-      textDiv.innerHTML=`<div class="error-msg">${e.message}<br><br><small>bible/ 폴더의 JSON 파일이 필요합니다.<br>converter.html로 먼저 변환해 주세요.</small></div>`;
+async function fetchVerses(bookId,chapter,trans){
+  if(trans==="kor"){
+    const key=bookId;
+    if(!cache[key]){
+      const r=await fetch(`bible/${bookId}.json`);
+      if(!r.ok) throw new Error(`bible/${bookId}.json 없음 — GitHub에 JSON 파일이 업로드되었는지 확인하세요.`);
+      cache[key]=await r.json();
     }
+    return cache[key].chapters[chapter]||[];
+  } else {
+    const apiId=API_MAP[bookId]||bookId;
+    const r=await fetch(`https://bible-api.com/${apiId}+${chapter}?translation=${trans}`);
+    const data=await r.json();
+    if(data.error) throw new Error(data.error);
+    return data.verses.map(v=>({n:v.verse,t:v.text.replace(/\n/g," ").trim()}));
   }
-
-  const addWrap=document.getElementById('add-wrap');
-  document.getElementById('panels').insertBefore(el,addWrap);
-  panels.push({id,el,renderBar,load});
-  updateUI();renderBar();load();
 }
 
-function removePanel(id){
-  const idx=panels.findIndex(p=>p.id===id);
-  if(idx===-1)return;
-  panels[idx].el.remove();panels.splice(idx,1);updateUI();
+let uid=0;
+
+function ChDropdown({chapter,maxCh,onSelect,onClose}){
+  const ref=useRef(null);
+  useEffect(()=>{
+    const handler=(e)=>{if(ref.current&&!ref.current.contains(e.target))onClose();};
+    document.addEventListener("mousedown",handler);
+    return()=>document.removeEventListener("mousedown",handler);
+  },[onClose]);
+  const cols=maxCh<=30?5:6;
+  return(
+    <div ref={ref} style={{position:"absolute",top:"calc(100% + 4px)",left:"50%",transform:"translateX(-50%)",zIndex:200,background:"#fff",border:"1px solid #d1d5db",borderRadius:8,boxShadow:"0 6px 20px rgba(0,0,0,0.13)",padding:6,display:"grid",gridTemplateColumns:`repeat(${cols},1fr)`,gap:3,maxHeight:220,overflowY:"auto",minWidth:160}}>
+      {Array.from({length:maxCh},(_,i)=>i+1).map(n=>(
+        <div key={n} onClick={()=>onSelect(n)} style={{fontSize:12,padding:"4px 2px",textAlign:"center",borderRadius:4,cursor:"pointer",background:n===chapter?"#4f46e5":"transparent",color:n===chapter?"#fff":"#374151",fontWeight:n===chapter?600:400,border:"1px solid transparent",transition:"all 0.1s"}}
+          onMouseEnter={e=>{if(n!==chapter)e.currentTarget.style.background="#eef2ff";}}
+          onMouseLeave={e=>{if(n!==chapter)e.currentTarget.style.background="transparent";}}
+        >{n}</div>
+      ))}
+    </div>
+  );
 }
-function addPanel(){createPanel();}
-function updateUI(){
-  document.getElementById('count-label').textContent=`패널 ${panels.length} / 5`;
-  document.getElementById('add-wrap').style.display=panels.length<5?'flex':'none';
-  panels.forEach(p=>p.renderBar());
+
+function Panel({canClose,onClose,globalFont,globalSize}){
+  const [trans,setTrans]=useState("kjv");
+  const [bookId,setBookId]=useState("john");
+  const [chapter,setChapter]=useState(3);
+  const [verses,setVerses]=useState([]);
+  const [loading,setLoading]=useState(false);
+  const [err,setErr]=useState(null);
+  const [hl,setHl]=useState(new Set());
+  const [chOpen,setChOpen]=useState(false);
+  const maxCh=BMAP[bookId].ch;
+
+  const load=useCallback(async()=>{
+    setLoading(true);setErr(null);setVerses([]);
+    try{const v=await fetchVerses(bookId,chapter,trans);setVerses(v);}
+    catch(e){setErr(e.message);}
+    finally{setLoading(false);}
+  },[bookId,chapter,trans]);
+
+  useEffect(()=>{load();},[load]);
+
+  const toggleHl=(n)=>setHl(prev=>{const s=new Set(prev);s.has(n)?s.delete(n):s.add(n);return s;});
+
+  const lh=1.85;
+  const verseStyle={fontFamily:globalFont,fontSize:globalSize+"px",lineHeight:lh,color:"#374151"};
+
+  return(
+    <div style={{width:300,flexShrink:0,display:"flex",flexDirection:"column",borderRight:"1px solid #e5e7eb",background:"#fff",height:"100%"}}>
+      {/* Bar */}
+      <div style={{padding:"6px 8px",borderBottom:"1px solid #e5e7eb",display:"flex",alignItems:"center",gap:4,flexWrap:"wrap",background:"#f9fafb",flexShrink:0}}>
+        <select value={trans} onChange={e=>setTrans(e.target.value)} style={{fontSize:11,padding:"2px 4px",borderRadius:4,border:"1px solid #d1d5db",background:"#fff",color:"#374151",cursor:"pointer",outline:"none"}}>
+          {TRANS.map(t=><option key={t.id} value={t.id}>{t.l}</option>)}
+        </select>
+        <select value={bookId} onChange={e=>{setBookId(e.target.value);setChapter(1);setChOpen(false);}} style={{flex:1,minWidth:72,fontSize:12,padding:"2px 4px",borderRadius:4,border:"1px solid #d1d5db",background:"#fff",color:"#374151",cursor:"pointer",outline:"none"}}>
+          <optgroup label="구약">{OT.map(([id,ko])=><option key={id} value={id}>{ko}</option>)}</optgroup>
+          <optgroup label="신약">{NT.map(([id,ko])=><option key={id} value={id}>{ko}</option>)}</optgroup>
+        </select>
+        <div style={{display:"flex",alignItems:"center",gap:2,position:"relative"}}>
+          <button onClick={()=>setChapter(c=>Math.max(1,c-1))} style={{fontSize:13,padding:"2px 7px",borderRadius:4,border:"1px solid #d1d5db",background:"#fff",color:"#6b7280",cursor:"pointer"}}>‹</button>
+          <button onClick={()=>setChOpen(o=>!o)} style={{fontSize:13,fontWeight:600,minWidth:28,padding:"2px 5px",borderRadius:4,border:"1px solid #c7d2fe",background:"#eef2ff",color:"#4f46e5",cursor:"pointer"}}>
+            {chapter}
+          </button>
+          <button onClick={()=>setChapter(c=>Math.min(maxCh,c+1))} style={{fontSize:13,padding:"2px 7px",borderRadius:4,border:"1px solid #d1d5db",background:"#fff",color:"#6b7280",cursor:"pointer"}}>›</button>
+          {chOpen&&<ChDropdown chapter={chapter} maxCh={maxCh} onSelect={n=>{setChapter(n);setChOpen(false);}} onClose={()=>setChOpen(false)}/>}
+        </div>
+        {canClose&&<button onClick={onClose} style={{fontSize:12,padding:"2px 6px",borderRadius:4,border:"1px solid #d1d5db",background:"#fff",color:"#9ca3af",cursor:"pointer",marginLeft:"auto"}}>✕</button>}
+      </div>
+
+      {/* Text */}
+      <div style={{flex:1,overflowY:"auto",padding:"16px 14px"}}>
+        <style>{`::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-thumb{background:#e5e7eb;border-radius:2px}`}</style>
+        {loading&&<div style={{textAlign:"center",paddingTop:50,color:"#9ca3af",fontSize:13}}><div style={{fontSize:20,animation:"spin 1.5s linear infinite",display:"inline-block",marginBottom:8}}>✦</div><br/>불러오는 중...</div>}
+        {err&&<div style={{color:"#ef4444",fontSize:12,padding:16,lineHeight:1.7,textAlign:"center"}}>{err}</div>}
+        {!loading&&!err&&(
+          <>
+            <div style={{fontSize:10,color:"#9ca3af",letterSpacing:3,marginBottom:14,fontFamily:"sans-serif"}}>{BMAP[bookId].ko} {chapter}</div>
+            {verses.map(({n,t})=>(
+              <div key={n} onClick={()=>toggleHl(n)}
+                style={{display:"flex",gap:8,padding:"0 6px",cursor:"pointer",
+                  background:hl.has(n)?"#fef9ec":"transparent",
+                  borderLeft:hl.has(n)?"2px solid #f59e0b":"2px solid transparent",
+                  lineHeight:lh,
+                  marginBottom: `${(globalSize*lh - globalSize)*0.5}px`
+                }}>
+                <span style={{fontSize:10,fontWeight:700,minWidth:18,color:"#f59e0b",fontFamily:"monospace",flexShrink:0,paddingTop:globalSize*0.18+"px"}}>{n}</span>
+                <span style={verseStyle}>{t}</span>
+              </div>
+            ))}
+          </>
+        )}
+      </div>
+    </div>
+  );
 }
-createPanel();
-</script>
-</body>
-</html>
+
+let panelUid=0;
+export default function App(){
+  const [panels,setPanels]=useState(()=>[{id:++panelUid}]);
+  const [font,setFont]=useState("'Noto Serif KR',serif");
+  const [size,setSize]=useState(14);
+
+  useEffect(()=>{
+    const s=document.createElement("style");
+    s.textContent=`@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;500&display=swap');@keyframes spin{to{transform:rotate(360deg)}}`;
+    document.head.appendChild(s);
+    return()=>s.remove();
+  },[]);
+
+  const sel={fontSize:12,padding:"3px 6px",borderRadius:4,border:"1px solid #d1d5db",background:"#fff",color:"#374151",cursor:"pointer",outline:"none",fontFamily:"sans-serif"};
+
+  return(
+    <div style={{width:"100%",height:"100vh",display:"flex",flexDirection:"column",fontFamily:"sans-serif",background:"#f3f4f6"}}>
+      {/* Header */}
+      <div style={{padding:"8px 14px",borderBottom:"1px solid #e5e7eb",display:"flex",alignItems:"center",gap:12,background:"#fff",flexShrink:0}}>
+        <span style={{fontSize:15,fontWeight:700,fontFamily:"'Noto Serif KR',serif",color:"#111827",whiteSpace:"nowrap",flexShrink:0}}>YB 다본문 성경</span>
+        <div style={{display:"flex",alignItems:"center",gap:5,flexWrap:"wrap"}}>
+          <span style={{fontSize:11,color:"#9ca3af"}}>폰트</span>
+          <select style={sel} value={font} onChange={e=>setFont(e.target.value)}>
+            {FONTS.map(f=><option key={f.id} value={f.id}>{f.l}</option>)}
+          </select>
+          <span style={{fontSize:11,color:"#9ca3af"}}>사이즈</span>
+          <select style={sel} value={size} onChange={e=>setSize(Number(e.target.value))}>
+            {SIZES.map(s=><option key={s} value={s}>{s}</option>)}
+          </select>
+        </div>
+        <span style={{fontSize:11,color:"#9ca3af",letterSpacing:1,marginLeft:"auto",whiteSpace:"nowrap"}}>패널 {panels.length} / 6</span>
+      </div>
+
+      {/* Panels area — horizontal scroll */}
+      <div style={{flex:1,overflowX:"auto",overflowY:"hidden",display:"flex",minHeight:0}}>
+        <style>{`div::-webkit-scrollbar{width:6px;height:6px}div::-webkit-scrollbar-track{background:#f3f4f6}div::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:3px}div::-webkit-scrollbar-thumb:hover{background:#9ca3af}`}</style>
+        {panels.map(p=>(
+          <Panel key={p.id}
+            canClose={panels.length>1}
+            onClose={()=>setPanels(prev=>prev.filter(x=>x.id!==p.id))}
+            globalFont={font}
+            globalSize={size}
+          />
+        ))}
+        {panels.length<6&&(
+          <div style={{display:"flex",alignItems:"center",justifyContent:"center",padding:"0 12px",flexShrink:0,background:"#f3f4f6"}}>
+            <button onClick={()=>setPanels(prev=>[...prev,{id:++panelUid}])}
+              style={{width:34,height:34,borderRadius:"50%",fontSize:22,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",border:"1px solid #d1d5db",background:"#fff",color:"#6b7280",lineHeight:1,paddingBottom:1,flexShrink:0}}>+</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
