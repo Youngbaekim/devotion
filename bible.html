@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="1426성경">
+<meta name="theme-color" content="#0e1628">
+<link rel="manifest" href="manifest_bible.json">
 <title>YB 1426 다본문 성경</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;500;700;900&family=Nanum+Myeongjo:wght@400;700&family=Nanum+Gothic&family=KoPub+Dotum:wght@300;500&display=swap">
 <style>
@@ -391,6 +397,15 @@ if(saved){
 } else {
   createPanel('genesis',1);
   createPanel('john',1);
+}
+</script>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw_bible.js')
+      .catch(e => console.log('SW 등록 실패:', e));
+  });
 }
 </script>
 </body>
