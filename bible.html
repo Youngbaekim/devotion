@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -8,56 +9,56 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Noto Sans KR',sans-serif;background:#f3f4f6;height:100vh;overflow:hidden;display:flex;flex-direction:column}
-
 #header{padding:8px 14px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;gap:12px;background:#fff;flex-shrink:0}
 .header-title{font-size:15px;font-weight:700;font-family:'Noto Serif KR',serif;color:#111827;white-space:nowrap;flex-shrink:0}
 .header-controls{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .ctrl-label{font-size:11px;color:#9ca3af;white-space:nowrap}
 .hdr-sel{font-size:12px;padding:3px 6px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#374151;cursor:pointer;outline:none}
 .count-label{font-size:11px;color:#9ca3af;letter-spacing:1px;white-space:nowrap;margin-left:auto;flex-shrink:0}
-
 #panels-wrap{flex:1;display:flex;overflow-x:auto;overflow-y:hidden;min-height:0}
 #panels-wrap::-webkit-scrollbar{height:5px}
 #panels-wrap::-webkit-scrollbar-track{background:#f3f4f6}
 #panels-wrap::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:3px}
 #panels-wrap::-webkit-scrollbar-thumb:hover{background:#9ca3af}
-#panels{display:flex;height:100%}
-
-.panel{width:300px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid #e5e7eb;background:#fff;height:100%}
+#panels{display:flex;height:100%;min-width:min-content}
+.panel{flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid #e5e7eb;background:#fff;height:100%;transition:width 0.2s}
 .panel-bar{padding:6px 8px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;gap:4px;flex-wrap:wrap;background:#f9fafb;flex-shrink:0;position:relative}
-.panel-text{flex:1;overflow-y:auto;padding:16px 14px}
+.panel-text{flex:1;overflow-y:auto;padding:16px 16px}
 .panel-text::-webkit-scrollbar{width:4px}
 .panel-text::-webkit-scrollbar-thumb{background:#e5e7eb;border-radius:2px}
-
-#add-wrap{display:flex;align-items:center;justify-content:center;padding:0 12px;flex-shrink:0;background:#f3f4f6}
-.add-btn{width:34px;height:34px;border-radius:50%;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;border:1px solid #d1d5db;background:#fff;color:#6b7280;transition:background 0.15s;line-height:1;flex-shrink:0}
-.add-btn:hover{background:#e0e7ff;border-color:#a5b4fc;color:#4f46e5}
-
+#add-wrap{display:flex;align-items:center;justify-content:center;padding:0 12px;flex-shrink:0;background:#f3f4f6;min-width:54px}
+.add-btn{width:34px;height:34px;border-radius:50%;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;border:1px solid #d1d5db;background:#fff;color:#6b7280;transition:all 0.15s;line-height:1;flex-shrink:0}
+.add-btn:hover{background:#eef2ff;border-color:#a5b4fc;color:#4f46e5}
 select,button{font-family:'Noto Sans KR',sans-serif}
 .bar-sel{font-size:11px;padding:2px 4px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#374151;cursor:pointer;outline:none}
 .book-sel{flex:1;min-width:72px;font-size:12px;padding:2px 4px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#374151;cursor:pointer;outline:none}
-.arr-btn{font-size:13px;padding:2px 7px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#6b7280;cursor:pointer;transition:background 0.12s}
+.arr-btn{font-size:13px;padding:2px 7px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#6b7280;cursor:pointer}
 .arr-btn:hover{background:#f3f4f6}
-.ch-btn{font-size:13px;font-weight:600;min-width:28px;padding:2px 5px;border-radius:4px;border:1px solid #c7d2fe;background:#eef2ff;color:#4f46e5;cursor:pointer;transition:background 0.12s}
+.ch-btn{font-size:13px;font-weight:600;min-width:28px;padding:2px 5px;border-radius:4px;border:1px solid #c7d2fe;background:#eef2ff;color:#4f46e5;cursor:pointer}
 .ch-btn:hover{background:#e0e7ff}
 .close-btn{font-size:12px;padding:2px 6px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#9ca3af;cursor:pointer;margin-left:auto}
 .close-btn:hover{background:#fee2e2;color:#ef4444;border-color:#fca5a5}
-
 .ch-dropdown{position:absolute;top:calc(100% + 2px);left:0;z-index:300;background:#fff;border:1px solid #d1d5db;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,0.13);padding:6px;display:grid;grid-template-columns:repeat(6,1fr);gap:3px;max-height:220px;overflow-y:auto;min-width:180px}
 .ch-dropdown::-webkit-scrollbar{width:4px}
 .ch-dropdown::-webkit-scrollbar-thumb{background:#e5e7eb;border-radius:2px}
 .ch-item{font-size:12px;padding:4px 2px;text-align:center;border-radius:4px;cursor:pointer;color:#374151;transition:all 0.1s}
 .ch-item:hover{background:#eef2ff;color:#4f46e5}
 .ch-item.cur{background:#4f46e5;color:#fff;font-weight:600}
-
 .ch-label{font-size:10px;color:#9ca3af;letter-spacing:3px;margin-bottom:14px;font-family:sans-serif}
-.verse-row{display:flex;gap:8px;padding:0 6px;cursor:pointer;border-left:2px solid transparent;transition:background 0.12s}
+.verse-row{display:flex;gap:8px;padding:0 5px;cursor:pointer;border-left:2px solid transparent;transition:background 0.12s}
 .verse-row:hover{background:#f9fafb}
 .verse-row.hl{background:#fef9ec;border-left-color:#f59e0b}
-.verse-num{font-size:10px;font-weight:700;min-width:18px;color:#f59e0b;font-family:monospace;flex-shrink:0}
+.verse-row.rtl{flex-direction:row-reverse;border-left:none;border-right:2px solid transparent}
+.verse-row.rtl.hl{border-right-color:#f59e0b}
+.verse-num{font-size:10px;font-weight:700;min-width:18px;color:#f59e0b;font-family:monospace;flex-shrink:0;direction:ltr}
+.verse-body{flex:1}
 .verse-text{color:#4b5563}
+.verse-text sup{font-size:0.7em;color:#6366f1;font-weight:700;vertical-align:super}
+.verse-text i{color:#6b7280;font-style:italic}
 .verse-row.hl .verse-text{color:#111827}
-
+.footnote{font-size:0.85em;color:#6b7280;margin-top:3px;padding-left:2px;line-height:1.5;border-left:2px solid #e5e7eb;padding-left:6px}
+.footnote sup{font-size:0.75em;color:#6366f1;font-weight:700;vertical-align:super}
+.footnote i{color:#6b7280;font-style:italic}
 .loading{text-align:center;padding:50px 0;color:#9ca3af;font-size:13px}
 .spinner{font-size:22px;margin-bottom:8px;display:inline-block;animation:spin 1.5s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -65,7 +66,6 @@ select,button{font-family:'Noto Sans KR',sans-serif}
 </style>
 </head>
 <body>
-
 <div id="header">
   <span class="header-title">YB 다본문 성경</span>
   <div class="header-controls">
@@ -90,7 +90,6 @@ select,button{font-family:'Noto Sans KR',sans-serif}
   </div>
   <span class="count-label" id="count-label">패널 1 / 6</span>
 </div>
-
 <div id="panels-wrap">
   <div id="panels">
     <div id="add-wrap">
@@ -98,115 +97,138 @@ select,button{font-family:'Noto Sans KR',sans-serif}
     </div>
   </div>
 </div>
-
 <script>
-const OT=[["genesis","창세기",50],["exodus","출애굽기",40],["leviticus","레위기",27],["numbers","민수기",36],["deuteronomy","신명기",34],["joshua","여호수아",24],["judges","사사기",21],["ruth","룻기",4],["1samuel","사무엘상",31],["2samuel","사무엘하",24],["1kings","열왕기상",22],["2kings","열왕기하",25],["1chronicles","역대상",29],["2chronicles","역대하",36],["ezra","에스라",10],["nehemiah","느헤미야",13],["esther","에스더",10],["job","욥기",42],["psalms","시편",150],["proverbs","잠언",31],["ecclesiastes","전도서",12],["songofsolomon","아가",8],["isaiah","이사야",66],["jeremiah","예레미야",52],["lamentations","애가",5],["ezekiel","에스겔",48],["daniel","다니엘",12],["hosea","호세아",14],["joel","요엘",3],["amos","아모스",9],["obadiah","오바댜",1],["jonah","요나",4],["micah","미가",7],["nahum","나훔",3],["habakkuk","하박국",3],["zephaniah","스바냐",3],["haggai","학개",2],["zechariah","스가랴",14],["malachi","말라기",4]];
-const NT=[["matthew","마태복음",28],["mark","마가복음",16],["luke","누가복음",24],["john","요한복음",21],["acts","사도행전",28],["romans","로마서",16],["1corinthians","고린도전서",16],["2corinthians","고린도후서",13],["galatians","갈라디아서",6],["ephesians","에베소서",6],["philippians","빌립보서",4],["colossians","골로새서",4],["1thessalonians","데살로니가전서",5],["2thessalonians","데살로니가후서",3],["1timothy","디모데전서",6],["2timothy","디모데후서",4],["titus","디도서",3],["philemon","빌레몬서",1],["hebrews","히브리서",13],["james","야고보서",5],["1peter","베드로전서",5],["2peter","베드로후서",3],["1john","요한일서",5],["2john","요한이서",1],["3john","요한삼서",1],["jude","유다서",1],["revelation","요한계시록",22]];
+const OT=[["genesis","창세기",50,1],["exodus","출애굽기",40,2],["leviticus","레위기",27,3],["numbers","민수기",36,4],["deuteronomy","신명기",34,5],["joshua","여호수아",24,6],["judges","사사기",21,7],["ruth","룻기",4,8],["1samuel","사무엘상",31,9],["2samuel","사무엘하",24,10],["1kings","열왕기상",22,11],["2kings","열왕기하",25,12],["1chronicles","역대상",29,13],["2chronicles","역대하",36,14],["ezra","에스라",10,15],["nehemiah","느헤미야",13,16],["esther","에스더",10,17],["job","욥기",42,18],["psalms","시편",150,19],["proverbs","잠언",31,20],["ecclesiastes","전도서",12,21],["songofsolomon","아가",8,22],["isaiah","이사야",66,23],["jeremiah","예레미야",52,24],["lamentations","애가",5,25],["ezekiel","에스겔",48,26],["daniel","다니엘",12,27],["hosea","호세아",14,28],["joel","요엘",3,29],["amos","아모스",9,30],["obadiah","오바댜",1,31],["jonah","요나",4,32],["micah","미가",7,33],["nahum","나훔",3,34],["habakkuk","하박국",3,35],["zephaniah","스바냐",3,36],["haggai","학개",2,37],["zechariah","스가랴",14,38],["malachi","말라기",4,39]];
+const NT=[["matthew","마태복음",28,40],["mark","마가복음",16,41],["luke","누가복음",24,42],["john","요한복음",21,43],["acts","사도행전",28,44],["romans","로마서",16,45],["1corinthians","고린도전서",16,46],["2corinthians","고린도후서",13,47],["galatians","갈라디아서",6,48],["ephesians","에베소서",6,49],["philippians","빌립보서",4,50],["colossians","골로새서",4,51],["1thessalonians","데살로니가전서",5,52],["2thessalonians","데살로니가후서",3,53],["1timothy","디모데전서",6,54],["2timothy","디모데후서",4,55],["titus","디도서",3,56],["philemon","빌레몬서",1,57],["hebrews","히브리서",13,58],["james","야고보서",5,59],["1peter","베드로전서",5,60],["2peter","베드로후서",3,61],["1john","요한일서",5,62],["2john","요한이서",1,63],["3john","요한삼서",1,64],["jude","유다서",1,65],["revelation","요한계시록",22,66]];
 const BMAP={};
-[...OT,...NT].forEach(([id,ko,ch])=>{BMAP[id]={ko,ch}});
+[...OT,...NT].forEach(([id,ko,ch,num])=>{BMAP[id]={ko,ch,num}});
 
 const API_MAP={"1samuel":"1+samuel","2samuel":"2+samuel","1kings":"1+kings","2kings":"2+kings","1chronicles":"1+chronicles","2chronicles":"2+chronicles","songofsolomon":"song+of+solomon","1corinthians":"1+corinthians","2corinthians":"2+corinthians","1thessalonians":"1+thessalonians","2thessalonians":"2+thessalonians","1timothy":"1+timothy","2timothy":"2+timothy","1peter":"1+peter","2peter":"2+peter","1john":"1+john","2john":"2+john","3john":"3+john"};
 
+// scope: 'all'|'ot'|'nt'
+const TRANS=[
+  {id:'kor',    l:'개역개정', scope:'all', src:'local',   fileId:'kor'},
+  {id:'saebeon',l:'새번역',   scope:'all', src:'local',   fileId:'saebeon'},
+  {id:'esv',    l:'ESV',      scope:'all', src:'local',   fileId:'esv'},
+  {id:'niv',    l:'NIV',      scope:'all', src:'local',   fileId:'niv'},
+  {id:'kjv',    l:'KJV',      scope:'all', src:'bibleapi',fileId:null},
+  {id:'asv',    l:'ASV',      scope:'all', src:'bibleapi',fileId:null},
+  {id:'web',    l:'WEB',      scope:'all', src:'bibleapi',fileId:null},
+  {id:'WLC',    l:'히브리어', scope:'ot',  src:'bolls',   fileId:null},
+  {id:'SBLGNT', l:'헬라어',   scope:'nt',  src:'bolls',   fileId:null},
+];
+
 const cache={};
-async function fetchVerses(bookId,chapter,trans){
-  if(trans==='kor'){
-    if(!cache[bookId]){
-      const r=await fetch(`bible/${bookId}.json`);
-      if(!r.ok) throw new Error(`bible/${bookId}.json 없음`);
-      cache[bookId]=await r.json();
+async function fetchVerses(bookId,chapter,transId){
+  const tr=TRANS.find(t=>t.id===transId);
+  if(tr.src==='local'){
+    const key=`${tr.fileId}_${bookId}`;
+    if(!cache[key]){
+      let url= tr.fileId==='kor'?`bible/${bookId}.json`:`bible/${bookId}_${tr.fileId}.json`;
+      const r=await fetch(url);
+      if(!r.ok) throw new Error(`${url} 파일 없음 — GitHub에 JSON 파일을 업로드하세요.`);
+      cache[key]=await r.json();
     }
-    return cache[bookId].chapters[chapter]||[];
-  } else {
-    const apiId=API_MAP[bookId]||bookId;
-    const r=await fetch(`https://bible-api.com/${apiId}+${chapter}?translation=${trans}`);
-    const d=await r.json();
-    if(d.error) throw new Error(d.error);
-    return d.verses.map(v=>({n:v.verse,t:v.text.replace(/\n/g,' ').trim()}));
+    return cache[key].chapters[chapter]||[];
   }
+  if(tr.src==='bolls'){
+    const bookNum=BMAP[bookId].num;
+    const key=`${transId}_${bookId}_${chapter}`;
+    if(cache[key]) return cache[key];
+    const r=await fetch(`https://bolls.life/get-text/${transId}/${bookNum}/${chapter}/`);
+    if(!r.ok) throw new Error('bolls.life 응답 오류');
+    const data=await r.json();
+    const verses=data.map(v=>({n:v.verse,t:v.text,f:''}));
+    cache[key]=verses;
+    return verses;
+  }
+  // bibleapi
+  const apiId=API_MAP[bookId]||bookId;
+  const r=await fetch(`https://bible-api.com/${apiId}+${chapter}?translation=${transId}`);
+  const d=await r.json();
+  if(d.error) throw new Error(d.error);
+  return d.verses.map(v=>({n:v.verse,t:v.text.replace(/\n/g,' ').trim(),f:''}));
 }
 
-// Global style
-let gFont="'Noto Serif KR',serif";
-let gSize=14;
+let gFont="'Noto Serif KR',serif", gSize=14;
 const LH=1.85;
-
 document.getElementById('font-sel').onchange=e=>{gFont=e.target.value;applyGlobal();};
 document.getElementById('size-sel').onchange=e=>{gSize=parseInt(e.target.value);applyGlobal();};
-
 function applyGlobal(){
-  document.querySelectorAll('.verse-text').forEach(el=>{
-    el.style.fontFamily=gFont;
-    el.style.fontSize=gSize+'px';
-    el.style.lineHeight=LH;
-  });
-  document.querySelectorAll('.verse-num').forEach(el=>{
-    el.style.paddingTop=(gSize*0.18)+'px';
-  });
-  document.querySelectorAll('.verse-row').forEach(el=>{
-    el.style.marginBottom=(gSize*(LH-1)*0.5)+'px';
-  });
+  document.querySelectorAll('.verse-text,.footnote').forEach(el=>{el.style.fontSize=gSize+'px';el.style.lineHeight=LH;el.style.fontFamily=gFont;});
+  document.querySelectorAll('.footnote').forEach(el=>{el.style.fontSize=(gSize*0.85)+'px';});
+  document.querySelectorAll('.verse-row').forEach(el=>{el.style.marginBottom=(gSize*(LH-1)*0.4)+'px';});
+  document.querySelectorAll('.verse-num').forEach(el=>{el.style.paddingTop=(gSize*0.15)+'px';});
 }
 
 let pid=0;
 const panels=[];
+
+function panelWidth(){return panels.length<=1?'100%':'300px';}
+function refreshWidths(){panels.forEach(p=>p.el.style.width=panelWidth());}
 
 function createPanel(){
   if(panels.length>=6) return;
   const id=++pid;
   const state={bookId:'john',chapter:3,trans:'kor',hl:new Set(),chOpen:false};
 
-  const el=document.createElement('div');
-  el.className='panel';
-  const bar=document.createElement('div');
-  bar.className='panel-bar';
-  const textDiv=document.createElement('div');
-  textDiv.className='panel-text';
-  el.appendChild(bar);
-  el.appendChild(textDiv);
+  const el=document.createElement('div');el.className='panel';el.style.width=panelWidth();
+  const bar=document.createElement('div');bar.className='panel-bar';
+  const textDiv=document.createElement('div');textDiv.className='panel-text';
+  el.appendChild(bar);el.appendChild(textDiv);
 
-  // Close dropdown on outside click
-  document.addEventListener('click',e=>{
-    if(state.chOpen && !bar.contains(e.target)){
-      state.chOpen=false;
-      renderDropdown();
-    }
-  });
+  document.addEventListener('click',e=>{if(state.chOpen&&!bar.contains(e.target)){state.chOpen=false;renderDropdown();}});
+
+  function getAvailBooks(){
+    const tr=TRANS.find(t=>t.id===state.trans);
+    if(tr.scope==='ot') return {ot:OT,nt:[]};
+    if(tr.scope==='nt') return {ot:[],nt:NT};
+    return {ot:OT,nt:NT};
+  }
 
   function renderDropdown(){
-    const existing=bar.querySelector('.ch-dropdown');
-    if(existing) existing.remove();
+    const old=bar.querySelector('.ch-dropdown');
+    if(old) old.remove();
     if(!state.chOpen) return;
     const maxCh=BMAP[state.bookId].ch;
-    const dd=document.createElement('div');
-    dd.className='ch-dropdown';
+    const dd=document.createElement('div');dd.className='ch-dropdown';
     for(let n=1;n<=maxCh;n++){
       const item=document.createElement('div');
       item.className='ch-item'+(n===state.chapter?' cur':'');
       item.textContent=n;
-      item.onclick=(e)=>{e.stopPropagation();state.chapter=n;state.chOpen=false;renderBar();load();};
+      item.onclick=e=>{e.stopPropagation();state.chapter=n;state.chOpen=false;renderBar();load();};
       dd.appendChild(item);
     }
     bar.querySelector('.nav-wrap').appendChild(dd);
   }
 
   function renderBar(){
-    const maxCh=BMAP[state.bookId].ch;
+    const {ot,nt}=getAvailBooks();
+    const isRTL=state.trans==='WLC';
     bar.innerHTML=`
       <select class="bar-sel trans-sel">
-        ${['kor','kjv','asv','web'].map(t=>`<option value="${t}"${t===state.trans?' selected':''}>${t==='kor'?'개역개정':t.toUpperCase()}</option>`).join('')}
+        ${TRANS.map(t=>`<option value="${t.id}"${t.id===state.trans?' selected':''}>${t.l}</option>`).join('')}
       </select>
       <select class="book-sel">
-        <optgroup label="구약">${OT.map(([bid,bko])=>`<option value="${bid}"${bid===state.bookId?' selected':''}>${bko}</option>`).join('')}</optgroup>
-        <optgroup label="신약">${NT.map(([bid,bko])=>`<option value="${bid}"${bid===state.bookId?' selected':''}>${bko}</option>`).join('')}</optgroup>
+        ${ot.length?`<optgroup label="구약">${ot.map(([bid,bko])=>`<option value="${bid}"${bid===state.bookId?' selected':''}>${bko}</option>`).join('')}</optgroup>`:''}
+        ${nt.length?`<optgroup label="신약">${nt.map(([bid,bko])=>`<option value="${bid}"${bid===state.bookId?' selected':''}>${bko}</option>`).join('')}</optgroup>`:''}
       </select>
       <div class="nav-wrap" style="display:flex;align-items:center;gap:2px;position:relative">
         <button class="arr-btn prev-btn">‹</button>
         <button class="ch-btn">${state.chapter}</button>
         <button class="arr-btn next-btn">›</button>
       </div>
-      ${panels.length>1?`<button class="close-btn">✕</button>`:''}
+      ${panels.length>1?'<button class="close-btn">✕</button>':''}
     `;
-    bar.querySelector('.trans-sel').onchange=e=>{state.trans=e.target.value;load();};
+    bar.querySelector('.trans-sel').onchange=e=>{
+      const prev=state.trans; state.trans=e.target.value;
+      const {ot,nt}=getAvailBooks();
+      const allAvail=[...ot,...nt];
+      if(!allAvail.find(([bid])=>bid===state.bookId)){
+        state.bookId=allAvail[0][0]; state.chapter=1;
+      }
+      state.chOpen=false; renderBar(); load();
+    };
     bar.querySelector('.book-sel').onchange=e=>{state.bookId=e.target.value;state.chapter=1;state.chOpen=false;renderBar();load();};
     bar.querySelector('.prev-btn').onclick=e=>{e.stopPropagation();if(state.chapter>1){state.chapter--;state.chOpen=false;renderBar();load();}};
     bar.querySelector('.next-btn').onclick=e=>{e.stopPropagation();const mx=BMAP[state.bookId].ch;if(state.chapter<mx){state.chapter++;state.chOpen=false;renderBar();load();}};
@@ -214,58 +236,55 @@ function createPanel(){
     const cb=bar.querySelector('.close-btn');
     if(cb) cb.onclick=()=>removePanel(id);
     if(state.chOpen) renderDropdown();
+    // RTL
+    textDiv.style.direction=state.trans==='WLC'?'rtl':'ltr';
   }
 
   async function load(){
+    const mb=(gSize*(LH-1)*0.4)+'px';
+    const pt=(gSize*0.15)+'px';
     textDiv.innerHTML=`<div class="loading"><div class="spinner">✦</div><br>불러오는 중...</div>`;
     const {bookId,chapter,trans}=state;
+    const isRTL=trans==='WLC';
     try{
       const verses=await fetchVerses(bookId,chapter,trans);
-      if(!verses.length){textDiv.innerHTML=`<div class="err-msg">${chapter}장 데이터가 없습니다.</div>`;return;}
-      const mb=(gSize*(LH-1)*0.5)+'px';
-      const pt=(gSize*0.18)+'px';
-      textDiv.innerHTML=`<div class="ch-label">${BMAP[bookId].ko} ${chapter}</div>`+
-        verses.map(({n,t})=>`
-          <div class="verse-row${state.hl.has(n)?' hl':''}" data-v="${n}" style="margin-bottom:${mb}">
+      if(!verses.length){textDiv.innerHTML=`<div class="err-msg">${chapter}장 데이터 없음</div>`;return;}
+      const labelDir=isRTL?'direction:ltr;text-align:right':'';
+      textDiv.innerHTML=`<div class="ch-label" style="${labelDir}">${BMAP[bookId].ko} ${chapter}</div>`+
+        verses.map(({n,t,f})=>`
+          <div class="verse-row${state.hl.has(n)?' hl':''}${isRTL?' rtl':''}" data-v="${n}" style="margin-bottom:${mb}">
             <span class="verse-num" style="padding-top:${pt}">${n}</span>
-            <span class="verse-text" style="font-family:${gFont};font-size:${gSize}px;line-height:${LH}">${t}</span>
+            <div class="verse-body">
+              <div class="verse-text" style="font-family:${gFont};font-size:${gSize}px;line-height:${LH}">${t}</div>
+              ${f?`<div class="footnote" style="font-family:${gFont};font-size:${gSize*0.85}px;line-height:${LH}">${f}</div>`:''}
+            </div>
           </div>`).join('');
       textDiv.querySelectorAll('.verse-row').forEach(row=>{
-        row.onclick=()=>{
-          const v=+row.dataset.v;
-          state.hl.has(v)?state.hl.delete(v):state.hl.add(v);
-          row.classList.toggle('hl');
-        };
+        row.onclick=()=>{const v=+row.dataset.v;state.hl.has(v)?state.hl.delete(v):state.hl.add(v);row.classList.toggle('hl');};
       });
     }catch(e){
-      textDiv.innerHTML=`<div class="err-msg">${e.message||'본문을 불러오지 못했습니다.'}<br><small style="color:#9ca3af">개역개정은 bible/ 폴더 JSON 파일이 필요합니다.</small></div>`;
+      textDiv.innerHTML=`<div class="err-msg">${e.message}</div>`;
     }
   }
 
   const addWrap=document.getElementById('add-wrap');
   document.getElementById('panels').insertBefore(el,addWrap);
   panels.push({id,el,renderBar});
-  updateUI();
-  renderBar();
-  load();
+  updateUI(); renderBar(); load();
 }
 
 function removePanel(id){
   const idx=panels.findIndex(p=>p.id===id);
-  if(idx===-1) return;
-  panels[idx].el.remove();
-  panels.splice(idx,1);
-  updateUI();
+  if(idx===-1)return;
+  panels[idx].el.remove();panels.splice(idx,1);updateUI();
 }
-
 function addPanel(){createPanel();}
-
 function updateUI(){
   document.getElementById('count-label').textContent=`패널 ${panels.length} / 6`;
   document.getElementById('add-wrap').style.display=panels.length<6?'flex':'none';
+  refreshWidths();
   panels.forEach(p=>p.renderBar());
 }
-
 createPanel();
 </script>
 </body>
