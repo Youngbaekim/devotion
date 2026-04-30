@@ -78,18 +78,18 @@ select,button{font-family:'Noto Sans KR',sans-serif}
 .err-msg{color:#ef4444;font-size:13px;padding:24px;line-height:1.8;text-align:center}
 
 /* ── Dark Mode ── */
-body.dark{background:#1a1a2e}
-body.dark #header{background:#16213e;border-color:#2d3748}
+body.dark{background:#0e1628}
+body.dark #header{background:#111f3a;border-color:#2d3748}
 body.dark .header-title{color:#e2e8f0}
 body.dark .hsel{background:#2d3748;border-color:#4a5568;color:#e2e8f0}
 body.dark .cl{color:#718096}
 body.dark .sval{color:#e2e8f0}
 body.dark .sbtn{background:#2d3748;border-color:#4a5568;color:#a0aec0}
 body.dark .sbtn:hover{background:#4a5568}
-body.dark #panels-wrap::-webkit-scrollbar-track{background:#1a1a2e}
+body.dark #panels-wrap::-webkit-scrollbar-track{background:#0e1628}
 body.dark #panels-wrap::-webkit-scrollbar-thumb{background:#4a5568}
-body.dark .panel{background:#16213e;border-color:#2d3748}
-body.dark .panel-bar{background:#0f3460;border-color:#2d3748}
+body.dark .panel{background:#111f3a;border-color:#2d3748}
+body.dark .panel-bar{background:#0d2a4a;border-color:#2d3748}
 body.dark .bar-sel,body.dark .book-sel{background:#2d3748;border-color:#4a5568;color:#e2e8f0}
 body.dark .arr-btn{background:#2d3748;border-color:#4a5568;color:#a0aec0}
 body.dark .arr-btn:hover{background:#4a5568}
@@ -97,14 +97,14 @@ body.dark .ch-btn{background:#312e81;border-color:#4338ca;color:#a5b4fc}
 body.dark .ch-btn:hover{background:#3730a3}
 body.dark .close-btn{background:#2d3748;border-color:#4a5568;color:#718096}
 body.dark .close-btn:hover{background:#7f1d1d;color:#fca5a5}
-body.dark .ch-dropdown{background:#1e293b;border-color:#4a5568;box-shadow:0 6px 20px rgba(0,0,0,0.5)}
+body.dark .ch-dropdown{background:#152238;border-color:#4a5568;box-shadow:0 6px 20px rgba(0,0,0,0.5)}
 body.dark .chi,.ch-item{color:#cbd5e0}
 body.dark .ch-item{color:#cbd5e0}
 body.dark .ch-item:hover{background:#312e81;color:#a5b4fc}
 body.dark .ch-item.cur{background:#4f46e5;color:#fff}
 body.dark .panel-text::-webkit-scrollbar-thumb{background:#4a5568}
 body.dark .ch-label{color:#718096}
-body.dark .verse-row:hover{background:#1e293b}
+body.dark .verse-row:hover{background:#152238}
 body.dark .verse-row.hl{background:#1c1917;border-left-color:#d97706}
 body.dark .verse-row.rtl.hl{border-right-color:#d97706}
 body.dark .verse-num{color:#d97706}
@@ -231,10 +231,10 @@ function applyGlobal(){
 
 let pid=0;const panels=[];
 
-function createPanel(initBook='john', initChapter=3){
+function createPanel(initBook='john', initChapter=3, initTrans='kor'){
   if(panels.length>=6)return;
   const id=++pid;
-  const state={bookId:initBook,chapter:initChapter,trans:'kor',hl:new Set(),chOpen:false};
+  const state={bookId:initBook,chapter:initChapter,trans:initTrans,hl:new Set(),chOpen:false};
   const el=document.createElement('div');el.className='panel';
   const bar=document.createElement('div');bar.className='panel-bar';
   const textDiv=document.createElement('div');textDiv.className='panel-text';
@@ -260,7 +260,7 @@ function createPanel(initBook='john', initChapter=3){
       const item=document.createElement('div');
       item.className='ch-item'+(n===state.chapter?' cur':'');
       item.textContent=n;
-      item.onclick=e=>{e.stopPropagation();state.chapter=n;state.chOpen=false;document.getElementById('ch-drop-'+id)?.remove();renderBar();load();};
+      item.onclick=e=>{e.stopPropagation();state.chapter=n;state.chOpen=false;document.getElementById('ch-drop-'+id)?.remove();renderBar();load();saveSession();};
       dd.appendChild(item);
     }
     document.body.appendChild(dd);
@@ -296,11 +296,11 @@ function createPanel(initBook='john', initChapter=3){
       state.trans=e.target.value;
       const{ot,nt}=availBooks();const all=[...ot,...nt];
       if(!all.find(([bid])=>bid===state.bookId)){state.bookId=all[0][0];state.chapter=1;}
-      state.chOpen=false;renderBar();load();
+      state.chOpen=false;renderBar();load();saveSession();
     };
-    bar.querySelector('.book-sel').onchange=e=>{state.bookId=e.target.value;state.chapter=1;state.chOpen=false;renderBar();load();};
-    bar.querySelector('.prev-btn').onclick=e=>{e.stopPropagation();if(state.chapter>1){state.chapter--;state.chOpen=false;renderBar();load();}};
-    bar.querySelector('.next-btn').onclick=e=>{e.stopPropagation();const mx=BMAP[state.bookId].ch;if(state.chapter<mx){state.chapter++;state.chOpen=false;renderBar();load();}};
+    bar.querySelector('.book-sel').onchange=e=>{state.bookId=e.target.value;state.chapter=1;state.chOpen=false;renderBar();load();saveSession();};
+    bar.querySelector('.prev-btn').onclick=e=>{e.stopPropagation();if(state.chapter>1){state.chapter--;state.chOpen=false;renderBar();load();saveSession();}};
+    bar.querySelector('.next-btn').onclick=e=>{e.stopPropagation();const mx=BMAP[state.bookId].ch;if(state.chapter<mx){state.chapter++;state.chOpen=false;renderBar();load();saveSession();}};
     bar.querySelector('.ch-btn').onclick=e=>{e.stopPropagation();state.chOpen=!state.chOpen;renderDropdown();};
     const cb=bar.querySelector('.close-btn');if(cb)cb.onclick=()=>removePanel(id);
     if(state.chOpen)renderDropdown();
@@ -332,7 +332,7 @@ function createPanel(initBook='john', initChapter=3){
 
   document.getElementById('panels').appendChild(el);
   panels.push({id, el, renderBar,
-    getState:()=>({bookId:state.bookId, chapter:state.chapter}),
+    getState:()=>({bookId:state.bookId, chapter:state.chapter, trans:state.trans}),
     setBookChapter:(bookId,chapter)=>{
       state.bookId=bookId;
       state.chapter=chapter;
@@ -341,13 +341,13 @@ function createPanel(initBook='john', initChapter=3){
       load();
     }
   });
-  updateUI();renderBar();load();
+  updateUI();renderBar();load();saveSession();
 }
 
 function removePanel(id){
   const idx=panels.findIndex(p=>p.id===id);if(idx===-1)return;
   panels[idx].el.remove();panels.splice(idx,1);
-  updateUI();
+  updateUI();saveSession();
 }
 function addPanel(){createPanel();}
 function toggleTheme(){
@@ -359,6 +359,7 @@ function syncPanels(){
   const first=panels[0];
   const {bookId,chapter}=first.getState();
   panels.slice(1).forEach(p=>p.setBookChapter(bookId,chapter));
+  saveSession();
 }
 function updateUI(){
   document.getElementById('add-panel-btn').disabled=panels.length>=6;
@@ -366,8 +367,31 @@ function updateUI(){
 }
 
 
-createPanel('genesis',1);
-createPanel('john',1);
+
+// ── Session persistence ──
+function saveSession(){
+  const data=panels.map(p=>{const s=p.getState();return{bookId:s.bookId,chapter:s.chapter,trans:s.trans};});
+  try{localStorage.setItem('bible_session',JSON.stringify(data));}catch(e){}
+}
+
+function loadSession(){
+  try{
+    const raw=localStorage.getItem('bible_session');
+    if(!raw) return null;
+    const data=JSON.parse(raw);
+    if(!Array.isArray(data)||data.length===0) return null;
+    return data;
+  }catch(e){return null;}
+}
+
+
+const saved=loadSession();
+if(saved){
+  saved.forEach(s=>createPanel(s.bookId||'john', s.chapter||1, s.trans||'kor'));
+} else {
+  createPanel('genesis',1);
+  createPanel('john',1);
+}
 </script>
 </body>
 </html>
