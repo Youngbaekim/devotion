@@ -233,10 +233,10 @@ function applyGlobal(){
 
 let pid=0;const panels=[];
 
-function createPanel(){
+function createPanel(initBook='john', initChapter=3){
   if(panels.length>=6)return;
   const id=++pid;
-  const state={bookId:'john',chapter:3,trans:'kor',hl:new Set(),chOpen:false};
+  const state={bookId:initBook,chapter:initChapter,trans:'kor',hl:new Set(),chOpen:false};
   const el=document.createElement('div');el.className='panel';
   const bar=document.createElement('div');bar.className='panel-bar';
   const textDiv=document.createElement('div');textDiv.className='panel-text';
@@ -356,7 +356,8 @@ function updateUI(){
   document.getElementById('add-panel-btn').disabled=panels.length>=6;
   panels.forEach(p=>p.renderBar());
 }
-createPanel();
+createPanel('genesis',1);
+createPanel('john',1);
 </script>
 </body>
 </html>
