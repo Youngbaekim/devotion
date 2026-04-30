@@ -51,10 +51,8 @@ select,button{font-family:'Noto Sans KR',sans-serif}
 .close-btn:hover{background:#fee2e2;color:#ef4444}
 
 /* Chapter dropdown */
-.ch-dropdown{position:absolute;top:calc(100% + 2px);left:0;z-index:300;background:#fff;border:1px solid #d1d5db;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,0.15);padding:6px;display:grid;grid-template-columns:repeat(6,1fr);gap:3px;max-height:220px;overflow-y:auto;min-width:185px}
-.ch-dropdown::-webkit-scrollbar{width:4px}
-.ch-dropdown::-webkit-scrollbar-thumb{background:#e5e7eb;border-radius:2px}
-.ch-item{font-size:13px;padding:5px 2px;text-align:center;border-radius:4px;cursor:pointer;color:#374151;transition:all 0.1s}
+.ch-dropdown{position:fixed;z-index:9999;background:#fff;border:1px solid #d1d5db;border-radius:8px;box-shadow:0 6px 24px rgba(0,0,0,0.18);padding:8px;display:grid;grid-template-columns:repeat(8,1fr);gap:3px;max-width:calc(100vw - 24px)}
+.ch-item{font-size:13px;padding:5px 3px;text-align:center;border-radius:4px;cursor:pointer;color:#374151;transition:all 0.1s;min-width:26px}
 .ch-item:hover{background:#eef2ff;color:#4f46e5}
 .ch-item.cur{background:#4f46e5;color:#fff;font-weight:600}
 
@@ -243,7 +241,7 @@ function createPanel(initBook='john', initChapter=3){
   el.appendChild(bar);el.appendChild(textDiv);
 
   document.addEventListener('click',e=>{
-    if(state.chOpen&&!bar.contains(e.target)){state.chOpen=false;renderDropdown();}
+    if(state.chOpen&&!bar.contains(e.target)&&!document.getElementById('ch-drop-'+id)?.contains(e.target)){state.chOpen=false;document.getElementById('ch-drop-'+id)?.remove();}
   });
 
   function availBooks(){
@@ -254,18 +252,27 @@ function createPanel(initBook='john', initChapter=3){
   }
 
   function renderDropdown(){
-    const old=bar.querySelector('.ch-dropdown');if(old)old.remove();
+    const old=document.getElementById('ch-drop-'+id);if(old)old.remove();
     if(!state.chOpen)return;
     const maxCh=BMAP[state.bookId].ch;
-    const dd=document.createElement('div');dd.className='ch-dropdown';
+    const dd=document.createElement('div');dd.className='ch-dropdown';dd.id='ch-drop-'+id;
     for(let n=1;n<=maxCh;n++){
       const item=document.createElement('div');
       item.className='ch-item'+(n===state.chapter?' cur':'');
       item.textContent=n;
-      item.onclick=e=>{e.stopPropagation();state.chapter=n;state.chOpen=false;renderBar();load();};
+      item.onclick=e=>{e.stopPropagation();state.chapter=n;state.chOpen=false;document.getElementById('ch-drop-'+id)?.remove();renderBar();load();};
       dd.appendChild(item);
     }
-    bar.querySelector('.nav-wrap').appendChild(dd);
+    document.body.appendChild(dd);
+    // position: below ch-btn, right-edge safe
+    const btn=bar.querySelector('.ch-btn');
+    const rect=btn.getBoundingClientRect();
+    const dropW=Math.min(maxCh<=30?220:maxCh<=60?280:340, window.innerWidth-24);
+    dd.style.width=dropW+'px';
+    let left=rect.left;
+    if(left+dropW>window.innerWidth-12) left=window.innerWidth-dropW-12;
+    dd.style.left=Math.max(12,left)+'px';
+    dd.style.top=(rect.bottom+4)+'px';
   }
 
   function renderBar(){
