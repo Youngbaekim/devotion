@@ -32,7 +32,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:#f3f4f6;height:100dvh;over
 #panels{display:flex;height:100%;width:100%}
 
 .panel{flex:1;min-width:min(460px,92vw);display:flex;flex-direction:column;border-right:1px solid #e5e7eb;background:#fff;height:100%;scroll-snap-align:start}
-.panel:last-of-type{border-right:1px solid #e5e7eb}
 .panel-bar{padding:6px 8px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;gap:4px;flex-wrap:nowrap;overflow-x:auto;background:#f9fafb;flex-shrink:0;position:relative}
 .panel-bar::-webkit-scrollbar{display:none}
 .panel-text{flex:1;overflow-y:auto;padding:16px 16px;-webkit-overflow-scrolling:touch}
@@ -166,7 +165,7 @@ body.dark #theme-btn:hover,body.dark #sync-btn:hover{background:#4a5568}
 </div>
 
 <div id="panels-wrap">
-  <div id="panels" style="display:flex;height:100%;"></div>
+  <div id="panels"></div>
 </div>
 
 <script>
@@ -343,14 +342,12 @@ function createPanel(initBook='john', initChapter=3){
     }
   });
   updateUI();renderBar();load();
-  insertResizers();
-  resetWidths();
 }
 
 function removePanel(id){
   const idx=panels.findIndex(p=>p.id===id);if(idx===-1)return;
   panels[idx].el.remove();panels.splice(idx,1);
-  insertResizers();resetWidths();updateUI();
+  updateUI();
 }
 function addPanel(){createPanel();}
 function toggleTheme(){
@@ -368,55 +365,6 @@ function updateUI(){
   panels.forEach(p=>p.renderBar());
 }
 
-function insertResizers(){
-  // Remove existing resizers
-  document.querySelectorAll('.resizer').forEach(r=>r.remove());
-  // Insert between panels
-  for(let i=0;i<panels.length-1;i++){
-    const r=document.createElement('div');r.className='resizer';
-    panels[i+1].el.before(r);
-    makeResizable(r,panels[i].el,panels[i+1].el);
-  }
-}
-
-function resetWidths(){
-  panels.forEach(p=>{p.el.style.flex='1';p.el.style.width='';p.el.style.minWidth='460px';});
-}
-
-function makeResizable(resizer,leftEl,rightEl){
-  let startX,startLeft,startRight;
-  function onStart(e){
-    e.preventDefault();
-    startX=e.touches?e.touches[0].clientX:e.clientX;
-    startLeft=leftEl.getBoundingClientRect().width;
-    startRight=rightEl.getBoundingClientRect().width;
-    resizer.classList.add('dragging');
-    document.addEventListener('mousemove',onMove);
-    document.addEventListener('mouseup',onEnd);
-    document.addEventListener('touchmove',onMove,{passive:false});
-    document.addEventListener('touchend',onEnd);
-  }
-  function onMove(e){
-    const x=e.touches?e.touches[0].clientX:e.clientX;
-    const dx=x-startX;
-    const minW=200;
-    const newLeft=Math.max(minW,startLeft+dx);
-    const newRight=Math.max(minW,startRight-dx);
-    leftEl.style.flex='none';leftEl.style.width=newLeft+'px';leftEl.style.minWidth='0';
-    rightEl.style.flex='none';rightEl.style.width=newRight+'px';rightEl.style.minWidth='0';
-  }
-  function onEnd(){
-    resizer.classList.remove('dragging');
-    document.removeEventListener('mousemove',onMove);
-    document.removeEventListener('mouseup',onEnd);
-    document.removeEventListener('touchmove',onMove);
-    document.removeEventListener('touchend',onEnd);
-  }
-  resizer.addEventListener('mousedown',onStart);
-  resizer.addEventListener('touchstart',onStart,{passive:false});
-  // Double-click to reset equal widths
-  resizer.addEventListener('dblclick',()=>resetWidths());
-}
 
 createPanel('genesis',1);
 createPanel('john',1);
