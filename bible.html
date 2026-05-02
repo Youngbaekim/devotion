@@ -368,6 +368,7 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
       const{ot,nt}=availBooks();const all=[...ot,...nt];
       if(!all.find(([bid])=>bid===state.bookId)){state.bookId=all[0][0];state.chapter=1;}
       state.chOpen=false;renderBar();load();saveSession();
+      if(LOCAL_TRANS.includes(state.trans)) preloadAllBooks(TRANS.find(t=>t.id===state.trans)?.fid?state.trans:null);
     };
     bar.querySelector('.book-sel').onchange=e=>{state.bookId=e.target.value;state.chapter=1;state.chOpen=false;renderBar();load();saveSession();};
     bar.querySelector('.prev-btn').onclick=e=>{e.stopPropagation();if(state.chapter>1){state.chapter--;state.chOpen=false;renderBar();load();saveSession();}};
@@ -446,6 +447,35 @@ function saveSession(){
   try{localStorage.setItem('bible_session',JSON.stringify(data));}catch(e){}
 }
 
+
+// ── Background Preload ──
+async function preloadAllBooks(transId){
+  const tr=TRANS.find(t=>t.id===transId);
+  if(!tr||tr.src!=='local') return;
+  const allBooks=[...OT,...NT];
+  // Fetch all books in parallel (batches of 10 to avoid overwhelming)
+  const batchSize=10;
+  for(let i=0;i<allBooks.length;i+=batchSize){
+    const batch=allBooks.slice(i,i+batchSize);
+    await Promise.all(batch.map(async([bookId])=>{
+      const key=`${tr.fid}_${bookId}`;
+      if(cache[key]) return;
+      try{
+        const url=tr.fid==='kor'?`bible/${bookId}.json`:`bible/${bookId}_${tr.fid}.json`;
+        const r=await fetch(url);
+        if(r.ok) cache[key]=await r.json();
+      }catch(e){}
+    }));
+  }
+}
+
+function startBackgroundPreload(){
+  // Preload the trans of each open panel, sequentially per trans
+  const transSet=new Set(panels.map(p=>p.getState().trans).filter(t=>LOCAL_TRANS.includes(t)));
+  let chain=Promise.resolve();
+  transSet.forEach(t=>{chain=chain.then(()=>preloadAllBooks(t));});
+}
+
 function loadSession(){
   try{
     const raw=localStorage.getItem('bible_session');
@@ -460,6 +490,7 @@ function loadSession(){
 const saved=loadSession();
 if(saved){
   saved.forEach(s=>createPanel(s.bookId||'john', s.chapter||1, s.trans||'kor'));
+startBackgroundPreload();
 } else {
   createPanel('genesis',1);
   createPanel('john',1);
@@ -482,7 +513,13 @@ function openSearch(){
   }
   document.getElementById('search-input').value='';
   document.getElementById('search-results').innerHTML='';
-  document.getElementById('search-status').textContent='로컬 역본(개역개정·새번역·ESV·NIV)만 전권 검색 가능합니다.';
+  const preloadedCount=TRANS.filter(t=>LOCAL_TRANS.includes(t.id)).reduce((acc,t)=>{
+    const loaded=[...OT,...NT].filter(([id])=>cache[`${t.fid}_${id}`]).length;
+    return acc+(loaded===66?1:0);
+  },0);
+  const totalLocal=TRANS.filter(t=>LOCAL_TRANS.includes(t.id)).length;
+  const readyMsg=preloadedCount>0?` (${preloadedCount}/${totalLocal}개 역본 캐시됨)`:'';
+  document.getElementById('search-status').textContent='로컬 역본(개역개정·새번역·ESV·NIV)만 전권 검색 가능합니다.'+readyMsg;
   document.getElementById('search-modal').classList.add('open');
   setTimeout(()=>document.getElementById('search-input').focus(),100);
 }
@@ -514,17 +551,25 @@ async function doSearch(){
   const results=[];
   const qLower=q.toLowerCase();
 
-  for(const [bookId,bookKo,,] of allBooks){
-    const key=`${tr.fid}_${bookId}`;
-    if(!cache[key]){
+  // If not yet preloaded, fetch remaining books in parallel first
+  const missing=allBooks.filter(([bookId])=>!cache[`${tr.fid}_${bookId}`]);
+  if(missing.length>0){
+    status.textContent=`캐시 로드 중... (${missing.length}권)`;
+    await Promise.all(missing.map(async([bookId])=>{
+      const key=`${tr.fid}_${bookId}`;
       try{
         const url=tr.fid==='kor'?`bible/${bookId}.json`:`bible/${bookId}_${tr.fid}.json`;
         const r=await fetch(url);
-        if(!r.ok) continue;
-        cache[key]=await r.json();
-      }catch(e){continue;}
-    }
+        if(r.ok) cache[key]=await r.json();
+      }catch(e){}
+    }));
+  }
+  status.textContent='검색 중...';
+  // Now search entirely in memory — no more awaits needed
+  for(const [bookId,bookKo] of allBooks){
+    const key=`${tr.fid}_${bookId}`;
     const bookData=cache[key];
+    if(!bookData) continue;
     for(const [chStr,verses] of Object.entries(bookData.chapters)){
       for(const {n,t} of verses){
         if(t&&t.toLowerCase().includes(qLower)){
@@ -535,8 +580,6 @@ async function doSearch(){
       if(results.length>=300) break;
     }
     if(results.length>=300) break;
-    status.textContent=`검색 중... ${bookKo}`;
-    await new Promise(r=>setTimeout(r,0));
   }
 
   const count=results.length;
