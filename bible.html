@@ -18,9 +18,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:#f3f4f6;height:100dvh;over
 
 /* ── Header ── */
 #header{padding:6px 12px;border-bottom:1px solid #e5e7eb;background:#fff;flex-shrink:0;display:flex;flex-direction:column;gap:4px}
-.hdr-row1{display:flex;align-items:center;gap:8px}
+.hdr-row1{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.hdr-btns{display:flex;align-items:center;gap:5px;flex-shrink:0;flex-wrap:nowrap}
 .hdr-row2{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.header-title{font-size:16px;font-weight:900;font-family:'Noto Sans KR',sans-serif;color:#111827;white-space:nowrap;flex:1;letter-spacing:-0.3px}
+.header-title{font-size:16px;font-weight:900;font-family:'Noto Sans KR',sans-serif;color:#111827;white-space:nowrap;flex-shrink:1;letter-spacing:-0.3px}
 .cl{font-size:11px;color:#9ca3af;white-space:nowrap}
 .hsel{font-size:12px;padding:3px 6px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#374151;cursor:pointer;outline:none}
 .swrap{display:flex;align-items:center;gap:2px}
@@ -125,11 +126,50 @@ body.dark .err-msg{color:#fc8181}
 body.dark #theme-btn,body.dark #sync-btn{background:#2d3748;border-color:#4a5568;color:#e2e8f0}
 body.dark #theme-btn:hover,body.dark #sync-btn:hover{background:#4a5568}
 
+
+#search-btn{font-size:12px;font-weight:600;padding:4px 10px;border-radius:5px;border:1px solid #d1d5db;background:#f3f4f6;color:#374151;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.2s;font-family:'Noto Sans KR',sans-serif}
+#search-btn:hover{background:#e5e7eb}
+body.dark #search-btn{background:#2d3748;border-color:#4a5568;color:#e2e8f0}
+body.dark #search-btn:hover{background:#4a5568}
+
+/* Search Modal */
+#search-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:2000;align-items:flex-start;justify-content:center;padding-top:60px}
+#search-modal.open{display:flex}
+#search-box{background:#fff;border-radius:12px;width:min(560px,96vw);max-height:80vh;display:flex;flex-direction:column;box-shadow:0 12px 40px rgba(0,0,0,0.25);overflow:hidden}
+body.dark #search-box{background:#111f3a;border:1px solid #2d3748}
+#search-header{padding:14px 16px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;gap:8px;flex-shrink:0}
+body.dark #search-header{border-color:#2d3748}
+#search-trans{font-size:13px;padding:4px 8px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#374151;outline:none;cursor:pointer}
+body.dark #search-trans{background:#2d3748;border-color:#4a5568;color:#e2e8f0}
+#search-input{flex:1;font-size:15px;padding:6px 10px;border-radius:6px;border:1px solid #d1d5db;outline:none;font-family:'KoPub Dotum',sans-serif;color:#111827}
+body.dark #search-input{background:#1e293b;border-color:#4a5568;color:#e2e8f0}
+#search-input:focus{border-color:#6366f1}
+#search-go{padding:6px 14px;border-radius:6px;border:none;background:#4f46e5;color:#fff;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Noto Sans KR',sans-serif}
+#search-go:hover{background:#4338ca}
+#search-close{padding:4px 8px;border-radius:6px;border:1px solid #d1d5db;background:transparent;color:#9ca3af;font-size:16px;cursor:pointer;flex-shrink:0}
+body.dark #search-close{border-color:#4a5568;color:#718096}
+#search-status{padding:6px 16px;font-size:12px;color:#9ca3af;flex-shrink:0;min-height:24px}
+body.dark #search-status{color:#718096}
+#search-results{overflow-y:auto;flex:1;padding:4px 0}
+#search-results::-webkit-scrollbar{width:4px}
+#search-results::-webkit-scrollbar-thumb{background:#e5e7eb;border-radius:2px}
+.sr-item{padding:10px 16px;cursor:pointer;border-bottom:1px solid #f3f4f6;transition:background 0.1s}
+.sr-item:hover{background:#f9fafb}
+body.dark .sr-item{border-color:#1e293b}
+body.dark .sr-item:hover{background:#152238}
+.sr-ref{font-size:11px;font-weight:700;color:#6366f1;margin-bottom:3px;letter-spacing:0.5px}
+.sr-text{font-size:14px;color:#111827;font-family:'KoPub Dotum',sans-serif;line-height:1.7}
+body.dark .sr-text{color:#e2e8f0}
+.sr-text mark{background:#fef08a;color:#000;border-radius:2px;padding:0 1px}
+body.dark .sr-text mark{background:#854d0e;color:#fef9c3}
+.sr-none{padding:32px 16px;text-align:center;color:#9ca3af;font-size:13px}
+
 /* ── Mobile ── */
 @media(max-width:600px){
   #header{padding:5px 10px;gap:3px}
   .header-title{font-size:13px}
-  #add-panel-btn{font-size:12px;padding:4px 10px}
+  .hdr-btns{gap:4px}
+  #add-panel-btn,#search-btn,#sync-btn,#theme-btn{font-size:11px;padding:3px 7px}
   .hsel{font-size:11px;padding:2px 5px}
   .sval{font-size:12px}
   .sbtn{width:20px;height:20px;font-size:11px}
@@ -148,9 +188,12 @@ body.dark #theme-btn:hover,body.dark #sync-btn:hover{background:#4a5568}
 <div id="header">
   <div class="hdr-row1">
     <span class="header-title">1426 다본문 성경</span>
-    <button id="theme-btn" onclick="toggleTheme()">Bright</button>
-    <button id="sync-btn" onclick="syncPanels()">연동</button>
-    <button id="add-panel-btn" onclick="addPanel()">＋ 추가</button>
+    <div class="hdr-btns">
+      <button id="theme-btn" onclick="toggleTheme()">Bright</button>
+      <button id="sync-btn" onclick="syncPanels()">연동</button>
+      <button id="search-btn" onclick="openSearch()">🔍 검색</button>
+      <button id="add-panel-btn" onclick="addPanel()">＋ 추가</button>
+    </div>
   </div>
   <div class="hdr-row2">
     <span class="cl">폰트</span>
@@ -361,9 +404,10 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
   document.getElementById('panels').appendChild(el);
   panels.push({id, el, renderBar,
     getState:()=>({bookId:state.bookId, chapter:state.chapter, trans:state.trans}),
-    setBookChapter:(bookId,chapter)=>{
+    setBookChapter:(bookId,chapter,trans)=>{
       state.bookId=bookId;
       state.chapter=chapter;
+      if(trans) state.trans=trans;
       state.chOpen=false;
       renderBar();
       load();
@@ -423,6 +467,111 @@ if(saved){
 </script>
 
 <script>
+// ── Search ──
+const LOCAL_TRANS=['kor','saebeon','esv','niv'];
+
+function openSearch(){
+  // Populate trans selector with only local translations
+  const sel=document.getElementById('search-trans');
+  sel.innerHTML=TRANS.filter(t=>LOCAL_TRANS.includes(t.id))
+    .map(t=>`<option value="${t.id}">${t.l}</option>`).join('');
+  // Default to first panel's trans if available
+  if(panels.length>0){
+    const pt=panels[0].getState().trans;
+    if(LOCAL_TRANS.includes(pt)) sel.value=pt;
+  }
+  document.getElementById('search-input').value='';
+  document.getElementById('search-results').innerHTML='';
+  document.getElementById('search-status').textContent='로컬 역본(개역개정·새번역·ESV·NIV)만 전권 검색 가능합니다.';
+  document.getElementById('search-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('search-input').focus(),100);
+}
+
+function closeSearch(){
+  document.getElementById('search-modal').classList.remove('open');
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape') closeSearch();
+  if(e.key==='Enter'&&document.getElementById('search-modal').classList.contains('open')) doSearch();
+});
+document.getElementById('search-modal').addEventListener('click',e=>{
+  if(e.target===document.getElementById('search-modal')) closeSearch();
+});
+
+async function doSearch(){
+  const q=document.getElementById('search-input').value.trim();
+  const transId=document.getElementById('search-trans').value;
+  const tr=TRANS.find(t=>t.id===transId);
+  if(!q){document.getElementById('search-status').textContent='검색어를 입력해 주세요.';return;}
+
+  const status=document.getElementById('search-status');
+  const resultsEl=document.getElementById('search-results');
+  status.textContent='검색 중...';
+  resultsEl.innerHTML='';
+
+  const allBooks=[...OT,...NT];
+  const results=[];
+  const qLower=q.toLowerCase();
+
+  for(const [bookId,bookKo,,] of allBooks){
+    const key=`${tr.fid}_${bookId}`;
+    if(!cache[key]){
+      try{
+        const url=tr.fid==='kor'?`bible/${bookId}.json`:`bible/${bookId}_${tr.fid}.json`;
+        const r=await fetch(url);
+        if(!r.ok) continue;
+        cache[key]=await r.json();
+      }catch(e){continue;}
+    }
+    const bookData=cache[key];
+    for(const [chStr,verses] of Object.entries(bookData.chapters)){
+      for(const {n,t} of verses){
+        if(t&&t.toLowerCase().includes(qLower)){
+          results.push({bookId,bookKo,ch:parseInt(chStr),v:n,t});
+          if(results.length>=300) break;
+        }
+      }
+      if(results.length>=300) break;
+    }
+    if(results.length>=300) break;
+    status.textContent=`검색 중... ${bookKo}`;
+    await new Promise(r=>setTimeout(r,0));
+  }
+
+  const count=results.length;
+  status.textContent=count===0?'검색 결과가 없습니다.':`${count}건${count>=300?' (최대 300건)':''} — 클릭하면 해당 패널로 이동`;
+
+  if(count===0){
+    resultsEl.innerHTML='<div class="sr-none">일치하는 본문이 없습니다.</div>';
+    return;
+  }
+
+  const esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  const re=new RegExp(`(${esc(q)})`,'gi');
+
+  resultsEl.innerHTML=results.map((r,i)=>`
+    <div class="sr-item" data-i="${i}">
+      <div class="sr-ref">${r.bookKo} ${r.ch}:${r.v}</div>
+      <div class="sr-text">${r.t.replace(re,'<mark>$1</mark>')}</div>
+    </div>`).join('');
+
+  resultsEl.querySelectorAll('.sr-item').forEach(el=>{
+    el.onclick=()=>{
+      const {bookId,ch}=results[+el.dataset.i];
+      const transId=document.getElementById('search-trans').value;
+      // Move first panel to this location, or all if synced
+      if(panels.length>0){
+        panels[0].setBookChapter(bookId,ch,transId);
+      }
+      closeSearch();
+    };
+  });
+}
+
+</script>
+
+<script>
 if('serviceWorker' in navigator){
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw_bible.js')
@@ -430,5 +579,18 @@ if('serviceWorker' in navigator){
   });
 }
 </script>
+
+<div id="search-modal">
+  <div id="search-box">
+    <div id="search-header">
+      <select id="search-trans"></select>
+      <input id="search-input" type="text" placeholder="검색어를 입력하세요..." autocomplete="off">
+      <button id="search-go" onclick="doSearch()">검색</button>
+      <button id="search-close" onclick="closeSearch()">✕</button>
+    </div>
+    <div id="search-status"></div>
+    <div id="search-results"></div>
+  </div>
+</div>
 </body>
 </html>
