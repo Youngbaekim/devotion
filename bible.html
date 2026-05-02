@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -192,6 +193,27 @@ const TRANS=[
   {id:'SBLGNT', l:'헬라어',  scope:'nt', src:'bolls',  fid:null},
 ];
 
+
+const KO_ABBR=["창", "출", "레", "민", "신", "수", "삿", "룻", "삼상", "삼하", "왕상", "왕하", "대상", "대하", "스", "느", "에", "욥", "시", "잠", "전", "아", "사", "렘", "애", "겔", "단", "호", "욜", "암", "옵", "욘", "미", "나", "합", "습", "학", "슥", "말", "마", "막", "눅", "요", "행", "롬", "고전", "고후", "갈", "엡", "빌", "골", "살전", "살후", "딤전", "딤후", "딛", "몬", "히", "약", "벧전", "벧후", "요일", "요이", "요삼", "유", "계"];
+const EN_BOOKS=["Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel", "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles", "Ezra", "Nehemiah", "Esther", "Job", "Psalms", "Proverbs", "Ecclesiastes", "Song of Solomon", "Isaiah", "Jeremiah", "Lamentations", "Ezekiel", "Daniel", "Hosea", "Joel", "Amos", "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah", "Malachi", "Matthew", "Mark", "Luke", "John", "Acts", "Romans", "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians", "Philippians", "Colossians", "1 Thessalonians", "2 Thessalonians", "1 Timothy", "2 Timothy", "Titus", "Philemon", "Hebrews", "James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John", "Jude", "Revelation"];
+const HEB_BOOKS=["בְּרֵאשִׁית", "שְׁמוֹת", "וַיִּקְרָא", "בְּמִדְבַּר", "דְּבָרִים", "יְהוֹשֻׁעַ", "שׁוֹפְטִים", "רוּת", "שְׁמוּאֵל א", "שְׁמוּאֵל ב", "מְלָכִים א", "מְלָכִים ב", "דִּבְרֵי הַיָּמִים א", "דִּבְרֵי הַיָּמִים ב", "עֶזְרָא", "נְחֶמְיָה", "אֶסְתֵּר", "אִיּוֹב", "תְּהִלִּים", "מִשְׁלֵי", "קֹהֶלֶת", "שִׁיר הַשִּׁירִים", "יְשַׁעְיָהוּ", "יִרְמְיָהוּ", "אֵיכָה", "יְחֶזְקֵאל", "דָּנִיֵּאל", "הוֹשֵׁעַ", "יוֹאֵל", "עָמוֹס", "עֹבַדְיָה", "יוֹנָה", "מִיכָה", "נַחוּם", "חֲבַקּוּק", "צְפַנְיָה", "חַגַּי", "זְכַרְיָה", "מַלְאָכִי"];
+const GRK_BOOKS=["Ματθαῖος", "Μάρκος", "Λουκᾶς", "Ἰωάννης", "Πράξεις", "Ῥωμαίους", "Αʹ Κορινθίους", "Βʹ Κορινθίους", "Γαλάτας", "Ἐφεσίους", "Φιλιππησίους", "Κολοσσαεῖς", "Αʹ Θεσσαλονικεῖς", "Βʹ Θεσσαλονικεῖς", "Αʹ Τιμόθεον", "Βʹ Τιμόθεον", "Τίτον", "Φιλήμονα", "Ἑβραίους", "Ἰάκωβος", "Αʹ Πέτρου", "Βʹ Πέτρου", "Αʹ Ἰωάννου", "Βʹ Ἰωάννου", "Γʹ Ἰωάννου", "Ἰούδας", "Ἀποκάλυψις"];
+
+function bookLabel(bid, transId) {
+  const allBooks = [...OT, ...NT];
+  const idx = allBooks.findIndex(([id]) => id === bid);
+  if (idx === -1) return bid;
+  const ko = allBooks[idx][1];
+  const ab = KO_ABBR[idx] || ko;
+  if (transId === 'kor' || transId === 'saebeon') return ko;
+  if (transId === 'WLC') return ab + ' ' + (HEB_BOOKS[idx] || '');
+  if (transId === 'SBLGNT') {
+    const ntStart = OT.length;
+    return ab + ' ' + (GRK_BOOKS[idx - ntStart] || '');
+  }
+  return ab + ' ' + (EN_BOOKS[idx] || '');
+}
+
 const cache={};
 async function fetchVerses(bookId,chapter,transId){
   const tr=TRANS.find(t=>t.id===transId);
@@ -288,8 +310,8 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
         ${TRANS.map(t=>`<option value="${t.id}"${t.id===state.trans?' selected':''}>${t.l}</option>`).join('')}
       </select>
       <select class="book-sel">
-        ${ot.length?`<optgroup label="구약">${ot.map(([bid,bko])=>`<option value="${bid}"${bid===state.bookId?' selected':''}>${bko}</option>`).join('')}</optgroup>`:''}
-        ${nt.length?`<optgroup label="신약">${nt.map(([bid,bko])=>`<option value="${bid}"${bid===state.bookId?' selected':''}>${bko}</option>`).join('')}</optgroup>`:''}
+        ${ot.length?`<optgroup label="구약">${ot.map(([bid,bko])=>`<option value="${bid}"${bid===state.bookId?' selected':''}>${bookLabel(bid,state.trans)}</option>`).join('')}</optgroup>`:''}
+        ${nt.length?`<optgroup label="신약">${nt.map(([bid,bko])=>`<option value="${bid}"${bid===state.bookId?' selected':''}>${bookLabel(bid,state.trans)}</option>`).join('')}</optgroup>`:''}
       </select>
       <div class="nav-wrap" style="display:flex;align-items:center;gap:2px;position:relative">
         <button class="arr-btn prev-btn">‹</button>
