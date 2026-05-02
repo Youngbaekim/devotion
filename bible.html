@@ -312,7 +312,7 @@ let pid=0;const panels=[];
 function createPanel(initBook='john', initChapter=3, initTrans='kor'){
   if(panels.length>=6)return;
   const id=++pid;
-  const state={bookId:initBook,chapter:initChapter,trans:initTrans,hl:new Set(),chOpen:false};
+  const state={bookId:initBook,chapter:initChapter,trans:initTrans,hl:new Set(),chOpen:false,targetVerse:null};
   const el=document.createElement('div');el.className='panel';
   const bar=document.createElement('div');bar.className='panel-bar';
   const textDiv=document.createElement('div');textDiv.className='panel-text';
@@ -477,6 +477,17 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
           updateCopyBtn();
         };
       });
+      // Scroll to and highlight target verse if set
+      if(state.targetVerse){
+        const target=textDiv.querySelector(`.verse-row[data-v="${state.targetVerse}"]`);
+        if(target){
+          target.classList.add('hl');
+          state.hl.add(state.targetVerse);
+          updateCopyBtn();
+          setTimeout(()=>target.scrollIntoView({behavior:'smooth',block:'center'}),80);
+        }
+        state.targetVerse=null;
+      }
     }catch(e){
       textDiv.innerHTML=`<div class="err-msg">${e.message}</div>`;
     }
@@ -485,11 +496,12 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
   document.getElementById('panels').appendChild(el);
   panels.push({id, el, renderBar,
     getState:()=>({bookId:state.bookId, chapter:state.chapter, trans:state.trans}),
-    setBookChapter:(bookId,chapter,trans)=>{
+    setBookChapter:(bookId,chapter,trans,targetVerse)=>{
       state.bookId=bookId;
       state.chapter=chapter;
       if(trans) state.trans=trans;
       state.chOpen=false;
+      state.targetVerse=targetVerse||null;
       renderBar();
       load();
     }
@@ -682,11 +694,10 @@ async function doSearch(){
 
   resultsEl.querySelectorAll('.sr-item').forEach(el=>{
     el.onclick=()=>{
-      const {bookId,ch}=results[+el.dataset.i];
+      const {bookId,ch,v}=results[+el.dataset.i];
       const transId=document.getElementById('search-trans').value;
-      // Move first panel to this location, or all if synced
       if(panels.length>0){
-        panels[0].setBookChapter(bookId,ch,transId);
+        panels[0].setBookChapter(bookId,ch,transId,v);
       }
       closeSearch();
     };
