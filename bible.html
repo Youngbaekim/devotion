@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -427,9 +426,8 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
       const row=textDiv.querySelector(`.verse-row[data-v="${v}"]`);
       if(row){
         const t=row.querySelector('.verse-text');
-        // Strip HTML tags for plain text
         const plain=t?t.innerText||t.textContent:'';
-        lines.push(plain.trim());
+        lines.push(`${v} ${plain.trim()}`);
       }
     });
 
