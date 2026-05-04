@@ -402,7 +402,20 @@ async function fetchVerses(bookId,chapter,transId){
     if(!r.ok)throw new Error(`bolls.life 오류 ${r.status}: ${respText.slice(0,100)}`);
     let parsed;
     try{parsed=JSON.parse(respText);}catch(e){throw new Error(`JSON 파싱 오류: ${respText.slice(0,100)}`);}
-    if(!Array.isArray(parsed)||parsed.length===0)throw new Error(`빈 응답 (book:${bookNum}, ch:${chapter}) — URL: bolls.life/get-text/${transId}/${bookNum}/${chapter}/`);
+    if(!Array.isArray(parsed)||parsed.length===0){
+      // Try to auto-detect correct book number by fetching book list
+      if(transId==='SBLGNT'||transId==='WLC'){
+        try{
+          const booksRes=await fetch(`https://bolls.life/get-books/${transId}/`);
+          const books=await booksRes.json();
+          const found=books.find(b=>b.bookid===bookNum||b.name?.toLowerCase().includes(bookId.slice(0,3)));
+          throw new Error(`빈 응답. bolls.life 책 목록: ${JSON.stringify(books.slice(0,3))}...`);
+        }catch(e2){
+          throw new Error(e2.message||`빈 응답 (book:${bookNum})`);
+        }
+      }
+      throw new Error(`빈 응답 (book:${bookNum}, ch:${chapter})`);
+    }
     cache[key]=parsed.map(v=>({n:v.verse,t:v.text,f:''}));
     return cache[key];
   }
