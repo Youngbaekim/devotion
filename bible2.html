@@ -923,20 +923,29 @@ function checkPin(){
   const val=document.getElementById('pin-input').value;
   if(val===UNLOCK_PIN){
     localStorage.setItem('bible2_auth','1');
-    document.getElementById('pin-modal').remove();
+    const m=document.getElementById('pin-modal');
+    if(m) m.remove();
   } else {
-    document.getElementById('pin-err').textContent='PIN이 올바르지 않습니다.';
-    document.getElementById('pin-input').value='';
+    const err=document.getElementById('pin-err');
+    const inp=document.getElementById('pin-input');
+    if(err) err.textContent='PIN이 올바르지 않습니다.';
+    if(inp) inp.value='';
   }
 }
-document.getElementById('pin-input').addEventListener('keydown',e=>{if(e.key==='Enter')checkPin();});
 
-// Check auth on load
-(function(){
+// Init PIN after DOM ready
+document.addEventListener('DOMContentLoaded',function(){
+  const inp=document.getElementById('pin-input');
+  if(inp) inp.addEventListener('keydown',e=>{if(e.key==='Enter')checkPin();});
+  // Auto-dismiss if already authorized
   if(localStorage.getItem('bible2_auth')==='1'){
-    document.getElementById('pin-modal').remove();
+    const m=document.getElementById('pin-modal');
+    if(m) m.remove();
+  } else {
+    // Focus input
+    if(inp) setTimeout(()=>inp.focus(),100);
   }
-})();
+});
 
 
 <script>
