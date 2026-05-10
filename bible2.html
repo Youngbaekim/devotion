@@ -288,18 +288,6 @@ body.bright2 .sr-ref{color:#8a6030}
 body.bright2 .sr-text{color:#2a1a08}
 body.bright2 .sr-text mark{background:#f0d080;color:#3d2b1a}
 
-
-/* ── PIN Modal ── */
-#pin-modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center}
-#pin-box{background:#f8f3ea;border-radius:14px;padding:36px 32px;width:280px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.4)}
-#pin-title{font-size:18px;font-weight:700;color:#3d2b1a;margin-bottom:6px;font-family:'Noto Sans KR',sans-serif}
-#pin-sub{font-size:13px;color:#8a7050;margin-bottom:20px}
-#pin-input{width:100%;font-size:22px;text-align:center;letter-spacing:8px;padding:10px;border:2px solid #c4b08a;border-radius:8px;outline:none;font-family:monospace;color:#3d2b1a;background:#fff}
-#pin-input:focus{border-color:#8a6030}
-#pin-err{font-size:12px;color:#c04020;margin-top:8px;min-height:18px}
-#pin-ok{margin-top:16px;width:100%;padding:10px;border-radius:8px;border:none;background:#8a6030;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:'Noto Sans KR',sans-serif}
-#pin-ok:hover{background:#7a5020}
-
 /* ── Mobile ── */
 @media(max-width:600px){
   #header{padding:5px 10px;gap:3px}
@@ -317,9 +305,28 @@ body.bright2 .sr-text mark{background:#f0d080;color:#3d2b1a}
   .ch-btn{font-size:14px;min-width:32px}
   .ch-item{font-size:14px;padding:6px 2px}
 }
+
+/* PIN Modal */
+#pin-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center}
+#pin-box{background:#f8f3ea;border-radius:14px;padding:36px 32px;width:280px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.4)}
+.pin-title{font-size:18px;font-weight:700;color:#3d2b1a;margin-bottom:6px;font-family:'Noto Sans KR',sans-serif}
+.pin-sub{font-size:13px;color:#8a7050;margin-bottom:20px}
+#pin-input{width:100%;font-size:22px;text-align:center;letter-spacing:8px;padding:10px;border:2px solid #c4b08a;border-radius:8px;outline:none;font-family:monospace;color:#3d2b1a;background:#fff;box-sizing:border-box}
+#pin-input:focus{border-color:#8a6030}
+#pin-err{font-size:12px;color:#c04020;margin-top:8px;min-height:18px}
+#pin-ok{margin-top:16px;width:100%;padding:10px;border-radius:8px;border:none;background:#8a6030;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:'Noto Sans KR',sans-serif}
+#pin-ok:hover{background:#7a5020}
 </style>
 </head>
 <body class="bright2">
+<div id="pin-overlay"><div id="pin-box">
+  <div class="pin-title">✦ 1426 다본문 성경</div>
+  <div class="pin-sub">PIN을 입력하세요</div>
+  <input id="pin-input" type="password" inputmode="numeric" maxlength="6" placeholder="••••">
+  <div id="pin-err"></div>
+  <button id="pin-ok">확인</button>
+</div></div>
+
 
 <div id="header">
   <div class="hdr-row1">
@@ -600,9 +607,6 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
     if(oldCopyBtn) oldCopyBtn.remove();
     textDiv.innerHTML=`<div class="loading"><div class="spinner">✦</div><br>불러오는 중...</div>`;
     const{bookId,chapter,trans}=state;const isRTL=trans==='WLC';
-    // Load highlights from Supabase
-    const saved=await sbLoad(trans,bookId,chapter);
-    saved.forEach(v=>state.hl.add(v));
     try{
       const verses=await fetchVerses(bookId,chapter,trans);
       if(!verses.length){textDiv.innerHTML=`<div class="err-msg">${chapter}장 데이터가 없습니다.</div>`;return;}
@@ -618,23 +622,11 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
       textDiv.querySelectorAll('.verse-row').forEach(row=>{
         row.onclick=()=>{
           const v=+row.dataset.v;
-          if(state.hl.has(v)){
-            state.hl.delete(v);
-            sbDelete(state.trans,state.bookId,state.chapter,v);
-          } else {
-            state.hl.add(v);
-            sbSave(state.trans,state.bookId,state.chapter,v);
-          }
+          state.hl.has(v)?state.hl.delete(v):state.hl.add(v);
           row.classList.toggle('hl');
           updateCopyBtn();
         };
       });
-      // Apply Supabase-loaded highlights to rendered rows
-      textDiv.querySelectorAll('.verse-row').forEach(row=>{
-        if(state.hl.has(+row.dataset.v)) row.classList.add('hl');
-      });
-      if(state.hl.size>0) updateCopyBtn();
-
       // Scroll to and highlight target verse if set
       if(state.targetVerse){
         const target=textDiv.querySelector(`.verse-row[data-v="${state.targetVerse}"]`);
@@ -883,71 +875,6 @@ async function doSearch(){
 
 </script>
 
-// ── Supabase Highlight Sync ──
-const SB_URL='https://unlvmtixzhvzxfexynri.supabase.co';
-const SB_KEY='sb_publishable_JDZtHylyUtZeDjph1aGUbQ_ru-YB_ga';
-const UNLOCK_PIN='1426';
-
-function sbHeaders(){
-  return{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'};
-}
-
-async function sbLoad(trans,book,chapter){
-  try{
-    const r=await fetch(`${SB_URL}/rest/v1/bible_highlights?select=verse&trans=eq.${trans}&book=eq.${encodeURIComponent(book)}&chapter=eq.${chapter}`,{headers:sbHeaders()});
-    if(!r.ok) return [];
-    const data=await r.json();
-    return data.map(d=>d.verse);
-  }catch(e){return [];}
-}
-
-async function sbSave(trans,book,chapter,verse){
-  try{
-    await fetch(`${SB_URL}/rest/v1/bible_highlights`,{
-      method:'POST',headers:sbHeaders(),
-      body:JSON.stringify({trans,book,chapter,verse})
-    });
-  }catch(e){}
-}
-
-async function sbDelete(trans,book,chapter,verse){
-  try{
-    await fetch(`${SB_URL}/rest/v1/bible_highlights?trans=eq.${trans}&book=eq.${encodeURIComponent(book)}&chapter=eq.${chapter}&verse=eq.${verse}`,{
-      method:'DELETE',headers:sbHeaders()
-    });
-  }catch(e){}
-}
-
-// ── PIN ──
-function checkPin(){
-  const val=document.getElementById('pin-input').value;
-  if(val===UNLOCK_PIN){
-    localStorage.setItem('bible2_auth','1');
-    const m=document.getElementById('pin-modal');
-    if(m) m.remove();
-  } else {
-    const err=document.getElementById('pin-err');
-    const inp=document.getElementById('pin-input');
-    if(err) err.textContent='PIN이 올바르지 않습니다.';
-    if(inp) inp.value='';
-  }
-}
-
-// Init PIN after DOM ready
-document.addEventListener('DOMContentLoaded',function(){
-  const inp=document.getElementById('pin-input');
-  if(inp) inp.addEventListener('keydown',e=>{if(e.key==='Enter')checkPin();});
-  // Auto-dismiss if already authorized
-  if(localStorage.getItem('bible2_auth')==='1'){
-    const m=document.getElementById('pin-modal');
-    if(m) m.remove();
-  } else {
-    // Focus input
-    if(inp) setTimeout(()=>inp.focus(),100);
-  }
-});
-
-
 <script>
 if('serviceWorker' in navigator){
   window.addEventListener('load', () => {
@@ -970,15 +897,107 @@ if('serviceWorker' in navigator){
   </div>
 </div>
 
-<div id="pin-modal">
-  <div id="pin-box">
-    <div id="pin-title">✦ 1426 다본문 성경</div>
-    <div id="pin-sub">PIN을 입력하세요</div>
-    <input id="pin-input" type="password" inputmode="numeric" maxlength="6" placeholder="••••" autofocus>
-    <div id="pin-err"></div>
-    <button id="pin-ok" onclick="checkPin()">확인</button>
-  </div>
-</div>
+<script>
+const SB_URL='https://unlvmtixzhvzxfexynri.supabase.co';
+const SB_KEY='sb_publishable_JDZtHylyUtZeDjph1aGUbQ_ru-YB_ga';
+const UNLOCK_PIN='1426';
+
+/* ── Supabase helpers ── */
+function sbH(){return{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'};}
+
+async function sbLoad(trans,book,ch){
+  try{
+    const r=await fetch(SB_URL+'/rest/v1/bible_highlights?select=verse&trans=eq.'+encodeURIComponent(trans)+'&book=eq.'+encodeURIComponent(book)+'&chapter=eq.'+ch,{headers:sbH()});
+    if(!r.ok)return[];
+    return(await r.json()).map(d=>d.verse);
+  }catch(e){return[];}
+}
+async function sbSave(trans,book,ch,v){
+  try{await fetch(SB_URL+'/rest/v1/bible_highlights',{method:'POST',headers:sbH(),body:JSON.stringify({trans,book,chapter:ch,verse:v})});}catch(e){}
+}
+async function sbDel(trans,book,ch,v){
+  try{await fetch(SB_URL+'/rest/v1/bible_highlights?trans=eq.'+encodeURIComponent(trans)+'&book=eq.'+encodeURIComponent(book)+'&chapter=eq.'+ch+'&verse=eq.'+v,{method:'DELETE',headers:sbH()});}catch(e){}
+}
+
+/* ── PIN ── */
+function checkPin(){
+  const v=document.getElementById('pin-input').value.trim();
+  if(v===UNLOCK_PIN){
+    localStorage.setItem('bible2_auth','1');
+    document.getElementById('pin-overlay').style.display='none';
+  } else {
+    document.getElementById('pin-err').textContent='PIN이 올바르지 않습니다.';
+    document.getElementById('pin-input').value='';
+  }
+}
+
+document.getElementById('pin-ok').addEventListener('click', checkPin);
+document.getElementById('pin-input').addEventListener('keydown',function(e){if(e.key==='Enter')checkPin();});
+
+if(localStorage.getItem('bible2_auth')==='1'){
+  document.getElementById('pin-overlay').style.display='none';
+} else {
+  setTimeout(function(){document.getElementById('pin-input').focus();},100);
+}
+
+/* ── Supabase highlight override ── */
+// Override the panels' load to inject Supabase highlights
+// Patch panels array after initial load
+function patchPanelForSB(panel){
+  if(panel._sbPatched) return;
+  panel._sbPatched=true;
+}
+
+// Monkey-patch: after each panel loads its text, fetch SB highlights
+const _origCreatePanel=window._origCreatePanel;
+
+// We hook into DOM mutations to detect when verse rows are rendered
+const sbObserver=new MutationObserver(function(mutations){
+  mutations.forEach(function(m){
+    m.addedNodes.forEach(function(node){
+      if(node.nodeType!==1)return;
+      const rows=node.classList&&node.classList.contains('verse-row')?[node]:Array.from(node.querySelectorAll&&node.querySelectorAll('.verse-row')||[]);
+      if(!rows.length)return;
+      // Find which panel this belongs to
+      const panelEl=node.closest?node.closest('.panel'):null;
+      if(!panelEl)return;
+      const pData=panels.find(p=>p.el===panelEl);
+      if(!pData)return;
+      const st=pData.getState();
+      sbLoad(st.trans,st.bookId,st.chapter).then(function(verses){
+        verses.forEach(function(v){
+          const row=panelEl.querySelector('.verse-row[data-v="'+v+'"]');
+          if(row&&!row.classList.contains('hl')){
+            row.classList.add('hl');
+            st.hl=st.hl||new Set();
+          }
+        });
+      });
+    });
+  });
+});
+sbObserver.observe(document.getElementById('panels'),{childList:true,subtree:true});
+
+// Override verse click to also call sbSave/sbDel
+document.getElementById('panels').addEventListener('click',function(e){
+  const row=e.target.closest('.verse-row');
+  if(!row||!e.target.closest('.panel'))return;
+  const panelEl=row.closest('.panel');
+  const pData=panels.find(p=>p.el===panelEl);
+  if(!pData)return;
+  const st=pData.getState();
+  const v=+row.dataset.v;
+  // Row click already toggled hl class via original handler
+  // Check current state AFTER toggle
+  setTimeout(function(){
+    if(row.classList.contains('hl')){
+      sbSave(st.trans,st.bookId,st.chapter,v);
+    } else {
+      sbDel(st.trans,st.bookId,st.chapter,v);
+    }
+  },0);
+},true);
+</script>
 
 </body>
 </html>
