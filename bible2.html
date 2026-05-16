@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -710,6 +709,15 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
         }
         state.targetVerse=null;
       }
+      // ── Load Supabase highlights ──
+      sbLoad(trans,bookId,chapter).then(savedVerses=>{
+        savedVerses.forEach(v=>{
+          state.hl.add(v);
+          const el=textDiv.querySelector(`[data-v="${v}"]`);
+          if(el) el.classList.add('hl');
+        });
+        if(state.hl.size>0) updateCopyBtn();
+      });
     }catch(e){
       textDiv.innerHTML=`<div class="err-msg">${e.message}</div>`;
     }
@@ -1022,29 +1030,7 @@ if(localStorage.getItem('bible2_auth')==='1'){
   setTimeout(function(){document.getElementById('pin-input').focus();},100);
 }
 
-/* ── Supabase highlight sync via MutationObserver ── */
-const sbObserver=new MutationObserver(function(mutations){
-  mutations.forEach(function(m){
-    m.addedNodes.forEach(function(node){
-      if(node.nodeType!==1)return;
-      const rows=Array.from(node.querySelectorAll?node.querySelectorAll('.verse-row,.vi')||[]:[]);
-      if(node.classList&&(node.classList.contains('verse-row')||node.classList.contains('vi'))) rows.push(node);
-      if(!rows.length)return;
-      const panelEl=rows[0].closest?rows[0].closest('.panel'):null;
-      if(!panelEl)return;
-      const pData=panels.find(p=>p.el===panelEl);
-      if(!pData)return;
-      const st=pData.getState();
-      sbLoad(st.trans,st.bookId,st.chapter).then(function(verses){
-        verses.forEach(function(v){
-          const el=panelEl.querySelector('[data-v="'+v+'"]');
-          if(el&&!el.classList.contains('hl')) el.classList.add('hl');
-        });
-      });
-    });
-  });
-});
-sbObserver.observe(document.getElementById('panels'),{childList:true,subtree:true});
+/* Supabase highlights loaded directly in load() */
 
 /* verse click → Supabase sync */
 document.getElementById('panels').addEventListener('click',function(e){
