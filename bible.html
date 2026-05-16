@@ -383,6 +383,16 @@ function bookLabel(bid, transId) {
 }
 
 const cache={};
+// ── 표시 치환 (DB 무변경) ──
+const KO_REPLACE=[['세례','침례']];
+function applyReplace(text,transId){
+  if(transId!=='kor'&&transId!=='saebeon') return text;
+  let t=text;
+  KO_REPLACE.forEach(([from,to])=>{t=t.replaceAll(from,to);});
+  return t;
+}
+  
+const cache={};
 async function fetchVerses(bookId,chapter,transId){
   const tr=TRANS.find(t=>t.id===transId);
   if(tr.src==='local'){
