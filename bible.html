@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -129,6 +128,18 @@ body.dark #theme-btn,body.dark #sync-btn{background:#2d3748;border-color:#4a5568
 body.dark #theme-btn:hover,body.dark #sync-btn:hover{background:#4a5568}
 
 
+#wrap-btn{font-size:12px;font-weight:600;padding:4px 10px;border-radius:5px;border:1px solid #d1d5db;background:#f3f4f6;color:#374151;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.2s;font-family:'Noto Sans KR',sans-serif}
+#wrap-btn:hover{background:#e5e7eb}
+#wrap-btn.active{background:#4f46e5;color:#fff;border-color:#4f46e5}
+body.dark #wrap-btn{background:#2d3748;border-color:#4a5568;color:#e2e8f0}
+body.dark #wrap-btn.active{background:#4f46e5;border-color:#4f46e5;color:#fff}
+body.dark #wrap-btn:hover{background:#4a5568}
+body.dark2 #wrap-btn{background:#2e2e2e;border-color:#3a3a3a;color:#d0d0d0}
+body.dark2 #wrap-btn.active{background:#4a90d9;border-color:#4a90d9;color:#fff}
+body.dark2 #wrap-btn:hover{background:#383838}
+body.bright2 #wrap-btn{background:#f5f0e4;border-color:#c4b08a;color:#3d2b1a}
+body.bright2 #wrap-btn.active{background:#8a6030;border-color:#8a6030;color:#fff}
+body.bright2 #wrap-btn:hover{background:#ede4d0}
 #search-btn{font-size:12px;font-weight:600;padding:4px 10px;border-radius:5px;border:1px solid #d1d5db;background:#f3f4f6;color:#374151;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.2s;font-family:'Noto Sans KR',sans-serif}
 #search-btn:hover{background:#e5e7eb}
 body.dark #search-btn{background:#2d3748;border-color:#4a5568;color:#e2e8f0}
@@ -297,12 +308,12 @@ body.dark1 .sec-heading{color:#e2e8f0}
 body.dark2 .sec-heading{color:#d8d8d8}
 body.bright2 .sec-heading{color:#3d2b1a}
 .verse-para{margin-bottom:14px;text-align:justify}
-.vi{cursor:pointer;border-radius:3px;transition:background 0.1s;padding:1px 1px;display:inline}
-.vi:hover{background:rgba(245,158,11,0.18)}
-.vi.hl{background:#fef9ec}
-body.dark .vi.hl,.dark1 .vi.hl{background:#1c1917}
-body.dark2 .vi.hl{background:#1e2d3d}
-body.bright2 .vi.hl{background:#f4e8cc}
+.vi{cursor:pointer;border-radius:3px;transition:background 0.1s;border-left:2px solid transparent}
+.vi:hover{background:rgba(245,158,11,0.12)}
+.vi.hl{background:#fef9ec;border-left-color:#f59e0b}
+body.dark .vi.hl{background:#1c1917;border-left-color:#d97706}
+body.dark2 .vi.hl{background:#1e2d3d;border-left-color:#4a90d9}
+body.bright2 .vi.hl{background:#f4e8cc;border-left-color:#a08050}
 .vn{font-size:0.65em;font-weight:700;color:#f59e0b;vertical-align:super;margin-right:2px;font-family:monospace;line-height:0}
 body.dark2 .vn{color:#4a90d9}
 .sec-footnotes{font-size:0.84em;color:#6b7280;margin:2px 0 14px;padding-left:8px;border-left:2px solid #e5e7eb;line-height:1.6}
@@ -357,6 +368,7 @@ body.bright2 .sec-footnotes{color:#7a6040;border-left-color:#d4c4a0}
       <span class="sval" id="size-val">15</span>
       <button class="sbtn" id="size-up">▲</button>
     </div>
+    <button id="wrap-btn" onclick="toggleWrap()">줄바꿈</button>
   </div>
 </div>
 
@@ -637,7 +649,11 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
         if(sec.h) html+=`<span class="sec-heading" style="font-family:${gFont}">${sec.h}</span>`;
         html+=`<div class="verse-para" style="font-family:${gFont};font-size:${gSize}px;line-height:${LH}">`;
         sec.verses.forEach(({n,t})=>{
-          html+=`<span class="vi${state.hl.has(n)?' hl':''}" data-v="${n}"><sup class="vn">${n}</sup>${t} </span>`;
+          if(lineBreak){
+            html+=`<div class="vi${state.hl.has(n)?' hl':''}" data-v="${n}" style="display:flex;gap:8px;margin-bottom:${vMB()}"><sup class="vn" style="padding-top:${vPT()};flex-shrink:0">${n}</sup><span>${t}</span></div>`;
+          } else {
+            html+=`<span class="vi${state.hl.has(n)?' hl':''}" data-v="${n}"><sup class="vn">${n}</sup>${t} </span>`;
+          }
         });
         html+=`</div>`;
         const fns=sec.verses.filter(v=>v.f).map(v=>v.f).join('<br>');
@@ -671,6 +687,7 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
 
   document.getElementById('panels').appendChild(el);
   panels.push({id, el, renderBar,
+    reload:()=>load(),
     getState:()=>({bookId:state.bookId, chapter:state.chapter, trans:state.trans}),
     setBookChapter:(bookId,chapter,trans,targetVerse)=>{
       state.bookId=bookId;
@@ -691,6 +708,17 @@ function removePanel(id){
   updateUI();saveSession();
 }
 function addPanel(){createPanel();}
+let lineBreak=true; // 기본값: 줄바꿈
+
+function toggleWrap(){
+  lineBreak=!lineBreak;
+  const btn=document.getElementById('wrap-btn');
+  btn.classList.toggle('active',lineBreak);
+  btn.textContent=lineBreak?'줄바꿈':'이어쓰기';
+  // Re-render all panels
+  panels.forEach(p=>p.reload());
+}
+
 function toggleTheme(){
   const body=document.body;
   const btn=document.getElementById('theme-btn');
