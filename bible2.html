@@ -308,9 +308,9 @@ body.dark1 .sec-heading{color:#e2e8f0}
 body.dark2 .sec-heading{color:#d8d8d8}
 body.bright2 .sec-heading{color:#3d2b1a}
 .verse-para{margin-bottom:14px;text-align:justify}
-.vi{cursor:pointer;border-radius:3px;transition:background 0.1s;border-left:2px solid transparent}
+.vi{cursor:pointer;border-radius:3px;transition:background 0.1s;border-left:2px solid transparent;color:#000}
 .vi:hover{background:rgba(245,158,11,0.12)}
-.vi.hl{background:#fef9ec;border-left-color:#f59e0b}
+.vi.hl{background:#fef9ec;border-left-color:#f59e0b;color:#000}
 body.dark .vi.hl{background:#1c1917;border-left-color:#d97706}
 body.dark2 .vi.hl{background:#1e2d3d;border-left-color:#4a90d9}
 body.bright2 .vi.hl{background:#f4e8cc;border-left-color:#a08050}
@@ -330,6 +330,18 @@ body.dark2 #wrap-btn{background:#2e2e2e;border-color:#3a3a3a;color:#d0d0d0}
 body.dark2 #wrap-btn.active{background:#4a90d9;border-color:#4a90d9;color:#fff}
 body.bright2 #wrap-btn{background:#f5f0e4;border-color:#c4b08a;color:#3d2b1a}
 body.bright2 #wrap-btn.active{background:#8a6030;border-color:#8a6030;color:#fff}
+
+
+/* ── 이어쓰기 모드 다크 스타일 ── */
+body.dark .verse-para{color:#f1f5f9}
+body.dark .vi{color:#f1f5f9}
+body.dark .vi.hl{background:#1c1917 !important;color:#fff}
+body.dark2 .verse-para{color:#d8d8d8}
+body.dark2 .vi{color:#d8d8d8}
+body.dark2 .vi.hl{background:#1e2d3d !important;color:#f0f0f0}
+body.bright2 .verse-para{color:#2a1a08}
+body.bright2 .vi{color:#2a1a08}
+body.bright2 .vi.hl{background:#f4e8cc !important;color:#1a0e04}
 
 /* ── Mobile ── */
 @media(max-width:600px){
@@ -505,8 +517,11 @@ function vMB(){return Math.round(gSize*(LH-1)*0.45)+'px';}
 function vPT(){return Math.round(gSize*0.14)+'px';}
 function vFN(){return Math.round(gSize*0.84)+'px';}
 function applyGlobal(){
+  // 줄바꿈 모드: .verse-text
   document.querySelectorAll('.verse-text').forEach(e=>{e.style.fontFamily=gFont;e.style.fontSize=gSize+'px';e.style.lineHeight=LH;});
-  document.querySelectorAll('.footnote').forEach(e=>{e.style.fontFamily=gFont;e.style.fontSize=vFN();});
+  // 이어쓰기 모드: .verse-para
+  document.querySelectorAll('.verse-para').forEach(e=>{e.style.fontFamily=gFont;e.style.fontSize=gSize+'px';e.style.lineHeight=LH;});
+  document.querySelectorAll('.footnote,.sec-footnotes').forEach(e=>{e.style.fontFamily=gFont;e.style.fontSize=vFN();});
   document.querySelectorAll('.verse-row').forEach(e=>{e.style.marginBottom=vMB();});
   document.querySelectorAll('.verse-num').forEach(e=>{e.style.paddingTop=vPT();});
 }
