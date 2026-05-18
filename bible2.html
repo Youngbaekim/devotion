@@ -790,8 +790,29 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
       textDiv.innerHTML=html;
 
       textDiv.querySelectorAll('.vi').forEach(span=>{
+        const v=+span.dataset.v;
+        // Long press: touch
+        span.addEventListener('touchstart',()=>{
+          lpTriggered=false;
+          lpTimer=setTimeout(()=>{lpTriggered=true;enterCopyMode(v);},600);
+        },{passive:true});
+        span.addEventListener('touchend',()=>{if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}});
+        span.addEventListener('touchmove',()=>{if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}});
+        // Long press: mouse (PC)
+        span.addEventListener('mousedown',()=>{
+          lpTriggered=false;
+          lpTimer=setTimeout(()=>{lpTriggered=true;enterCopyMode(v);},600);
+        });
+        span.addEventListener('mouseup',()=>{if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}});
+        span.addEventListener('mouseleave',()=>{if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}});
         span.onclick=()=>{
-          const v=+span.dataset.v;
+          if(lpTriggered){lpTriggered=false;return;}
+          if(copyMode){
+            copySet.has(v)?copySet.delete(v):copySet.add(v);
+            span.classList.toggle('cp',copySet.has(v));
+            updateCpBar();
+            return;
+          }
           state.hl.has(v)?state.hl.delete(v):state.hl.add(v);
           span.classList.toggle('hl');
           updateCopyBtn();
