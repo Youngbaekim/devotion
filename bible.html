@@ -334,6 +334,20 @@ body.bright2 .verse-para{color:#2a1a08}
 body.bright2 .vi{color:#2a1a08}
 body.bright2 .vi.hl{background:#f4e8cc !important;color:#1a0e04}
 
+
+/* ── 복사 모드 ── */
+.cp-bar{display:none;padding:6px 10px;background:#1d4ed8;align-items:center;gap:8px;flex-shrink:0;border-bottom:1px solid #1e40af}
+.cp-bar.active{display:flex}
+.cp-label{font-size:12px;color:#fff;font-weight:600;flex:1;font-family:'Noto Sans KR',sans-serif}
+.cp-confirm{font-size:12px;font-weight:700;padding:4px 14px;border-radius:5px;border:none;background:#fff;color:#1d4ed8;cursor:pointer;font-family:'Noto Sans KR',sans-serif}
+.cp-confirm:hover{background:#dbeafe}
+.cp-cancel{font-size:12px;padding:4px 10px;border-radius:5px;border:1px solid rgba(255,255,255,0.5);background:transparent;color:#fff;cursor:pointer;font-family:'Noto Sans KR',sans-serif}
+.cp-cancel:hover{background:rgba(255,255,255,0.15)}
+.verse-row.cp,.vi.cp{background:#dbeafe !important;border-left-color:#3b82f6 !important}
+body.dark .verse-row.cp,body.dark .vi.cp{background:#1e3a5f !important;border-left-color:#60a5fa !important}
+body.dark2 .verse-row.cp,body.dark2 .vi.cp{background:#1a2a40 !important;border-left-color:#4a90d9 !important}
+body.bright2 .verse-row.cp,body.bright2 .vi.cp{background:#e0f0ff !important;border-left-color:#4a90d9 !important}
+
 /* ── Mobile ── */
 @media(max-width:600px){
   #header{padding:5px 10px;gap:3px}
@@ -504,10 +518,17 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
   if(panels.length>=6)return;
   const id=++pid;
   const state={bookId:initBook,chapter:initChapter,trans:initTrans,hl:new Set(),chOpen:false,targetVerse:null};
+  let copyMode=false;
+  let copySet=new Set();
+  let lpTimer=null;
+  let lpTriggered=false;
   const el=document.createElement('div');el.className='panel';
   const bar=document.createElement('div');bar.className='panel-bar';
   const textDiv=document.createElement('div');textDiv.className='panel-text';
-  el.appendChild(bar);el.appendChild(textDiv);
+  el.appendChild(bar);
+  const cpBar=document.createElement('div');cpBar.className='cp-bar';
+  el.appendChild(cpBar);
+  el.appendChild(textDiv);
 
   document.addEventListener('click',e=>{
     if(state.chOpen&&!bar.contains(e.target)&&!document.getElementById('ch-drop-'+id)?.contains(e.target)){state.chOpen=false;document.getElementById('ch-drop-'+id)?.remove();}
@@ -518,6 +539,68 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
     if(tr.scope==='ot')return{ot:OT,nt:[]};
     if(tr.scope==='nt')return{ot:[],nt:NT};
     return{ot:OT,nt:NT};
+  }
+
+  function updateCpBar(){
+    const count=copySet.size;
+    cpBar.innerHTML=count>0
+      ?`<span class="cp-label">📋 복사 모드 — ${count}절 선택됨</span><button class="cp-confirm" onclick="">복사</button><button class="cp-cancel" onclick="">취소</button>`
+      :`<span class="cp-label">📋 복사 모드 — 절을 클릭해서 선택하세요</span><button class="cp-cancel" onclick="">취소</button>`;
+    cpBar.querySelector('.cp-cancel').onclick=exitCopyMode;
+    const conf=cpBar.querySelector('.cp-confirm');
+    if(conf) conf.onclick=doCopyMode;
+  }
+
+  function enterCopyMode(initVerse){
+    copyMode=true;
+    copySet=new Set();
+    if(initVerse!=null){
+      copySet.add(initVerse);
+      const el=textDiv.querySelector(`[data-v="${initVerse}"]`);
+      if(el) el.classList.add('cp');
+    }
+    cpBar.classList.add('active');
+    updateCpBar();
+  }
+
+  function exitCopyMode(){
+    copyMode=false;
+    copySet=new Set();
+    cpBar.classList.remove('active');
+    textDiv.querySelectorAll('.cp').forEach(e=>e.classList.remove('cp'));
+  }
+
+  function doCopyMode(){
+    if(copySet.size===0) return;
+    const sorted=[...copySet].sort((a,b)=>a-b);
+    const bko=BMAP[state.bookId].ko;
+    const transLabel=TRANS.find(t=>t.id===state.trans)?.l||state.trans;
+    const ranges=[];
+    let s=sorted[0],e2=sorted[0];
+    for(let i=1;i<sorted.length;i++){
+      if(sorted[i]===e2+1){e2=sorted[i];}
+      else{ranges.push([s,e2]);s=sorted[i];e2=sorted[i];}
+    }
+    ranges.push([s,e2]);
+    const refs=ranges.map(([a,b])=>a===b?`${state.chapter}:${a}`:`${state.chapter}:${a}-${b}`).join(', ');
+    const lines=sorted.map(v=>{
+      const el=textDiv.querySelector(`[data-v="${v}"]`);
+      if(!el) return null;
+      const vt=el.querySelector('.verse-text');
+      let plain=vt?vt.innerText||vt.textContent:el.innerText||el.textContent||'';
+      if(!vt){const vn=el.querySelector('sup');if(vn)plain=plain.slice((vn.innerText||vn.textContent||'').length).trim();}
+      return `${v} ${plain.trim()}`;
+    }).filter(Boolean);
+    const text=`${bko} ${refs} ${transLabel}`+'\n'+lines.join('\n');
+    navigator.clipboard.writeText(text).then(()=>{
+      const conf=cpBar.querySelector('.cp-confirm');
+      if(conf){conf.textContent='복사됨 ✓';setTimeout(()=>{exitCopyMode();},1200);}
+    }).catch(()=>{
+      const ta=document.createElement('textarea');
+      ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+      document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+      exitCopyMode();
+    });
   }
 
   function renderDropdown(){
@@ -643,6 +726,7 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
   }
 
   async function load(){
+    if(copyMode) exitCopyMode();
     state.hl.clear();
     const oldCopyBtn=bar.querySelector('.copy-btn');
     if(oldCopyBtn) oldCopyBtn.remove();
