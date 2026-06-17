@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -469,6 +470,25 @@ function bookLabel(bid, transId) {
     return ab + ' ' + (GRK_BOOKS[idx - ntStart] || '');
   }
   return ab + ' ' + (EN_BOOKS[idx] || '');
+}
+
+const SB_URL='https://unlvmtixzhvzxfexynri.supabase.co';
+const SB_KEY='sb_publishable_JDZtHylyUtZeDjph1aGUbQ_ru-YB_ga';
+
+function sbH(){return{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'};}
+
+async function sbLoad(trans,book,ch){
+  try{
+    const r=await fetch(SB_URL+'/rest/v1/bible_highlights?select=verse&trans=eq.'+encodeURIComponent(trans)+'&book=eq.'+encodeURIComponent(book)+'&chapter=eq.'+ch,{headers:sbH()});
+    if(!r.ok)return[];
+    return(await r.json()).map(d=>d.verse);
+  }catch(e){return[];}
+}
+async function sbSave(trans,book,ch,v){
+  try{await fetch(SB_URL+'/rest/v1/bible_highlights',{method:'POST',headers:sbH(),body:JSON.stringify({trans,book,chapter:ch,verse:v})});}catch(e){}
+}
+async function sbDel(trans,book,ch,v){
+  try{await fetch(SB_URL+'/rest/v1/bible_highlights?trans=eq.'+encodeURIComponent(trans)+'&book=eq.'+encodeURIComponent(book)+'&chapter=eq.'+ch+'&verse=eq.'+v,{method:'DELETE',headers:sbH()});}catch(e){}
 }
 
 const cache={};
@@ -1111,25 +1131,7 @@ if('serviceWorker' in navigator){
 </div>
 
 <script>
-const SB_URL='https://unlvmtixzhvzxfexynri.supabase.co';
-const SB_KEY='sb_publishable_JDZtHylyUtZeDjph1aGUbQ_ru-YB_ga';
 const UNLOCK_PIN='1426';
-
-function sbH(){return{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'};}
-
-async function sbLoad(trans,book,ch){
-  try{
-    const r=await fetch(SB_URL+'/rest/v1/bible_highlights?select=verse&trans=eq.'+encodeURIComponent(trans)+'&book=eq.'+encodeURIComponent(book)+'&chapter=eq.'+ch,{headers:sbH()});
-    if(!r.ok)return[];
-    return(await r.json()).map(d=>d.verse);
-  }catch(e){return[];}
-}
-async function sbSave(trans,book,ch,v){
-  try{await fetch(SB_URL+'/rest/v1/bible_highlights',{method:'POST',headers:sbH(),body:JSON.stringify({trans,book,chapter:ch,verse:v})});}catch(e){}
-}
-async function sbDel(trans,book,ch,v){
-  try{await fetch(SB_URL+'/rest/v1/bible_highlights?trans=eq.'+encodeURIComponent(trans)+'&book=eq.'+encodeURIComponent(book)+'&chapter=eq.'+ch+'&verse=eq.'+v,{method:'DELETE',headers:sbH()});}catch(e){}
-}
 
 /* ── PIN ── */
 function checkPin(){
