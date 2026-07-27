@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="1426성경">
 <meta name="theme-color" content="#0e1628">
-<link rel="manifest" href="manifest_bible.json">
+<link rel="manifest" href="manifest_bible2.json">
 <link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
 
 <title>YB 1426 다본문 성경 ✦</title>
@@ -321,16 +321,6 @@ body.dark2 .vn{color:#4a90d9}
 body.dark .sec-footnotes{color:#94a3b8;border-left-color:#2d3748}
 body.dark2 .sec-footnotes{color:#909090;border-left-color:#383838}
 body.bright2 .sec-footnotes{color:#7a6040;border-left-color:#d4c4a0}
-
-#wrap-btn{font-size:12px;font-weight:600;padding:4px 10px;border-radius:5px;border:1px solid #d1d5db;background:#f3f4f6;color:#374151;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.2s;font-family:'Noto Sans KR',sans-serif}
-#wrap-btn:hover{background:#e5e7eb}
-#wrap-btn.active{background:#4f46e5;color:#fff;border-color:#4f46e5}
-body.dark #wrap-btn{background:#2d3748;border-color:#4a5568;color:#e2e8f0}
-body.dark #wrap-btn.active{background:#4f46e5;border-color:#4f46e5;color:#fff}
-body.dark2 #wrap-btn{background:#2e2e2e;border-color:#3a3a3a;color:#d0d0d0}
-body.dark2 #wrap-btn.active{background:#4a90d9;border-color:#4a90d9;color:#fff}
-body.bright2 #wrap-btn{background:#f5f0e4;border-color:#c4b08a;color:#3d2b1a}
-body.bright2 #wrap-btn.active{background:#8a6030;border-color:#8a6030;color:#fff}
 
 
 /* ── 이어쓰기 모드 다크 스타일 ── */
@@ -746,10 +736,10 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
     // Get verse texts from DOM
     const lines=[];
     sorted.forEach(v=>{
-      const span=textDiv.querySelector(`.vi[data-v="${v}"]`);
-      if(span){
-        const vnum=span.querySelector('.vn');
-        let plain=span.innerText||span.textContent||'';
+      const el2=textDiv.querySelector(`[data-v="${v}"]`);
+      if(el2){
+        const vnum=el2.querySelector('.vn');
+        let plain=el2.innerText||el2.textContent||'';
         if(vnum) plain=plain.slice((vnum.innerText||vnum.textContent||'').length).trim();
         lines.push(`${v} ${plain.trim()}`);
       }
@@ -853,8 +843,8 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
       sbLoad(trans,bookId,chapter).then(savedVerses=>{
         savedVerses.forEach(v=>{
           state.hl.add(v);
-          const el=textDiv.querySelector(`[data-v="${v}"]`);
-          if(el) el.classList.add('hl');
+          const el2=textDiv.querySelector(`[data-v="${v}"]`);
+          if(el2) el2.classList.add('hl');
         });
         if(state.hl.size>0) updateCopyBtn();
       });
