@@ -420,6 +420,7 @@ const TRANS=[
   {id:'web',    l:'WEB',     scope:'all',src:'bibleapi',fid:null},
   {id:'WLC',    l:'히브리어',scope:'ot', src:'bolls',  fid:null},
   {id:'SBLGNT', l:'헬라어',  scope:'nt', src:'bolls',  fid:null},
+  {id:'mh',     l:'매튜헨리주석',scope:'all',src:'chapter',fid:'commentary'},
 ];
 
 
@@ -434,7 +435,7 @@ function bookLabel(bid, transId) {
   if (idx === -1) return bid;
   const ko = allBooks[idx][1];
   const ab = KO_ABBR[idx] || ko;
-  if (transId === 'kor' || transId === 'saebeon') return ko;
+  if (transId === 'kor' || transId === 'saebeon' || transId === 'mh') return ko;
   if (transId === 'WLC') return ab + ' ' + (HEB_BOOKS[idx] || '');
   if (transId === 'SBLGNT') {
     const ntStart = OT.length;
@@ -464,6 +465,16 @@ async function fetchVerses(bookId,chapter,transId){
       cache[key]=await r.json();
     }
     return (cache[key].chapters[chapter]||[]).map(v=>{const o={...v,t:applyReplace(v.t,transId)};if(o.h)o.h=applyReplace(o.h,transId);return o;});
+  }
+  if(tr.src==='chapter'){
+    const key=`${tr.fid}_${bookId}_${chapter}`;
+    if(cache[key]) return cache[key];
+    const sub=BMAP[bookId].num<=39?'ot':'nt';
+    const r=await fetch(`${tr.fid}/${sub}/${bookId}_${chapter}.json`,{cache:'no-cache'});
+    if(!r.ok)throw new Error(`${BMAP[bookId].ko} ${chapter}장 주석이 없습니다.`);
+    const d=await r.json();
+    cache[key]=(d.sections||[]).map(s=>({n:s.n,t:s.t,f:'',h:s.h}));
+    return cache[key];
   }
   if(tr.src==='bolls'){
     const key=`${transId}_${bookId}_${chapter}`;
