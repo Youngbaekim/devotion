@@ -52,8 +52,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:#f3f4f6;height:100dvh;over
 /* Bar controls */
 select,button{font-family:'Noto Sans KR',sans-serif}
 .panel-bar{justify-content:flex-start}
-.bar-sel{font-size:15px;padding:4px 8px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#374151;cursor:pointer;outline:none;flex-shrink:0}
-.book-sel{width:160px;flex:none;font-size:15px;padding:4px 7px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#374151;cursor:pointer;outline:none;flex-shrink:0}
+.bar-sel,.book-sel{width:114px;flex:none;font-size:14px;padding:4px 6px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#374151;cursor:pointer;outline:none;flex-shrink:0}
+.pop-btn{font-size:15px;padding:3px 8px;line-height:1;flex-shrink:0}
 .arr-btn{font-size:20px;padding:3px 11px;border-radius:4px;border:1px solid #d1d5db;background:#fff;color:#6b7280;cursor:pointer;line-height:1;flex-shrink:0}
 .arr-btn:hover{background:#f3f4f6}
 .ch-btn{font-size:15px;font-weight:600;min-width:36px;padding:3px 6px;border-radius:4px;border:1px solid #c7d2fe;background:#eef2ff;color:#4f46e5;cursor:pointer;line-height:1;flex-shrink:0}
@@ -360,8 +360,8 @@ body.bright2 .verse-row.cp,body.bright2 .vi.cp{background:#e0f0ff !important;bor
   .sbtn{width:20px;height:20px;font-size:11px}
   .panel{min-width:min(460px,100vw)}
   .panel-text{padding:12px 12px}
-  .bar-sel{font-size:14px;padding:3px 6px}
-  .book-sel{width:130px;font-size:14px}
+  .bar-sel,.book-sel{width:100px;font-size:13px;padding:3px 5px}
+  .pop-btn{font-size:14px;padding:3px 7px}
   .arr-btn{font-size:18px;padding:3px 9px}
   .ch-btn{font-size:14px;min-width:32px}
   .ch-item{font-size:14px;padding:6px 2px}
@@ -687,6 +687,7 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
         ${ot.length?`<optgroup label="구약">${ot.map(([bid,bko])=>`<option value="${bid}"${bid===state.bookId?' selected':''}>${bookLabel(bid,state.trans)}</option>`).join('')}</optgroup>`:''}
         ${nt.length?`<optgroup label="신약">${nt.map(([bid,bko])=>`<option value="${bid}"${bid===state.bookId?' selected':''}>${bookLabel(bid,state.trans)}</option>`).join('')}</optgroup>`:''}
       </select>
+      <button class="arr-btn pop-btn" title="새 창으로 열기">↑</button>
       <div class="nav-wrap" style="display:flex;align-items:center;gap:2px;position:relative">
         <button class="arr-btn prev-btn">‹</button>
         <button class="ch-btn">${state.chapter}</button>
@@ -704,6 +705,11 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
     bar.querySelector('.book-sel').onchange=e=>{state.bookId=e.target.value;state.chapter=1;state.chOpen=false;renderBar();load();saveSession();};
     bar.querySelector('.prev-btn').onclick=e=>{e.stopPropagation();if(state.chapter>1){state.chapter--;state.chOpen=false;renderBar();load();saveSession();}};
     bar.querySelector('.next-btn').onclick=e=>{e.stopPropagation();const mx=BMAP[state.bookId].ch;if(state.chapter<mx){state.chapter++;state.chOpen=false;renderBar();load();saveSession();}};
+    bar.querySelector('.pop-btn').onclick=e=>{
+      e.stopPropagation();
+      const q=`?pop=1&book=${encodeURIComponent(state.bookId)}&ch=${state.chapter}&trans=${encodeURIComponent(state.trans)}`;
+      window.open(location.pathname+q,'_blank','width=560,height=860,menubar=no,toolbar=no');
+    };
     bar.querySelector('.ch-btn').onclick=e=>{e.stopPropagation();state.chOpen=!state.chOpen;renderDropdown();};
     const cb=bar.querySelector('.close-btn');if(cb)cb.onclick=()=>removePanel(id);
     if(state.chOpen)renderDropdown();
@@ -937,7 +943,10 @@ function updateUI(){
 
 
 // ── Session persistence ──
+const QS=new URLSearchParams(location.search);
+const POPUP=QS.get('pop')==='1';
 function saveSession(){
+  if(POPUP) return;
   const data=panels.map(p=>{const s=p.getState();return{bookId:s.bookId,chapter:s.chapter,trans:s.trans};});
   try{localStorage.setItem('bible_session',JSON.stringify(data));}catch(e){}
 }
@@ -983,8 +992,11 @@ function loadSession(){
 }
 
 
-const saved=loadSession();
-if(saved){
+const saved=POPUP?null:loadSession();
+if(POPUP){
+  createPanel(QS.get('book')||'john', parseInt(QS.get('ch')||'1',10), QS.get('trans')||'kor');
+  startBackgroundPreload();
+} else if(saved){
   saved.forEach(s=>createPanel(s.bookId||'john', s.chapter||1, s.trans||'kor'));
   startBackgroundPreload();
 } else {
