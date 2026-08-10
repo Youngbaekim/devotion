@@ -1,4 +1,4 @@
-const CACHE = '1426bible-v4';
+const CACHE = '1426bible-v5';
 
 // HTML 파일은 캐시 안 함 — 항상 최신본을 네트워크에서
 const HTML_FILES = ['/devotion/bible.html', '/devotion/bible2.html'];

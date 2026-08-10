@@ -498,7 +498,7 @@ async function fetchVerses(bookId,chapter,transId){
     const key=`${tr.fid}_${bookId}`;
     if(!cache[key]){
       const url=tr.fid==='kor'?`bible/${bookId}.json`:`bible/${bookId}_${tr.fid}.json`;
-      const r=await fetch(url);
+      const r=await fetch(url,{cache:'no-cache'});
       if(!r.ok)throw new Error(`${url} 없음 — bible/ 폴더 JSON 파일을 확인하세요.`);
       cache[key]=await r.json();
     }
@@ -947,7 +947,7 @@ async function preloadAllBooks(transId){
       if(cache[key]) return;
       try{
         const url=tr.fid==='kor'?`bible/${bookId}.json`:`bible/${bookId}_${tr.fid}.json`;
-        const r=await fetch(url);
+        const r=await fetch(url,{cache:'no-cache'});
         if(r.ok) cache[key]=await r.json();
       }catch(e){}
     }));
@@ -1045,7 +1045,7 @@ async function doSearch(){
       const key=`${tr.fid}_${bookId}`;
       try{
         const url=tr.fid==='kor'?`bible/${bookId}.json`:`bible/${bookId}_${tr.fid}.json`;
-        const r=await fetch(url);
+        const r=await fetch(url,{cache:'no-cache'});
         if(r.ok) cache[key]=await r.json();
       }catch(e){}
     }));
