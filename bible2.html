@@ -502,7 +502,7 @@ async function fetchVerses(bookId,chapter,transId){
       if(!r.ok)throw new Error(`${url} 없음 — bible/ 폴더 JSON 파일을 확인하세요.`);
       cache[key]=await r.json();
     }
-    return (cache[key].chapters[chapter]||[]).map(v=>({...v,t:applyReplace(v.t,transId)}));
+    return (cache[key].chapters[chapter]||[]).map(v=>{const o={...v,t:applyReplace(v.t,transId)};if(o.h)o.h=applyReplace(o.h,transId);return o;});
   }
   if(tr.src==='bolls'){
     const key=`${transId}_${bookId}_${chapter}`;
@@ -630,7 +630,7 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
       if(!vt){const vn=el.querySelector('sup');if(vn)plain=plain.slice((vn.innerText||vn.textContent||'').length).trim();}
       return `${v} ${plain.trim()}`;
     }).filter(Boolean);
-    const text=`${bko} ${refs} ${transLabel}`+'\n'+lines.join('\n');
+    const text=`${bko} ${refs}`+'\n'+lines.join('\n');
     navigator.clipboard.writeText(text).then(()=>{
       const conf=cpBar.querySelector('.cp-confirm');
       if(conf){conf.textContent='복사됨 ✓';setTimeout(()=>{exitCopyMode();},1200);}
@@ -746,7 +746,7 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
       }
     });
 
-    const header=`${bko} ${refs} ${transLabel}`;
+    const header=`${bko} ${refs}`;
     const text=header+'\n'+lines.join('\n');
 
     navigator.clipboard.writeText(text).then(()=>{
