@@ -143,10 +143,10 @@ body.dark2 #wrap-btn:hover,body.dark2 #sync-btn:hover{background:#343a42}
 body.bright2 #wrap-btn,body.bright2 #sync-btn{background:#f5f0e4;border-color:#c4b08a;color:#3d2b1a}
 body.bright2 #wrap-btn.active{background:#8a6030;border-color:#8a6030;color:#fff}
 body.bright2 #wrap-btn:hover,body.bright2 #sync-btn:hover{background:#ede4d0}
-#search-btn,#help-btn{font-size:12px;font-weight:600;padding:4px 10px;border-radius:5px;border:1px solid #d1d5db;background:#f3f4f6;color:#374151;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.2s;font-family:'Noto Sans KR',sans-serif}
-#search-btn:hover,#help-btn:hover{background:#e5e7eb}
-body.dark #search-btn,body.dark #help-btn{background:#2c3137;border-color:#3a4048;color:#d5dade}
-body.dark #search-btn:hover,body.dark #help-btn:hover{background:#3a4048}
+#search-btn,#help-btn,#plan-btn{font-size:12px;font-weight:600;padding:4px 10px;border-radius:5px;border:1px solid #d1d5db;background:#f3f4f6;color:#374151;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.2s;font-family:'Noto Sans KR',sans-serif}
+#search-btn:hover,#help-btn:hover,#plan-btn:hover{background:#e5e7eb}
+body.dark #search-btn,body.dark #help-btn,body.dark #plan-btn{background:#2c3137;border-color:#3a4048;color:#d5dade}
+body.dark #search-btn:hover,body.dark #help-btn:hover,body.dark #plan-btn:hover{background:#3a4048}
 
 /* Search Modal */
 #search-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:2000;align-items:flex-start;justify-content:center;padding-top:60px}
@@ -198,8 +198,8 @@ body.dark2 .cl{color:#9aa5b0}
 body.dark2 .sval{color:#c9cfd5}
 body.dark2 .sbtn{background:#2a2f35;border-color:#3a4048;color:#9aa5b0}
 body.dark2 .sbtn:hover{background:#343a42}
-body.dark2 #theme-btn,body.dark2 #search-btn,body.dark2 #help-btn,body.dark2 #auth-btn{background:#2a2f35;border-color:#3a4048;color:#c9cfd5}
-body.dark2 #theme-btn:hover,body.dark2 #search-btn:hover,body.dark2 #help-btn:hover{background:#343a42}
+body.dark2 #theme-btn,body.dark2 #search-btn,body.dark2 #help-btn,body.dark2 #plan-btn,body.dark2 #auth-btn{background:#2a2f35;border-color:#3a4048;color:#c9cfd5}
+body.dark2 #theme-btn:hover,body.dark2 #search-btn:hover,body.dark2 #help-btn:hover,body.dark2 #plan-btn:hover{background:#343a42}
 body.dark2 #add-panel-btn{background:#8fb0e6;border-color:#7a9dd6}
 body.dark2 #add-panel-btn:hover{background:#7a9dd6}
 body.dark2 #panels-wrap::-webkit-scrollbar-track{background:#131518}
@@ -255,8 +255,8 @@ body.bright2 .cl{color:#8a7050}
 body.bright2 .sval{color:#3d2b1a}
 body.bright2 .sbtn{background:#f5f0e4;border-color:#c4b08a;color:#6a5030}
 body.bright2 .sbtn:hover{background:#ede4d0}
-body.bright2 #theme-btn,body.bright2 #search-btn,body.bright2 #help-btn,body.bright2 #auth-btn{background:#f5f0e4;border-color:#c4b08a;color:#3d2b1a}
-body.bright2 #theme-btn:hover,body.bright2 #search-btn:hover,body.bright2 #help-btn:hover{background:#ede4d0}
+body.bright2 #theme-btn,body.bright2 #search-btn,body.bright2 #help-btn,body.bright2 #plan-btn,body.bright2 #auth-btn{background:#f5f0e4;border-color:#c4b08a;color:#3d2b1a}
+body.bright2 #theme-btn:hover,body.bright2 #search-btn:hover,body.bright2 #help-btn:hover,body.bright2 #plan-btn:hover{background:#ede4d0}
 body.bright2 #add-panel-btn{background:#8a6030;border-color:#7a5020}
 body.bright2 #add-panel-btn:hover{background:#7a5020}
 body.bright2 #panels-wrap::-webkit-scrollbar-track{background:#ede4d0}
@@ -359,7 +359,7 @@ body.bright2 .verse-row.cp,body.bright2 .vi.cp{background:#e0f0ff !important;bor
   #header{padding:5px 10px;gap:3px}
   .header-title{font-size:13px}
   .hdr-btns{gap:4px}
-  #add-panel-btn,#search-btn,#help-btn,#theme-btn{font-size:11px;padding:3px 7px}
+  #add-panel-btn,#search-btn,#help-btn,#plan-btn,#theme-btn{font-size:11px;padding:3px 7px}
   .hsel{font-size:11px;padding:2px 5px}
   #font-sel{width:66px}
   #wrap-btn,#sync-btn{font-size:11px;padding:3px 7px}
@@ -458,7 +458,7 @@ body.bright2 .help-body tr+tr th,body.bright2 .help-body tr+tr td{border-color:#
   .theme-sel{font-size:11px;padding:3px 2px;max-width:82px}
   .hdr-row1 .header-title{min-width:0;overflow:hidden;text-overflow:ellipsis}
   .hdr-btns{gap:3px}
-  #help-btn,#auth-btn{font-size:11px;padding:3px 7px}
+  #help-btn,  #plan-btn,#auth-btn{font-size:11px;padding:3px 7px}
   .help-body th{width:78px}
 }
 
@@ -487,6 +487,48 @@ body.dark .verse-row.cp,body.dark .vi.cp,body.dark2 .verse-row.cp,body.dark2 .vi
 body.bright2 .vi.cp .vn{border-color:#c0392b;color:#c0392b !important;background:rgba(192,57,43,.08)}
 body.bright2 .verse-row.cp,body.bright2 .vi.cp{background:rgba(192,57,43,.06) !important;border-left-color:#c0392b !important}
 body .vi.cp:not(.vi-row){border-left-color:transparent !important} /* 이어쓰기: 왼쪽 세로줄 없이 원 번호만 */
+
+/* ── 매일성경 팝업 ── */
+#plan-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:2000;align-items:flex-start;justify-content:center;padding:50px 0 20px}
+#plan-modal.open{display:flex}
+#plan-box{background:#fff;border-radius:12px;width:min(420px,94vw);max-height:calc(100vh - 70px);display:flex;flex-direction:column;box-shadow:0 12px 40px rgba(0,0,0,0.25);font-family:'Noto Sans KR',sans-serif;color:#111827;overflow:hidden}
+#plan-nav{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 12px;border-bottom:1px solid #e5e7eb}
+.pn-cur{font-size:16px;font-weight:700;min-width:110px;text-align:center}
+.pn-arr,.pn-side{border:none;background:transparent;cursor:pointer;font-family:inherit;color:#4f46e5;border-radius:6px}
+.pn-arr{font-size:20px;padding:0 8px;line-height:1.2}
+.pn-side{font-size:12px;color:#9ca3af;padding:4px 6px}
+.pn-arr:hover,.pn-side:hover{background:rgba(79,70,229,.08)}
+.pn-arr:disabled,.pn-side:disabled{opacity:.25;cursor:default;background:transparent}
+#plan-list{overflow:auto;padding:6px 8px}
+.plan-row{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;border:none;border-radius:8px;background:transparent;cursor:pointer;font-family:inherit;color:inherit;text-align:left;font-size:14px}
+.plan-row+.plan-row{border-top:1px solid #f0f1f3;border-radius:0}
+.plan-row:hover{background:#eef2ff}
+.pr-d{width:22px;text-align:right;font-weight:700;color:#6b7280}
+.pr-w{width:16px;font-size:12px;color:#9ca3af}
+.plan-row.sun .pr-d,.plan-row.sun .pr-w{color:#e03131}
+.pr-t{flex:1}
+.pr-tag{font-size:11px;font-weight:700;padding:1px 7px;border-radius:9px;background:#4f46e5;color:#fff}
+.plan-row.today{background:#eef2ff;border-radius:8px}
+.plan-foot{font-size:11px;color:#9ca3af;text-align:center;padding:8px 10px;border-top:1px solid #e5e7eb}
+body.dark #plan-box,body.dark2 #plan-box{background:#1b1e22;border:1px solid #3a4048;color:#d5dade}
+body.dark #plan-nav,body.dark2 #plan-nav,body.dark .plan-foot,body.dark2 .plan-foot{border-color:#2c3137}
+body.dark .pn-arr,body.dark2 .pn-arr{color:#8fb0e6}
+body.dark .pn-side,body.dark2 .pn-side,body.dark .pr-w,body.dark2 .pr-w,body.dark .plan-foot,body.dark2 .plan-foot{color:#7d8792}
+body.dark .pr-d,body.dark2 .pr-d{color:#9aa5b0}
+body.dark .plan-row+.plan-row,body.dark2 .plan-row+.plan-row{border-color:#2c3137}
+body.dark .plan-row:hover,body.dark2 .plan-row:hover,body.dark .plan-row.today,body.dark2 .plan-row.today{background:#24304a}
+body.dark .pr-tag,body.dark2 .pr-tag{background:#8fb0e6;color:#10151c}
+body.dark .plan-row.sun .pr-d,body.dark .plan-row.sun .pr-w,body.dark2 .plan-row.sun .pr-d,body.dark2 .plan-row.sun .pr-w{color:#ff6b6b}
+body.bright2 #plan-box{background:#f8f3ea;border:1px solid #c4b08a;color:#3d2b1a}
+body.bright2 #plan-nav,body.bright2 .plan-foot{border-color:#d4c4a0}
+body.bright2 .pn-arr{color:#8a6030}
+body.bright2 .plan-row+.plan-row{border-color:#e6dac0}
+body.bright2 .plan-row:hover,body.bright2 .plan-row.today{background:#ede4d0}
+body.bright2 .pr-tag{background:#8a6030}
+@media(max-width:600px){
+  #search-btn .lbl{display:none}
+  #plan-btn{font-size:11px;padding:3px 7px}
+}
 /* ── 새 버전 알림 ── */
 .update-toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:9999;display:flex;align-items:center;gap:10px;padding:10px 14px 10px 18px;border-radius:12px;background:#16202b;color:#fff;font-size:14px;font-family:'Pretendard Variable',Pretendard,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.25);white-space:nowrap}
 .update-toast[hidden]{display:none}
@@ -505,7 +547,7 @@ body.bright2 .update-toast button{color:#f4d9a0}
   <div class="hdr-row1">
     <span class="header-title">1426 다본문 성경</span>
     <div class="hdr-btns">
-      <button id="search-btn" onclick="openSearch()">🔍 검색</button>
+      <button id="search-btn" onclick="openSearch()">🔍<span class="lbl"> 검색</span></button>
       <select id="theme-sel" class="theme-sel" title="색상 모드">
         <option value="system">🌓 시스템 설정 사용</option>
         <option value="bright">☀ Bright</option>
@@ -514,6 +556,7 @@ body.bright2 .update-toast button{color:#f4d9a0}
         <option value="dark2">🌙 Dark2</option>
       </select>
       <button id="help-btn" onclick="openHelp()">안내</button>
+      <button id="plan-btn" onclick="openPlan()">매일성경</button>
       <button id="auth-btn" onclick="authClick()">로그인</button>
     </div>
   </div>
@@ -979,12 +1022,15 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor', force=fals
       // Scroll to and highlight target verse if set
       if(state.targetVerse){
         const target=textDiv.querySelector(`.vi[data-v="${state.targetVerse}"]`);
-        if(target){
+        if(target&&state.targetNoHl){
+          setTimeout(()=>target.scrollIntoView({behavior:'smooth',block:'start'}),80);
+        }else if(target){
           target.classList.add('hl');
           state.hl.add(state.targetVerse);
           updateCopyBtn();
           setTimeout(()=>target.scrollIntoView({behavior:'smooth',block:'center'}),80);
         }
+        state.targetNoHl=false;
         state.targetVerse=null;
       }
       // ── Load Supabase highlights ──
@@ -1005,12 +1051,13 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor', force=fals
   panels.push({id, el, renderBar,
     reload:()=>load(),
     getState:()=>({bookId:state.bookId, chapter:state.chapter, trans:state.trans}),
-    setBookChapter:(bookId,chapter,trans,targetVerse)=>{
+    setBookChapter:(bookId,chapter,trans,targetVerse,noHl)=>{
       state.bookId=bookId;
       state.chapter=chapter;
       if(trans) state.trans=trans;
       state.chOpen=false;
       state.targetVerse=targetVerse||null;
+      state.targetNoHl=!!noHl;
       renderBar();
       load();
     }
@@ -1070,6 +1117,69 @@ function transFits(t,bookId){
   return true;
 }
 function syncPanels(){ openSync(); }
+
+// ── 매일성경 읽기표(성서유니온, 2026) ──
+const RP2026={"1":["창세기 1:1-13","창 1:14-25","창 1:26-2:3","창 2:4-25","창 3:1-13","창 3:14-24","창 4:1-26","창 5:1-32","창 6:1-22","창 7:1-24","창 8:1-22","창 9:1-17","창 9:18-29","창 10:1-32","창 11:1-9","창 11:10-30","창 11:31-12:9","창 12:10-20","창 13:1-18","창 14:1-24","창 15:1-21","창 16:1-16","창 17:1-27","창 18:1-15","창 18:16-33","창 19:1-11","창 19:12-23","창 19:24-38","창 20:1-18","창 21:1-21","창 21:22-34"],"2":["요한복음 1:1-18","요 1:19-34","요 1:35-51","요 2:1-12","요 2:13-25","요 3:1-15","요 3:16-21","요 3:22-36","요 4:1-14","요 4:15-26","요 4:27-42","요 4:43-54","요 5:1-15","요 5:16-30","요 5:31-47","요 6:1-15","요 6:16-29","요 6:30-40","요 6:41-59","요 6:60-71","요 7:1-13","요 7:14-24","요 7:25-36","요 7:37-52","요 7:53-8:20","요 8:21-30","요 8:31-41","요 8:42-59"],"3":["요한복음 9:1-12","요 9:13-23","요 9:24-41","요 10:1-21","요 10:22-42","요 11:1-16","요 11:17-27","요 11:28-37","요 11:38-46","요 11:47-57","요 12:1-11","요 12:12-19","요 12:20-33","요 12:34-43","요 12:44-50","요 13:1-17","요 13:18-30","요 13:31-38","요 14:1-14","요 14:15-21","요 14:22-31","요 15:1-17","요 15:18-27","요 16:1-15","요 16:16-24","요 16:25-33","요 17:1-16","요 17:17-26","요 18:1-11","요 18:12-27","요 18:28-38"],"4":["요 18:39-19:16","요 19:17-27","요 19:28-30+가상칠언","요 19:31-42","요 20:1-18(부활절)","요 20:19-31","요 21:1-14","요 21:15-25","창세기 22:1-24","창 23:1-20","창 24:1-27","창 24:28-49","창 24:50-67","창 25:1-18","창 25:19-34","창 26:1-11","창 26:12-33","창 26:34-27:14","창 27:15-29","창 27:30-46","창 28:1-22","창 29:1-20","창 29:21-35","창 30:1-24","창 30:25-43","창 31:1-16","창 31:17-35","창 31:36-55","창 32:1-21","창 32:22-32"],"5":["창세기 33:1-20","창 34:1-17","창 34:18-31","창 35:1-22","창 35:23-36:8","창 36:9-43","창 37:1-17","창 37:18-36","창 38:1-30","창 39:1-23","창 40:1-23","창 41:1-24","창 41:25-36","창 41:37-57","창 42:1-17","창 42:18-38","창 43:1-15","창 43:16-34","창 44:1-17","창 44:18-34","창 45:1-15","창 45:16-28","창 46:1-27","창 46:28-47:12","창 47:13-26","창 47:27-48:7","창 48:8-22","창 49:1-15","창 49:16-28","창 49:29-50:14","창 50:15-26"],"6":["고린도전서 1:1-9","고전 1:10-17","고전 1:18-31","고전 2:1-16","고전 3:1-15","고전 3:16-4:5","고전 4:6-21","고전 5:1-13","고전 6:1-11","고전 6:12-20","고전 7:1-24","고전 7:25-40","고전 8:1-13","고전 9:1-23","고전 9:24-10:13","고전 10:14-11:1","고전 11:2-16","고전 11:17-34","고전 12:1-11","고전 12:12-31","고전 13:1-13","고전 14:1-19","고전 14:20-40","고전 15:1-11","고전 15:12-19","고전 15:20-34","고전 15:35-49","고전 15:50-58","고전 16:1-12","고전 16:13-24"],"7":["시편 1:1-6","시 2:1-12","시 3:1-8","시 4:1-8","시 5:1-12","시 6:1-10","시 7:1-17","시 8:1-9","시 9:1-20","시 10:1-18","시 11:1-7","시 12:1-8","시 13:1-6","시 14:1-7","시 15:1-5","이사야 1:1-20","사 1:21-31","사 2:1-22","사 3:1-12","사 3:13-4:6","사 5:1-17","사 5:18-30","사 6:1-13","사 7:1-25","사 8:1-22","사 9:1-7","사 9:8-10:4","사 10:5-19","사 10:20-34","사 11:1-16","사 12:1-6"],"8":["사 13:1-22","사 14:1-23","사 14:24-15:9","사 16:1-14","사 17:1-14","사 18:1-19:15","사 19:16-20:6","사 21:1-17","사 22:1-25","사 23:1-18","사 24:1-13","사 24:14-23","사 25:1-12","사 26:1-27:1","사 27:2-13","사 28:1-13","사 28:14-29","사 29:1-14","사 29:15-24","사 30:1-17","사 30:18-33","사 31:1-9","사 32:1-20","사 33:1-24","사 34:1-17","사 35:1-10","사 36:1-22","사 37:1-20","사 37:21-38","사 38:1-22","사 39:1-8"],"9":["사사기 1:1-10","삿 1:11-21","삿 1:22-36","삿 2:1-10","삿 2:11-23","삿 3:1-11","삿 3:12-31","삿 4:1-10","삿 4:11-24","삿 5:1-18","삿 5:19-31","삿 6:1-10","삿 6:11-24","삿 6:25-40","삿 7:1-14","삿 7:15-25","삿 8:1-21","삿 8:22-35","삿 9:1-6","삿 9:7-21","삿 9:22-45","삿 9:46-57","삿 10:1-18","삿 11:1-11","삿 11:12-28","삿 11:29-40","삿 12:1-15","삿 13:1-14","삿 13:15-25","삿 14:1-20"],"10":["삿 15:1-20","삿 16:1-14","삿 16:15-31","삿 17:1-13","삿 18:1-20","삿 18:21-31","삿 19:1-10","삿 19:11-21","삿 19:22-30","삿 20:1-7","삿 20:8-28","삿 20:29-48","삿 21:1-12","삿 21:13-25","야고보서 1:1-11","약 1:12-18","약 1:19-27","약 2:1-13","약 2:14-26","약 3:1-12","약 3:13-18","약 4:1-12","약 4:13-5:6","약 5:7-12","약 5:13-20","시편 16:1-11","시 17:1-15","시 18:1-15","시 18:16-29","시 18:30-50","시 19:1-14"],"11":["고린도후서 1:1-11","고후 1:12-22","고후 1:23-2:17","고후 3:1-18","고후 4:1-18","고후 5:1-10","고후 5:11-21","고후 6:1-7:1","고후 7:2-16","고후 8:1-15","고후 8:16-24","고후 9:1-15","고후 10:1-18","고후 11:1-15","고후 11:16-33","고후 12:1-13","고후 12:14-21","고후 13:1-13","시편 20:1-9","시 21:1-13","시 22:1-21","시 22:22-31","시 23:1-6","시 24:1-10","시 25:1-22","이사야 40:1-11","사 40:12-31","사 41:1-20","사 41:21-29","사 42:1-25"],"12":["사 43:1-13","사 43:14-28","사 44:1-20","사 44:21-45:7","사 45:8-17","사 45:18-25","사 46:1-13","사 47:1-15","사 48:1-11","사 48:12-22","사 49:1-13","사 49:14-50:3","사 50:4-51:8","사 51:9-16","사 51:17-52:12","사 52:13-53:12","사 54:1-17","사 55:1-13","사 56:1-8","사 56:9-57:13","사 57:14-21","사 58:1-14","사 59:1-21","사 60:1-22","사 61:1-11(성탄절)","사 62:1-12","사 63:1-14","사 63:15-64:12","사 65:1-16","사 65:17-25","사 66:1-24"]};
+const RP_ABBR={'창세기':'genesis','창':'genesis','요한복음':'john','요':'john','고린도전서':'1corinthians','고전':'1corinthians',
+  '고린도후서':'2corinthians','고후':'2corinthians','시편':'psalms','시':'psalms','이사야':'isaiah','사':'isaiah',
+  '사사기':'judges','삿':'judges','야고보서':'james','약':'james'};
+const RP_DATA={2026:RP2026};
+let planY,planM;
+function parseRP(str){
+  const m=str.match(/^(\S+)\s+(\d+):(\d+)-(?:(\d+):)?(\d+)/);
+  if(!m||!RP_ABBR[m[1]])return null;
+  return {book:RP_ABBR[m[1]],ch:+m[2],v:+m[3]};
+}
+function openPlan(){
+  const t=new Date();planY=t.getFullYear();planM=t.getMonth()+1;
+  if(!RP_DATA[planY]){planY=2026;planM=t.getFullYear()<2026?1:12;}
+  renderPlan(true);
+  document.getElementById('plan-modal').classList.add('open');
+}
+function closePlan(){document.getElementById('plan-modal').classList.remove('open');}
+function planShift(d){
+  let y=planY,m=planM+d;
+  if(m<1){m=12;y--;} if(m>12){m=1;y++;}
+  if(!RP_DATA[y])return;
+  planY=y;planM=m;renderPlan(false);
+}
+function renderPlan(scrollToday){
+  const pm=planM===1?12:planM-1, nm=planM===12?1:planM+1;
+  const hasPrev=!!RP_DATA[planM===1?planY-1:planY], hasNext=!!RP_DATA[planM===12?planY+1:planY];
+  document.getElementById('plan-nav').innerHTML=
+    `<button type="button" class="pn-side" ${hasPrev?'':'disabled'} onclick="planShift(-1)">${pm}월</button>
+     <button type="button" class="pn-arr" ${hasPrev?'':'disabled'} onclick="planShift(-1)">‹</button>
+     <span class="pn-cur">${planY}년 ${planM}월</span>
+     <button type="button" class="pn-arr" ${hasNext?'':'disabled'} onclick="planShift(1)">›</button>
+     <button type="button" class="pn-side" ${hasNext?'':'disabled'} onclick="planShift(1)">${nm}월</button>`;
+  const list=RP_DATA[planY][planM]||[];
+  const t=new Date(),W=['일','월','화','수','목','금','토'];
+  document.getElementById('plan-list').innerHTML=list.map((txt,i)=>{
+    const d=i+1,dt=new Date(planY,planM-1,d),w=dt.getDay();
+    const today=(t.getFullYear()===planY&&t.getMonth()+1===planM&&t.getDate()===d);
+    return `<button type="button" class="plan-row${today?' today':''}${w===0?' sun':''}" data-i="${i}">
+      <span class="pr-d">${d}</span><span class="pr-w">${W[w]}</span><span class="pr-t">${txt}</span>${today?'<span class="pr-tag">오늘</span>':''}</button>`;
+  }).join('');
+  document.querySelectorAll('#plan-list .plan-row').forEach(b=>b.onclick=()=>openPlanDay(list[+b.dataset.i]));
+  const box=document.getElementById('plan-list');
+  const td=box.querySelector('.today');
+  if(scrollToday&&td)setTimeout(()=>td.scrollIntoView({block:'center'}),30); else box.scrollTop=0;
+}
+function openPlanDay(txt){
+  const r=parsePlan(txt);if(!r)return;
+  closePlan();
+  const tr=panels.length?panels[0].getState().trans:'kor';
+  const useTr=['kor','saebeon','esv','niv','NKJV','kjv','asv','web'].includes(tr)?tr:'kor';
+  let p;
+  if(panels.length<MAX_PANELS){createPanel(r.book,r.ch,useTr);p=panels[panels.length-1];}
+  else p=panels[panels.length-1];
+  p.setBookChapter(r.book,r.ch,useTr,r.v,true);
+  saveSession();
+  setTimeout(()=>p.el.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'}),60);
+}
+function parsePlan(t){return parseRP(t);}
+document.addEventListener('click',e=>{if(e.target&&e.target.id==='plan-modal')closePlan();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePlan();});
 function openHelp(){document.getElementById('help-modal').classList.add('open');}
 function closeHelp(){document.getElementById('help-modal').classList.remove('open');}
 document.addEventListener('click',e=>{if(e.target&&e.target.id==='help-modal')closeHelp();});
@@ -1345,6 +1455,15 @@ if('serviceWorker' in navigator){
 }
 </script>
 
+<div id="plan-modal">
+  <div id="plan-box">
+    <div class="help-head"><span>매일성경 읽기표</span><button type="button" class="sync-x" onclick="closePlan()">✕</button></div>
+    <div id="plan-nav"></div>
+    <div id="plan-list"></div>
+    <div class="plan-foot">날짜를 누르면 그 본문이 새 창으로 열립니다 · 출처: 성서유니온 매일성경</div>
+  </div>
+</div>
+
 <div id="help-modal">
   <div id="help-box">
     <div class="help-head"><span>1426 다본문 성경 · 사용 안내</span><button type="button" class="sync-x" onclick="closeHelp()">✕</button></div>
@@ -1353,6 +1472,7 @@ if('serviceWorker' in navigator){
       <table>
         <tr><th>🔍 검색</th><td>개역개정·새번역·ESV·NIV에서 단어를 찾습니다. 결과를 누르면 첫 번째 창에서 그 절로 이동합니다.</td></tr>
         <tr><th>색상 모드</th><td>Bright · Bright2 · Dark1 · Dark2 중 선택. ‘시스템 설정 사용’은 기기 설정에 따라 Bright2/Dark2로 바뀝니다. 기기마다 따로 기억합니다.</td></tr>
+        <tr><th>매일성경</th><td>성서유니온 매일성경 읽기표(2026)를 월별로 보여 줍니다. 처음엔 오늘 날짜가 표시되고, ‹ › 또는 이전·다음 달 이름으로 달을 옮깁니다. 날짜를 누르면 그 본문이 새 창으로 열리고 시작 절로 이동합니다.</td></tr>
         <tr><th>로그인</th><td>Google 계정으로 로그인합니다. 허용된 계정만 쓸 수 있고, 로그인해야 형광펜이 저장됩니다.</td></tr>
       </table>
       <h4>보기 설정</h4>
