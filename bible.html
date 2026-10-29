@@ -143,10 +143,10 @@ body.dark2 #wrap-btn:hover,body.dark2 #sync-btn:hover{background:#343a42}
 body.bright2 #wrap-btn,body.bright2 #sync-btn{background:#f5f0e4;border-color:#c4b08a;color:#3d2b1a}
 body.bright2 #wrap-btn.active{background:#8a6030;border-color:#8a6030;color:#fff}
 body.bright2 #wrap-btn:hover,body.bright2 #sync-btn:hover{background:#ede4d0}
-#search-btn{font-size:12px;font-weight:600;padding:4px 10px;border-radius:5px;border:1px solid #d1d5db;background:#f3f4f6;color:#374151;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.2s;font-family:'Noto Sans KR',sans-serif}
-#search-btn:hover{background:#e5e7eb}
-body.dark #search-btn{background:#2c3137;border-color:#3a4048;color:#d5dade}
-body.dark #search-btn:hover{background:#3a4048}
+#search-btn,#help-btn{font-size:12px;font-weight:600;padding:4px 10px;border-radius:5px;border:1px solid #d1d5db;background:#f3f4f6;color:#374151;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.2s;font-family:'Noto Sans KR',sans-serif}
+#search-btn:hover,#help-btn:hover{background:#e5e7eb}
+body.dark #search-btn,body.dark #help-btn{background:#2c3137;border-color:#3a4048;color:#d5dade}
+body.dark #search-btn:hover,body.dark #help-btn:hover{background:#3a4048}
 
 /* Search Modal */
 #search-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:2000;align-items:flex-start;justify-content:center;padding-top:60px}
@@ -198,8 +198,8 @@ body.dark2 .cl{color:#9aa5b0}
 body.dark2 .sval{color:#c9cfd5}
 body.dark2 .sbtn{background:#2a2f35;border-color:#3a4048;color:#9aa5b0}
 body.dark2 .sbtn:hover{background:#343a42}
-body.dark2 #theme-btn,body.dark2 #search-btn,body.dark2 #auth-btn{background:#2a2f35;border-color:#3a4048;color:#c9cfd5}
-body.dark2 #theme-btn:hover,body.dark2 #search-btn:hover{background:#343a42}
+body.dark2 #theme-btn,body.dark2 #search-btn,body.dark2 #help-btn,body.dark2 #auth-btn{background:#2a2f35;border-color:#3a4048;color:#c9cfd5}
+body.dark2 #theme-btn:hover,body.dark2 #search-btn:hover,body.dark2 #help-btn:hover{background:#343a42}
 body.dark2 #add-panel-btn{background:#8fb0e6;border-color:#7a9dd6}
 body.dark2 #add-panel-btn:hover{background:#7a9dd6}
 body.dark2 #panels-wrap::-webkit-scrollbar-track{background:#131518}
@@ -255,8 +255,8 @@ body.bright2 .cl{color:#8a7050}
 body.bright2 .sval{color:#3d2b1a}
 body.bright2 .sbtn{background:#f5f0e4;border-color:#c4b08a;color:#6a5030}
 body.bright2 .sbtn:hover{background:#ede4d0}
-body.bright2 #theme-btn,body.bright2 #search-btn,body.bright2 #auth-btn{background:#f5f0e4;border-color:#c4b08a;color:#3d2b1a}
-body.bright2 #theme-btn:hover,body.bright2 #search-btn:hover{background:#ede4d0}
+body.bright2 #theme-btn,body.bright2 #search-btn,body.bright2 #help-btn,body.bright2 #auth-btn{background:#f5f0e4;border-color:#c4b08a;color:#3d2b1a}
+body.bright2 #theme-btn:hover,body.bright2 #search-btn:hover,body.bright2 #help-btn:hover{background:#ede4d0}
 body.bright2 #add-panel-btn{background:#8a6030;border-color:#7a5020}
 body.bright2 #add-panel-btn:hover{background:#7a5020}
 body.bright2 #panels-wrap::-webkit-scrollbar-track{background:#ede4d0}
@@ -359,7 +359,7 @@ body.bright2 .verse-row.cp,body.bright2 .vi.cp{background:#e0f0ff !important;bor
   #header{padding:5px 10px;gap:3px}
   .header-title{font-size:13px}
   .hdr-btns{gap:4px}
-  #add-panel-btn,#search-btn,#theme-btn{font-size:11px;padding:3px 7px}
+  #add-panel-btn,#search-btn,#help-btn,#theme-btn{font-size:11px;padding:3px 7px}
   .hsel{font-size:11px;padding:2px 5px}
   #font-sel{width:66px}
   #wrap-btn,#sync-btn{font-size:11px;padding:3px 7px}
@@ -425,6 +425,42 @@ body.bright2 .sync-item:hover{background:#ede4d0;border-color:#8a6030}
 body.bright2 .sync-tr,body.bright2 .sync-sub{color:#7a6040}
 body.bright2 .sync-sub{border-color:#d4c4a0}
 body.bright2 .sync-ck input{accent-color:#8a6030}
+
+/* ── 색상 모드 선택(링크 모양) ── */
+.theme-sel{padding:4px 6px;border:1px solid #d1d5db;border-radius:6px;background:#fff;color:#6b7280;font-size:12px;cursor:pointer;outline:none;max-width:150px;font-family:'Noto Sans KR',sans-serif;flex-shrink:1;min-width:0}
+.theme-sel:hover{color:#4f46e5}
+body.dark .theme-sel,body.dark2 .theme-sel{background:#1b1e22;border-color:#2c3137;color:#9aa5b0}
+body.dark .theme-sel:hover,body.dark2 .theme-sel:hover{color:#8fb0e6}
+body.bright2 .theme-sel{background:#f8f3ea;border-color:#c4b08a;color:#7a6040}
+body.bright2 .theme-sel:hover{color:#8a6030}
+/* ── 안내 창 ── */
+#help-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:2000;align-items:flex-start;justify-content:center;padding:50px 0 20px}
+#help-modal.open{display:flex}
+#help-box{background:#fff;border-radius:12px;width:min(560px,94vw);max-height:calc(100vh - 70px);display:flex;flex-direction:column;box-shadow:0 12px 40px rgba(0,0,0,0.25);font-family:'Noto Sans KR',sans-serif;color:#111827;overflow:hidden}
+.help-head{display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:700;padding:14px 16px 10px;border-bottom:1px solid #e5e7eb}
+.help-body{overflow:auto;padding:4px 16px 16px}
+.help-body h4{margin:14px 0 6px;font-size:12px;color:#4f46e5;letter-spacing:.04em}
+.help-body table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.55}
+.help-body th{width:92px;text-align:left;vertical-align:top;font-weight:700;padding:6px 8px 6px 0;white-space:nowrap}
+.help-body td{padding:6px 0;color:#374151;word-break:keep-all}
+.help-body tr+tr th,.help-body tr+tr td{border-top:1px solid #f0f1f3}
+body.dark #help-box,body.dark2 #help-box{background:#1b1e22;border:1px solid #3a4048;color:#e8ebee}
+body.dark .help-head,body.dark2 .help-head{border-color:#2c3137}
+body.dark .help-body h4,body.dark2 .help-body h4{color:#8fb0e6}
+body.dark .help-body td,body.dark2 .help-body td{color:#c9cfd5}
+body.dark .help-body tr+tr th,body.dark .help-body tr+tr td,body.dark2 .help-body tr+tr th,body.dark2 .help-body tr+tr td{border-color:#2c3137}
+body.bright2 #help-box{background:#f8f3ea;border:1px solid #c4b08a;color:#3d2b1a}
+body.bright2 .help-head{border-color:#d4c4a0}
+body.bright2 .help-body h4{color:#8a6030}
+body.bright2 .help-body td{color:#5a4028}
+body.bright2 .help-body tr+tr th,body.bright2 .help-body tr+tr td{border-color:#e6dac0}
+@media(max-width:600px){
+  .theme-sel{font-size:11px;padding:3px 2px;max-width:82px}
+  .hdr-row1 .header-title{min-width:0;overflow:hidden;text-overflow:ellipsis}
+  .hdr-btns{gap:3px}
+  #help-btn,#auth-btn{font-size:11px;padding:3px 7px}
+  .help-body th{width:78px}
+}
 /* ── 새 버전 알림 ── */
 .update-toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:9999;display:flex;align-items:center;gap:10px;padding:10px 14px 10px 18px;border-radius:12px;background:#16202b;color:#fff;font-size:14px;font-family:'Pretendard Variable',Pretendard,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.25);white-space:nowrap}
 .update-toast[hidden]{display:none}
@@ -443,9 +479,16 @@ body.bright2 .update-toast button{color:#f4d9a0}
   <div class="hdr-row1">
     <span class="header-title">1426 다본문 성경</span>
     <div class="hdr-btns">
-      <button id="auth-btn" onclick="authClick()">로그인</button>
-      <button id="theme-btn" onclick="toggleTheme()">Bright2</button>
       <button id="search-btn" onclick="openSearch()">🔍 검색</button>
+      <select id="theme-sel" class="theme-sel" title="색상 모드">
+        <option value="system">🌓 시스템 설정 사용</option>
+        <option value="bright">☀ Bright</option>
+        <option value="bright2">☀ Bright2</option>
+        <option value="dark">🌙 Dark1</option>
+        <option value="dark2">🌙 Dark2</option>
+      </select>
+      <button id="help-btn" onclick="openHelp()">안내</button>
+      <button id="auth-btn" onclick="authClick()">로그인</button>
     </div>
   </div>
   <div class="hdr-row2">
@@ -965,29 +1008,26 @@ function toggleWrap(){
   panels.forEach(p=>p.reload());
 }
 
-function toggleTheme(){
-  const body=document.body;
-  const btn=document.getElementById('theme-btn');
-  if(body.classList.contains('dark2')){
-    // Dark2 → Bright
-    body.classList.remove('dark2');
-    btn.textContent='Bright';
-  } else if(body.classList.contains('dark')){
-    // Dark1 → Dark2
-    body.classList.remove('dark');
-    body.classList.add('dark2');
-    btn.textContent='Dark2';
-  } else if(body.classList.contains('bright2')){
-    // Bright2 → Dark1
-    body.classList.remove('bright2');
-    body.classList.add('dark');
-    btn.textContent='Dark1';
-  } else {
-    // Bright → Bright2
-    body.classList.add('bright2');
-    btn.textContent='Bright2';
-  }
+// ── 색상 모드: 기기별 저장, '시스템 설정 사용'은 기기의 밝게/어둡게를 따름 ──
+const THEME_KEY='bible_theme';
+const THEME_SYS={light:'bright2',dark:'dark2'};
+const darkMQ=window.matchMedia('(prefers-color-scheme: dark)');
+function getThemeMode(){try{return localStorage.getItem(THEME_KEY)||'system';}catch(e){return 'system';}}
+function applyThemeMode(mode){
+  const cls=mode==='system'?(darkMQ.matches?THEME_SYS.dark:THEME_SYS.light):mode;
+  document.body.classList.remove('dark','dark2','bright2');
+  if(cls!=='bright')document.body.classList.add(cls);
+  document.documentElement.style.colorScheme=(cls==='dark'||cls==='dark2')?'dark':'light';
+  const sel=document.getElementById('theme-sel');if(sel)sel.value=mode;
 }
+function setThemeMode(mode){try{localStorage.setItem(THEME_KEY,mode);}catch(e){}applyThemeMode(mode);}
+document.getElementById('theme-sel').onchange=e=>setThemeMode(e.target.value);
+darkMQ.addEventListener('change',()=>{if(getThemeMode()==='system')applyThemeMode('system');});
+applyThemeMode(getThemeMode());
+// 좁은 화면(휴대폰)에서는 '시스템 설정 사용'을 '시스템'으로 짧게
+const narrowMQ=window.matchMedia('(max-width:600px)');
+function labelThemeSel(){const o=document.querySelector('#theme-sel option[value="system"]');if(o)o.textContent=narrowMQ.matches?'🌓 시스템':'🌓 시스템 설정 사용';}
+narrowMQ.addEventListener('change',labelThemeSel);labelThemeSel();
 // ── 연동: 열린 창의 본문 중 하나를 골라, 체크한 역본들로 나란히 펼치기 ──
 const SYNC_DEFAULT=['kor','saebeon','esv','niv','NKJV'];
 const SYNC_KEY='bible_sync_trans';
@@ -1001,6 +1041,10 @@ function transFits(t,bookId){
   return true;
 }
 function syncPanels(){ openSync(); }
+function openHelp(){document.getElementById('help-modal').classList.add('open');}
+function closeHelp(){document.getElementById('help-modal').classList.remove('open');}
+document.addEventListener('click',e=>{if(e.target&&e.target.id==='help-modal')closeHelp();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeHelp();});
 function openSync(){
   // 상단: 현재 창들의 본문(같은 책·장은 하나로)
   const seen=new Map();
@@ -1264,6 +1308,43 @@ if('serviceWorker' in navigator){
   });
 }
 </script>
+
+<div id="help-modal">
+  <div id="help-box">
+    <div class="help-head"><span>1426 다본문 성경 · 사용 안내</span><button type="button" class="sync-x" onclick="closeHelp()">✕</button></div>
+    <div class="help-body">
+      <h4>상단 메뉴</h4>
+      <table>
+        <tr><th>🔍 검색</th><td>개역개정·새번역·ESV·NIV에서 단어를 찾습니다. 결과를 누르면 첫 번째 창에서 그 절로 이동합니다.</td></tr>
+        <tr><th>색상 모드</th><td>Bright · Bright2 · Dark1 · Dark2 중 선택. ‘시스템 설정 사용’은 기기 설정에 따라 Bright2/Dark2로 바뀝니다. 기기마다 따로 기억합니다.</td></tr>
+        <tr><th>로그인</th><td>Google 계정으로 로그인합니다. 허용된 계정만 쓸 수 있고, 로그인해야 형광펜이 저장됩니다.</td></tr>
+      </table>
+      <h4>보기 설정</h4>
+      <table>
+        <tr><th>폰트 · 크기</th><td>본문 글씨체와 크기(▼▲)를 바꿉니다. 기기마다 따로 기억합니다.</td></tr>
+        <tr><th>줄바꿈</th><td>누를 때마다 ‘줄바꿈(절마다 한 줄)’과 ‘이어쓰기(문단처럼)’가 바뀝니다.</td></tr>
+        <tr><th>연동</th><td>열린 창의 본문 목록이 뜹니다. 하나를 고르면 아래에 체크한 역본들로 같은 본문을 나란히 펼칩니다. 체크 상태는 기기마다 기억합니다.</td></tr>
+        <tr><th>본문+</th><td>성경 창을 하나 더 엽니다(최대 6개). 좌우로 넘겨 봅니다.</td></tr>
+      </table>
+      <h4>각 창 상단</h4>
+      <table>
+        <tr><th>역본 · 책</th><td>창마다 역본과 책을 따로 고릅니다.</td></tr>
+        <tr><th>‹ 장 ›</th><td>앞뒤 장으로 이동합니다. 가운데 숫자를 누르면 장 목록이 열립니다.</td></tr>
+        <tr><th>✕</th><td>그 창을 닫습니다(창이 둘 이상일 때).</td></tr>
+      </table>
+      <h4>본문에서</h4>
+      <table>
+        <tr><th>절 누르기</th><td>형광펜을 칠하거나 지웁니다. 칠한 절이 있으면 창 상단에 ‘복사’ 버튼이 생깁니다.</td></tr>
+        <tr><th>절 길게 누르기</th><td>복사 모드가 켜집니다. 여러 절을 눌러 고른 뒤 ‘복사’를 누릅니다.</td></tr>
+      </table>
+      <h4>그 밖에</h4>
+      <table>
+        <tr><th>새 버전 알림</th><td>업데이트가 있으면 화면 아래에 ‘새로고침’ 안내가 뜹니다. 누르면 바로 적용됩니다.</td></tr>
+        <tr><th>이어 보기</th><td>마지막에 열어 둔 창(역본·책·장)은 다음에 열 때 그대로 복원됩니다.</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
 
 <div id="sync-modal">
   <div id="sync-box">
