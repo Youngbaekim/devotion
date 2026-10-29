@@ -26,11 +26,7 @@ if (-not $Message) {
     $Message = "update " + (Get-Date -Format "yyyy-MM-dd HH:mm")
 }
 
-$answer = Read-Host "Commit message: '$Message'  /  Proceed? (y/n)"
-if ($answer -ne "y") {
-    Write-Host "Cancelled." -ForegroundColor Yellow
-    exit 0
-}
+Write-Host "Commit message: $Message" -ForegroundColor Cyan
 
 # bump service worker version -> open apps show the update popup
 $swPath = Join-Path $PSScriptRoot "sw.js"
