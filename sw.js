@@ -1,6 +1,6 @@
 // devotion service worker (index.html + bible.html share this one worker)
 // VERSION is bumped automatically by deploy.ps1 on every deploy.
-const VERSION = '20261029-235203';
+const VERSION = '20261030-000525';
 const SHELL = 'devotion-shell-' + VERSION;   // pages, icons: replaced every deploy
 const DATA  = 'devotion-data-v1';            // bible / commentary JSON: kept across deploys
 const FONTS = 'devotion-fonts-v1';           // web fonts: kept across deploys
