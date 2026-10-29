@@ -477,6 +477,16 @@ body.bright2 .help-body tr+tr th,body.bright2 .help-body tr+tr td{border-color:#
 #header{padding-top:max(6px,env(safe-area-inset-top));padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
 .panel-text{padding-bottom:max(16px,env(safe-area-inset-bottom))}
 @media(max-width:600px){#header{padding-top:max(5px,env(safe-area-inset-top));padding-left:max(10px,env(safe-area-inset-left));padding-right:max(10px,env(safe-area-inset-right))}}
+
+/* ── 복사 모드(절 길게 누르기)로 고른 절: 절 번호를 붉은 원으로 표시 ── */
+.vi.cp .vn{display:inline-block;min-width:1.7em;padding:0 .3em;line-height:1.55em;text-align:center;border:1.5px solid #e03131;border-radius:999px;color:#e03131 !important;background:rgba(224,49,49,.08);vertical-align:.35em}
+.vi-row.cp>.vn{top:-0.2em;min-width:1.9em}
+.verse-row.cp,.vi.cp{background:rgba(224,49,49,.06) !important;border-left-color:#e03131 !important}
+body.dark .vi.cp .vn,body.dark2 .vi.cp .vn{border-color:#ff6b6b;color:#ff6b6b !important;background:rgba(255,107,107,.14)}
+body.dark .verse-row.cp,body.dark .vi.cp,body.dark2 .verse-row.cp,body.dark2 .vi.cp{background:rgba(255,107,107,.08) !important;border-left-color:#ff6b6b !important}
+body.bright2 .vi.cp .vn{border-color:#c0392b;color:#c0392b !important;background:rgba(192,57,43,.08)}
+body.bright2 .verse-row.cp,body.bright2 .vi.cp{background:rgba(192,57,43,.06) !important;border-left-color:#c0392b !important}
+body .vi.cp:not(.vi-row){border-left-color:transparent !important} /* 이어쓰기: 왼쪽 세로줄 없이 원 번호만 */
 /* ── 새 버전 알림 ── */
 .update-toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:9999;display:flex;align-items:center;gap:10px;padding:10px 14px 10px 18px;border-radius:12px;background:#16202b;color:#fff;font-size:14px;font-family:'Pretendard Variable',Pretendard,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.25);white-space:nowrap}
 .update-toast[hidden]{display:none}
@@ -1361,7 +1371,7 @@ if('serviceWorker' in navigator){
       <h4>본문에서</h4>
       <table>
         <tr><th>절 누르기</th><td>형광펜을 칠하거나 지웁니다. 칠한 절이 있으면 창 상단에 ‘복사’ 버튼이 생깁니다.</td></tr>
-        <tr><th>절 길게 누르기</th><td>복사 모드가 켜집니다. 여러 절을 눌러 고른 뒤 ‘복사’를 누릅니다.</td></tr>
+        <tr><th>절 길게 누르기</th><td>복사 모드가 켜집니다. 고른 절은 절 번호가 붉은 원으로 표시되며, 여러 절을 눌러 고른 뒤 ‘복사’를 누릅니다.</td></tr>
       </table>
       <h4>그 밖에</h4>
       <table>
