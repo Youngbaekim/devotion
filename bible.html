@@ -320,6 +320,7 @@ body.bright2 .vi.hl{background:#f4e8cc;border-left-color:#a08050}
 .vn{font-size:0.65em;font-weight:700;color:#f59e0b;vertical-align:super;margin-right:2px;font-family:monospace;line-height:0}
 /* 줄바꿈 모드: 절 번호를 본문 첫 줄 기준선에 맞추고 위첨자 높이만큼 올림 */
 .vi-row{display:flex;align-items:baseline;gap:8px}
+.vi-row>.vbody{flex:1;min-width:0} /* 형광펜이 글자 줄마다 끊기도록 본문은 inline span 안에 */
 .vi-row>.vn{flex-shrink:0;min-width:1.4em;text-align:right;position:relative;top:-0.45em;line-height:1;margin-right:0}
 body.dark2 .vn{color:#8fb0e6}
 .sec-footnotes{font-size:0.84em;color:#6b7280;margin:2px 0 14px;padding-left:8px;border-left:2px solid #e5e7eb;line-height:1.6}
@@ -840,7 +841,7 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
         html+=`<div class="verse-para" style="font-family:${gFont};font-size:${gSize}px;line-height:${curLH()}">`;
         sec.verses.forEach(({n,t})=>{
           if(lineBreak){
-            html+=`<div class="vi vi-row${state.hl.has(n)?' hl':''}" data-v="${n}" style="margin-bottom:${vMB()}"><sup class="vn">${n}</sup><span class="vt">${t}</span></div>`;
+            html+=`<div class="vi vi-row${state.hl.has(n)?' hl':''}" data-v="${n}" style="margin-bottom:${vMB()}"><sup class="vn">${n}</sup><span class="vbody"><span class="vt">${t}</span></span></div>`;
           } else {
             html+=`<span class="vi${state.hl.has(n)?' hl':''}" data-v="${n}"><sup class="vn">${n}</sup><span class="vt">${t}</span> </span>`;
           }
