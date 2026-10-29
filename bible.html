@@ -318,6 +318,9 @@ body.dark .vi.hl{background:#1c1917;border-left-color:#d97706}
 body.dark2 .vi.hl{background:#1e2d3d;border-left-color:#4a90d9}
 body.bright2 .vi.hl{background:#f4e8cc;border-left-color:#a08050}
 .vn{font-size:0.65em;font-weight:700;color:#f59e0b;vertical-align:super;margin-right:2px;font-family:monospace;line-height:0}
+/* 줄바꿈 모드: 절 번호를 본문 첫 줄 기준선에 맞추고 위첨자 높이만큼 올림 */
+.vi-row{display:flex;align-items:baseline;gap:8px}
+.vi-row>.vn{flex-shrink:0;min-width:1.4em;text-align:right;position:relative;top:-0.45em;line-height:1;margin-right:0}
 body.dark2 .vn{color:#4a90d9}
 .sec-footnotes{font-size:0.84em;color:#6b7280;margin:2px 0 14px;padding-left:8px;border-left:2px solid #e5e7eb;line-height:1.6}
 body.dark .sec-footnotes{color:#94a3b8;border-left-color:#2d3748}
@@ -397,7 +400,7 @@ body.bright2 .verse-row.cp,body.bright2 .vi.cp{background:#e0f0ff !important;bor
     <span class="cl">크기</span>
     <div class="swrap">
       <button class="sbtn" id="size-down">▼</button>
-      <span class="sval" id="size-val">15</span>
+      <span class="sval" id="size-val">16</span>
       <button class="sbtn" id="size-up">▲</button>
     </div>
     <button id="wrap-btn" onclick="toggleWrap()">줄바꿈</button>
@@ -533,19 +536,21 @@ async function fetchVerses(bookId,chapter,transId){
   return d.verses.map(v=>({n:v.verse,t:v.text.replace(/\n/g,' ').trim(),f:''}));
 }
 
-let gFont="'KoPub Dotum',sans-serif",gSize=15;
-const LH=1.9;
+let gFont="'KoPub Dotum',sans-serif",gSize=16;
+const LH_INLINE=1.9, LH_BREAK=1.6; // 이어쓰기 / 줄바꿈 줄간격
+function curLH(){return lineBreak?LH_BREAK:LH_INLINE;}
 document.getElementById('font-sel').onchange=e=>{gFont=e.target.value;applyGlobal();};
 document.getElementById('size-up').onclick=()=>{if(gSize<24){gSize++;document.getElementById('size-val').textContent=gSize;applyGlobal();}};
 document.getElementById('size-down').onclick=()=>{if(gSize>10){gSize--;document.getElementById('size-val').textContent=gSize;applyGlobal();}};
-function vMB(){return Math.round(gSize*(LH-1)*0.45)+'px';}
+function vMB(){return Math.round(gSize*0.35)+'px';}
 function vPT(){return Math.round(gSize*0.14)+'px';}
 function vFN(){return Math.round(gSize*0.84)+'px';}
 function applyGlobal(){
   // 줄바꿈 모드: .verse-text
-  document.querySelectorAll('.verse-text').forEach(e=>{e.style.fontFamily=gFont;e.style.fontSize=gSize+'px';e.style.lineHeight=LH;});
+  document.querySelectorAll('.verse-text').forEach(e=>{e.style.fontFamily=gFont;e.style.fontSize=gSize+'px';e.style.lineHeight=curLH();});
   // 이어쓰기 모드: .verse-para
-  document.querySelectorAll('.verse-para').forEach(e=>{e.style.fontFamily=gFont;e.style.fontSize=gSize+'px';e.style.lineHeight=LH;});
+  document.querySelectorAll('.verse-para').forEach(e=>{e.style.fontFamily=gFont;e.style.fontSize=gSize+'px';e.style.lineHeight=curLH();});
+  document.querySelectorAll('.vi-row').forEach(e=>{e.style.marginBottom=vMB();});
   document.querySelectorAll('.footnote,.sec-footnotes').forEach(e=>{e.style.fontFamily=gFont;e.style.fontSize=vFN();});
   document.querySelectorAll('.verse-row').forEach(e=>{e.style.marginBottom=vMB();});
   document.querySelectorAll('.verse-num').forEach(e=>{e.style.paddingTop=vPT();});
@@ -792,10 +797,10 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
       let html=`<div class="ch-label">${BMAP[bookId].ko} ${chapter}</div>`;
       sections.forEach(sec=>{
         if(sec.h) html+=`<span class="sec-heading" style="font-family:${gFont}">${sec.h}</span>`;
-        html+=`<div class="verse-para" style="font-family:${gFont};font-size:${gSize}px;line-height:${LH}">`;
+        html+=`<div class="verse-para" style="font-family:${gFont};font-size:${gSize}px;line-height:${curLH()}">`;
         sec.verses.forEach(({n,t})=>{
           if(lineBreak){
-            html+=`<div class="vi${state.hl.has(n)?' hl':''}" data-v="${n}" style="display:flex;gap:8px;margin-bottom:${vMB()}"><sup class="vn" style="padding-top:${vPT()};flex-shrink:0">${n}</sup><span>${t}</span></div>`;
+            html+=`<div class="vi vi-row${state.hl.has(n)?' hl':''}" data-v="${n}" style="margin-bottom:${vMB()}"><sup class="vn">${n}</sup><span>${t}</span></div>`;
           } else {
             html+=`<span class="vi${state.hl.has(n)?' hl':''}" data-v="${n}"><sup class="vn">${n}</sup>${t} </span>`;
           }
