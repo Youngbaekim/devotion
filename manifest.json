@@ -1,9 +1,10 @@
 {
   "name": "YB Family 매일묵상",
   "short_name": "매일묵상",
+  "id": "/devotion/",
   "description": "YB Family Daily Devotion Links",
-  "start_url": "/devotion/",
-  "scope": "/devotion/",
+  "start_url": "/devotion/index.html",
+  "scope": "/devotion/index.html",
   "display": "standalone",
   "background_color": "#16191f",
   "theme_color": "#1b1f27",
