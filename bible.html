@@ -385,6 +385,23 @@ body.dark .vi.hl,body.dark2 .vi.hl,body.dark .verse-row.hl,body.dark2 .verse-row
 body.dark .verse-row.hl .verse-text,body.dark2 .verse-row.hl .verse-text{color:#16202b !important}
 body.dark .vi.hl .vn,body.dark2 .vi.hl .vn,body.dark .verse-row.hl .verse-num,body.dark2 .verse-row.hl .verse-num{color:#5a4a00}
 body.dark .sr-text mark,body.dark2 .sr-text mark{background:#FFF176;color:#16202b}
+
+
+/* ── 형광펜: 절 번호·줄 끝 여백 제외, 문장에만 ── */
+.vi.hl,body.dark .vi.hl,body.dark2 .vi.hl,body.bright2 .vi.hl{background:transparent !important;border-left-color:transparent !important}
+.vi.hl .vt{background:#fff3a3;color:#000;border-radius:2px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+body.dark .vi.hl .vt,body.dark2 .vi.hl .vt{background:#FFF176;color:#16202b}
+body.bright2 .vi.hl .vt{background:#efdcae;color:#1a0e04}
+body.dark .vi.hl .vn,body.dark2 .vi.hl .vn{color:#8fb0e6}
+/* ── 새 버전 알림 ── */
+.update-toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:9999;display:flex;align-items:center;gap:10px;padding:10px 14px 10px 18px;border-radius:12px;background:#16202b;color:#fff;font-size:14px;font-family:'Pretendard Variable',Pretendard,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.25);white-space:nowrap}
+.update-toast[hidden]{display:none}
+.update-toast button{border:none;background:transparent;color:#9cc0ff;font-size:14px;font-weight:700;cursor:pointer;padding:4px 8px;border-radius:6px;font-family:inherit}
+.update-toast button:hover{background:rgba(255,255,255,.1)}
+body.dark .update-toast,body.dark2 .update-toast{background:#e8ebee;color:#1b1e22}
+body.dark .update-toast button,body.dark2 .update-toast button{color:#243e6b}
+body.bright2 .update-toast{background:#3d2b1a;color:#f8f3ea}
+body.bright2 .update-toast button{color:#f4d9a0}
 </style>
 </head>
 <body class="bright2">
@@ -404,12 +421,12 @@ body.dark .sr-text mark,body.dark2 .sr-text mark{background:#FFF176;color:#16202
   <div class="hdr-row2">
     <span class="cl">폰트</span>
     <select class="hsel" id="font-sel">
-      <option value="'Pretendard Variable',Pretendard,sans-serif" selected>Pretendard</option>
+      <option value="'Pretendard Variable',Pretendard,sans-serif">Pretendard</option>
       <option value="'Noto Sans KR',sans-serif">노토산스</option>
       <option value="'Noto Serif KR',serif">노토세리프</option>
       <option value="'Nanum Myeongjo',serif">나눔명조</option>
       <option value="'Nanum Gothic',sans-serif">나눔고딕</option>
-      <option value="'KoPub Dotum',sans-serif">KoPub돋움L</option>
+      <option value="'KoPub Dotum',sans-serif" selected>KoPub돋움L</option>
       <option value="Georgia,serif">Georgia</option>
     </select>
     <span class="cl">크기</span>
@@ -551,12 +568,20 @@ async function fetchVerses(bookId,chapter,transId){
   return d.verses.map(v=>({n:v.verse,t:v.text.replace(/\n/g,' ').trim(),f:''}));
 }
 
-let gFont="'Pretendard Variable',Pretendard,sans-serif",gSize=16;
+let gFont="'KoPub Dotum',sans-serif",gSize=16;   // 기본값
+// 기기별 저장값(글씨체·크기)이 있으면 기본값보다 우선
+const PREF_KEY='bible_prefs';
+try{const pf=JSON.parse(localStorage.getItem(PREF_KEY)||'{}');
+  if(pf.font&&[...document.getElementById('font-sel').options].some(o=>o.value===pf.font))gFont=pf.font;
+  if(pf.size>=10&&pf.size<=24)gSize=pf.size;}catch(e){}
+document.getElementById('font-sel').value=gFont;
+document.getElementById('size-val').textContent=gSize;
+function savePrefs(){try{localStorage.setItem(PREF_KEY,JSON.stringify({font:gFont,size:gSize}));}catch(e){}}
 const LH_INLINE=1.9, LH_BREAK=1.6; // 이어쓰기 / 줄바꿈 줄간격
 function curLH(){return lineBreak?LH_BREAK:LH_INLINE;}
-document.getElementById('font-sel').onchange=e=>{gFont=e.target.value;applyGlobal();};
-document.getElementById('size-up').onclick=()=>{if(gSize<24){gSize++;document.getElementById('size-val').textContent=gSize;applyGlobal();}};
-document.getElementById('size-down').onclick=()=>{if(gSize>10){gSize--;document.getElementById('size-val').textContent=gSize;applyGlobal();}};
+document.getElementById('font-sel').onchange=e=>{gFont=e.target.value;applyGlobal();savePrefs();};
+document.getElementById('size-up').onclick=()=>{if(gSize<24){gSize++;document.getElementById('size-val').textContent=gSize;applyGlobal();savePrefs();}};
+document.getElementById('size-down').onclick=()=>{if(gSize>10){gSize--;document.getElementById('size-val').textContent=gSize;applyGlobal();savePrefs();}};
 function vMB(){return Math.round(gSize*0.35)+'px';}
 function vPT(){return Math.round(gSize*0.14)+'px';}
 function vFN(){return Math.round(gSize*0.84)+'px';}
@@ -815,9 +840,9 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
         html+=`<div class="verse-para" style="font-family:${gFont};font-size:${gSize}px;line-height:${curLH()}">`;
         sec.verses.forEach(({n,t})=>{
           if(lineBreak){
-            html+=`<div class="vi vi-row${state.hl.has(n)?' hl':''}" data-v="${n}" style="margin-bottom:${vMB()}"><sup class="vn">${n}</sup><span>${t}</span></div>`;
+            html+=`<div class="vi vi-row${state.hl.has(n)?' hl':''}" data-v="${n}" style="margin-bottom:${vMB()}"><sup class="vn">${n}</sup><span class="vt">${t}</span></div>`;
           } else {
-            html+=`<span class="vi${state.hl.has(n)?' hl':''}" data-v="${n}"><sup class="vn">${n}</sup>${t} </span>`;
+            html+=`<span class="vi${state.hl.has(n)?' hl':''}" data-v="${n}"><sup class="vn">${n}</sup><span class="vt">${t}</span> </span>`;
           }
         });
         html+=`</div>`;
@@ -1132,10 +1157,35 @@ async function doSearch(){
 </script>
 
 <script>
+// ── 서비스 워커 + 새 버전 알림 (YB-EverNote 방식) ──
+function showUpdateToast(worker){
+  const t=document.getElementById('update-toast');
+  t.hidden=false;
+  document.getElementById('update-btn').onclick=()=>{
+    document.getElementById('update-btn').disabled=true;
+    worker.postMessage('skipWaiting');
+  };
+}
 if('serviceWorker' in navigator){
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw_bible.js')
-      .catch(e => console.log('SW 등록 실패:', e));
+  let reloading=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(reloading)return; reloading=true;
+    if(typeof saveSession==='function'){try{saveSession();}catch(e){}}
+    location.reload();
+  });
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js').then(reg=>{
+      if(reg.waiting&&navigator.serviceWorker.controller) showUpdateToast(reg.waiting);
+      reg.addEventListener('updatefound',()=>{
+        const w=reg.installing;
+        w&&w.addEventListener('statechange',()=>{
+          if(w.state==='installed'&&navigator.serviceWorker.controller) showUpdateToast(w);
+        });
+      });
+      // 앱을 켜 둔 채로 다시 화면에 돌아오면 새 버전 확인 + 1시간마다 확인
+      document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')reg.update().catch(()=>{});});
+      setInterval(()=>reg.update().catch(()=>{}),60*60*1000);
+    }).catch(e=>console.log('SW 등록 실패:',e));
   });
 }
 </script>
@@ -1232,5 +1282,6 @@ document.getElementById('panels').addEventListener('click',function(e){
 },true);
 </script>
 
+<div id="update-toast" class="update-toast" hidden>새 버전이 준비되었습니다. <button type="button" id="update-btn">새로고침</button></div>
 </body>
 </html>

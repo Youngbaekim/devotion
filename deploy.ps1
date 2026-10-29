@@ -32,6 +32,14 @@ if ($answer -ne "y") {
     exit 0
 }
 
+# bump service worker version -> open apps show the update popup
+$swPath = Join-Path $PSScriptRoot "sw.js"
+$ver = Get-Date -Format "yyyyMMdd-HHmmss"
+$sw = [IO.File]::ReadAllText($swPath)
+$sw = $sw -replace "const VERSION = '[^']*'", "const VERSION = '$ver'"
+[IO.File]::WriteAllText($swPath, $sw, (New-Object System.Text.UTF8Encoding($false)))
+Write-Host "sw.js VERSION = $ver" -ForegroundColor Cyan
+
 git add -A
 git commit -m $Message
 git push
