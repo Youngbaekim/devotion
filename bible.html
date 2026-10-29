@@ -396,6 +396,35 @@ body.dark .sr-text mark,body.dark2 .sr-text mark{background:#FFF176;color:#16202
 body.dark .vi.hl .vt,body.dark2 .vi.hl .vt{background:#FFF176;color:#16202b}
 body.bright2 .vi.hl .vt{background:#efdcae;color:#1a0e04}
 body.dark .vi.hl .vn,body.dark2 .vi.hl .vn{color:#8fb0e6}
+
+/* ── 연동 창 ── */
+#sync-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:2000;align-items:flex-start;justify-content:center;padding-top:70px}
+#sync-modal.open{display:flex}
+#sync-box{background:#fff;border-radius:12px;width:min(420px,94vw);max-height:80vh;overflow:auto;box-shadow:0 12px 40px rgba(0,0,0,0.25);padding:14px 16px 16px;font-family:'Noto Sans KR',sans-serif;color:#111827}
+.sync-head{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:10px}
+.sync-x{border:none;background:transparent;font-size:16px;color:#9ca3af;cursor:pointer;padding:2px 6px}
+#sync-list{display:flex;flex-direction:column;gap:6px}
+.sync-item{display:flex;align-items:baseline;justify-content:space-between;gap:10px;width:100%;text-align:left;padding:10px 12px;border:1px solid #d1d5db;border-radius:8px;background:#f9fafb;cursor:pointer;font-family:inherit;color:inherit}
+.sync-item:hover{border-color:#4f46e5;background:#eef2ff}
+.sync-ref{font-size:15px;font-weight:700}
+.sync-tr{font-size:11px;color:#6b7280;text-align:right}
+.sync-sub{margin:14px 0 6px;padding-top:10px;border-top:1px solid #e5e7eb;font-size:12px;font-weight:700;color:#6b7280}
+#sync-msg{font-weight:400;color:#ef4444;margin-left:6px}
+#sync-trans{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 10px}
+.sync-ck{display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;white-space:nowrap}
+.sync-ck input{width:15px;height:15px;accent-color:#4f46e5;cursor:pointer}
+body.dark #sync-box,body.dark2 #sync-box{background:#1b1e22;border:1px solid #3a4048;color:#d5dade}
+body.dark .sync-item,body.dark2 .sync-item{background:#23272c;border-color:#3a4048}
+body.dark .sync-item:hover,body.dark2 .sync-item:hover{background:#24304a;border-color:#8fb0e6}
+body.dark .sync-tr,body.dark2 .sync-tr,body.dark .sync-sub,body.dark2 .sync-sub{color:#9aa5b0}
+body.dark .sync-sub,body.dark2 .sync-sub{border-color:#2c3137}
+body.dark .sync-ck input,body.dark2 .sync-ck input{accent-color:#8fb0e6}
+body.bright2 #sync-box{background:#f8f3ea;border:1px solid #c4b08a;color:#3d2b1a}
+body.bright2 .sync-item{background:#f5f0e4;border-color:#c4b08a}
+body.bright2 .sync-item:hover{background:#ede4d0;border-color:#8a6030}
+body.bright2 .sync-tr,body.bright2 .sync-sub{color:#7a6040}
+body.bright2 .sync-sub{border-color:#d4c4a0}
+body.bright2 .sync-ck input{accent-color:#8a6030}
 /* ── 새 버전 알림 ── */
 .update-toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:9999;display:flex;align-items:center;gap:10px;padding:10px 14px 10px 18px;border-radius:12px;background:#16202b;color:#fff;font-size:14px;font-family:'Pretendard Variable',Pretendard,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.25);white-space:nowrap}
 .update-toast[hidden]{display:none}
@@ -601,8 +630,8 @@ function applyGlobal(){
 
 let pid=0;const panels=[];
 
-function createPanel(initBook='john', initChapter=3, initTrans='kor'){
-  if(panels.length>=6)return;
+function createPanel(initBook='john', initChapter=3, initTrans='kor', force=false){
+  if(!force&&panels.length>=6)return; // 본문+는 6개까지, 연동은 체크한 역본 수만큼
   const id=++pid;
   const state={bookId:initBook,chapter:initChapter,trans:initTrans,hl:new Set(),chOpen:false,targetVerse:null};
   let copyMode=false;
@@ -959,13 +988,61 @@ function toggleTheme(){
     btn.textContent='Bright2';
   }
 }
-function syncPanels(){
-  if(panels.length<2) return;
-  const first=panels[0];
-  const {bookId,chapter}=first.getState();
-  panels.slice(1).forEach(p=>p.setBookChapter(bookId,chapter));
-  saveSession();
+// ── 연동: 열린 창의 본문 중 하나를 골라, 체크한 역본들로 나란히 펼치기 ──
+const SYNC_DEFAULT=['kor','saebeon','esv','niv','NKJV'];
+const SYNC_KEY='bible_sync_trans';
+function syncChecked(){
+  try{const v=JSON.parse(localStorage.getItem(SYNC_KEY));if(Array.isArray(v))return v;}catch(e){}
+  return SYNC_DEFAULT.slice();
 }
+function transFits(t,bookId){
+  if(t.scope==='ot')return OT.some(([b])=>b===bookId);
+  if(t.scope==='nt')return NT.some(([b])=>b===bookId);
+  return true;
+}
+function syncPanels(){ openSync(); }
+function openSync(){
+  // 상단: 현재 창들의 본문(같은 책·장은 하나로)
+  const seen=new Map();
+  panels.forEach(p=>{
+    const {bookId,chapter,trans}=p.getState();
+    const k=bookId+'|'+chapter;
+    const tl=(TRANS.find(t=>t.id===trans)||{l:trans}).l;
+    if(!seen.has(k))seen.set(k,{bookId,chapter,trs:[tl]});
+    else if(!seen.get(k).trs.includes(tl))seen.get(k).trs.push(tl);
+  });
+  document.getElementById('sync-list').innerHTML=[...seen.values()].map(o=>
+    `<button type="button" class="sync-item" data-book="${o.bookId}" data-ch="${o.chapter}">
+       <span class="sync-ref">${BMAP[o.bookId].ko} ${o.chapter}장</span>
+       <span class="sync-tr">${o.trs.join(' · ')}</span></button>`).join('');
+  // 하단: 역본 체크박스
+  const on=syncChecked();
+  document.getElementById('sync-trans').innerHTML=TRANS.map(t=>
+    `<label class="sync-ck"><input type="checkbox" value="${t.id}"${on.includes(t.id)?' checked':''}>${t.l}</label>`).join('');
+  document.querySelectorAll('#sync-trans input').forEach(cb=>cb.onchange=()=>{
+    const v=[...document.querySelectorAll('#sync-trans input:checked')].map(x=>x.value);
+    try{localStorage.setItem(SYNC_KEY,JSON.stringify(v));}catch(e){}
+  });
+  document.querySelectorAll('#sync-list .sync-item').forEach(b=>b.onclick=()=>runSync(b.dataset.book,+b.dataset.ch));
+  document.getElementById('sync-modal').classList.add('open');
+}
+function closeSync(){document.getElementById('sync-modal').classList.remove('open');}
+function runSync(bookId,chapter){
+  const on=[...document.querySelectorAll('#sync-trans input:checked')].map(x=>x.value);
+  const list=TRANS.filter(t=>on.includes(t.id)&&transFits(t,bookId)).map(t=>t.id);
+  if(!list.length){alertSync('역본을 하나 이상 체크해 주세요.');return;}
+  closeSync();
+  list.forEach((tr,i)=>{
+    if(i<panels.length)panels[i].setBookChapter(bookId,chapter,tr);
+    else createPanel(bookId,chapter,tr,true);
+  });
+  panels.slice(list.length).map(p=>p.id).forEach(id=>removePanel(id));
+  updateUI();saveSession();
+  document.getElementById('panels-wrap').scrollTo({left:0,behavior:'smooth'});
+}
+function alertSync(msg){const m=document.getElementById('sync-msg');m.textContent=msg;setTimeout(()=>{m.textContent='';},2500);}
+document.addEventListener('click',e=>{if(e.target&&e.target.id==='sync-modal')closeSync();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSync();});
 function updateUI(){
   document.getElementById('add-panel-btn').disabled=panels.length>=6;
   panels.forEach(p=>p.renderBar());
@@ -1187,6 +1264,15 @@ if('serviceWorker' in navigator){
   });
 }
 </script>
+
+<div id="sync-modal">
+  <div id="sync-box">
+    <div class="sync-head"><span>연동 · 본문을 고르면 체크한 역본으로 펼칩니다</span><button type="button" class="sync-x" onclick="closeSync()">✕</button></div>
+    <div id="sync-list"></div>
+    <div class="sync-sub">역본 <span id="sync-msg"></span></div>
+    <div id="sync-trans"></div>
+  </div>
+</div>
 
 <div id="search-modal">
   <div id="search-box">
