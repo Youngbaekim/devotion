@@ -28,12 +28,15 @@
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { background: var(--bg); font-family: 'Noto Sans KR', sans-serif; color: var(--text-main); min-height: 100vh; font-size: 10px; }
-  .topbar { background: var(--ssu-blue); border-bottom: 1px solid var(--border); padding: 0 32px; height: 48px; display: flex; align-items: center; justify-content: space-between; }
-  .topbar-brand { display: flex; align-items: center; gap: 10px; }
-  .brand-mark { width: 28px; height: 28px; }
-  .brand-name { color: #e6e9ee; font-size: 13px; font-weight: 700; letter-spacing: 0.04em; }
-  .brand-sub { color: #79828f; font-size: 10px; font-weight: 300; margin-left: 4px; letter-spacing: 0.06em; }
-  .topbar-date { color: #79828f; font-size: 10px; font-weight: 300; letter-spacing: 0.06em; }
+  .topbar { background: var(--ssu-blue); border-bottom: 1px solid var(--border); padding: 0 32px; min-height: 68px; gap: 16px; display: flex; align-items: center; justify-content: space-between; }
+  .topbar-brand { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .brand-mark { width: 40px; height: 40px; }
+  .brand-name { color: #e6e9ee; font-size: 19px; font-weight: 700; letter-spacing: 0.04em; }
+  .brand-sub { color: #79828f; font-size: 11px; font-weight: 300; margin-left: 8px; letter-spacing: 0.06em; }
+  .topbar-verse { text-align: right; font-size: 10px; color: var(--text-sub); line-height: 1.6; font-weight: 300; }
+  .topbar-verse strong { color: var(--ssu-blue-mid); font-weight: 500; }
+  @media (max-width: 600px) { .topbar { padding: 0 16px; } .brand-mark { width: 32px; height: 32px; } .brand-name { font-size: 16px; } .brand-sub { display: none; } .topbar-verse { font-size: 9px; white-space: nowrap; } .v1 { display: block; } .vbr { display: none; } .topbar-verse strong { margin-left: 4px; } }
+  @media (max-width: 400px) { .topbar { padding: 0 12px; gap: 10px; } .topbar-brand { gap: 8px; } .brand-mark { width: 28px; height: 28px; } .brand-name { font-size: 14px; letter-spacing: 0; } }
   .hero { background: var(--white); border-bottom: 1px solid var(--border); padding: 22px 32px; display: flex; align-items: center; justify-content: center; }
   .hero-title { font-size: 22px; font-weight: 700; color: var(--text-main); letter-spacing: -0.02em; line-height: 1.15; }
   .hero-title span { display: block; font-size: 11px; font-weight: 400; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
@@ -73,13 +76,8 @@
     </svg>
     <span class="brand-name">YB Family 매일묵상<span class="brand-sub">Daily Devotion</span></span>
   </div>
-  <span class="topbar-date" id="today-date"></span>
-</div>
-
-<div class="hero">
-  <div class="hero-verse">
-    "주의 말씀은 내 발에 등이요<br>
-    내 길에 빛이니이다"<br>
+  <div class="topbar-verse">
+    <span class="v1">"주의 말씀은 내 발에 등이요</span> <span class="v2">내 길에 빛이니이다"</span><br class="vbr">
     <strong>— 시편 119:105</strong>
   </div>
 </div>
@@ -365,16 +363,6 @@
 <footer class="footer">
   <span class="footer-copy">YOUNGBAE KIM</span>
 </footer>
-
-<script>
-  const d = new Date();
-  const days = ['일','월','화','수','목','금','토'];
-  document.getElementById('today-date').textContent =
-    d.getFullYear() + '. ' +
-    String(d.getMonth()+1).padStart(2,'0') + '. ' +
-    String(d.getDate()).padStart(2,'0') +
-    ' (' + days[d.getDay()] + ')';
-</script>
 
 <script>
 (function () {

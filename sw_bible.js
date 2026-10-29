@@ -1,5 +1,5 @@
-﻿const CACHE = '1426bible-v6';
-const HTML_FILES = ['/devotion/bible.html', '/devotion/bible2.html'];
+﻿const CACHE = '1426bible-v7';
+const HTML_FILES = ['/devotion/bible.html'];
 const BYPASS_DOMAINS = [
   'supabase.co','bible-api.com','bolls.life',
   'fonts.googleapis.com','fonts.gstatic.com',
