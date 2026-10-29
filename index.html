@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#1b1f27">
 <title>YB 패밀리 매일묵상</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="매일묵상">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -29,10 +34,10 @@
   .brand-name { color: #e6e9ee; font-size: 13px; font-weight: 700; letter-spacing: 0.04em; }
   .brand-sub { color: #79828f; font-size: 10px; font-weight: 300; margin-left: 4px; letter-spacing: 0.06em; }
   .topbar-date { color: #79828f; font-size: 10px; font-weight: 300; letter-spacing: 0.06em; }
-  .hero { background: var(--white); border-bottom: 1px solid var(--border); padding: 28px 32px 22px; display: flex; align-items: flex-end; justify-content: space-between; }
+  .hero { background: var(--white); border-bottom: 1px solid var(--border); padding: 22px 32px; display: flex; align-items: center; justify-content: center; }
   .hero-title { font-size: 22px; font-weight: 700; color: var(--text-main); letter-spacing: -0.02em; line-height: 1.15; }
   .hero-title span { display: block; font-size: 11px; font-weight: 400; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
-  .hero-verse { text-align: right; font-size: 10px; color: var(--text-sub); line-height: 1.7; font-weight: 300; }
+  .hero-verse { text-align: center; font-size: 10px; color: var(--text-sub); line-height: 1.7; font-weight: 300; }
   .hero-verse strong { color: var(--ssu-blue-mid); font-weight: 500; }
   .main { max-width: 720px; margin: 0 auto; padding: 28px 20px 48px; }
   .section { margin-bottom: 24px; }
@@ -48,6 +53,11 @@
   .card-url { font-size: 10px; color: var(--text-muted); font-weight: 300; }
   .card-badge { font-size: 9px; font-weight: 500; color: #9bb8f2; background: var(--ssu-blue-light); border-radius: 3px; padding: 2px 7px; letter-spacing: 0.04em; flex-shrink: 0; }
   .card-arrow { color: var(--ssu-blue-mid); font-size: 14px; opacity: 0; transform: translateX(-4px); transition: opacity 0.18s, transform 0.18s; flex-shrink: 0; margin-left: 4px; }
+  .install-wrap { max-width: 720px; margin: 0 auto; padding: 0 20px 44px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .install-btn { display: inline-flex; align-items: center; gap: 9px; background: #2b3341; color: #cdd7e6; border: 1px solid #3c4657; border-radius: 8px; padding: 13px 26px; font-family: 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: background 0.18s, border-color 0.18s; }
+  .install-btn:hover { background: #343d4d; border-color: #62a9dd; }
+  .install-btn svg { width: 17px; height: 17px; flex-shrink: 0; }
+  .install-hint { font-size: 11px; color: #79828f; font-weight: 300; text-align: center; line-height: 1.7; }
   .footer { background: var(--ssu-blue); border-top: 1px solid var(--border); padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
   .footer-copy { font-size: 9px; color: #6b7482; font-weight: 300; letter-spacing: 0.06em; }
 </style>
@@ -56,10 +66,10 @@
 
 <div class="topbar">
   <div class="topbar-brand">
-    <svg class="brand-mark" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="14" cy="14" r="13" stroke="rgba(255,255,255,0.25)" stroke-width="1"></circle>
-      <line x1="14" y1="6" x2="14" y2="22" stroke="#c8a84b" stroke-width="2" stroke-linecap="round"></line>
-      <line x1="7" y1="12" x2="21" y2="12" stroke="#c8a84b" stroke-width="2" stroke-linecap="round"></line>
+    <svg class="brand-mark" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M18 13h25a3 3 0 0 1 3 3v34H21a3 3 0 0 1-3-3V13z" fill="#cdd7e6" stroke="#7d8ea8" stroke-width="2.6" stroke-linejoin="round"></path>
+      <path d="M21 50a3 3 0 0 1 0-6h25" stroke="#7d8ea8" stroke-width="2.6" stroke-linejoin="round"></path>
+      <path d="M36 13v19l-5-4-5 4V13z" fill="#62a9dd" stroke="#3d87b8" stroke-width="2.2" stroke-linejoin="round"></path>
     </svg>
     <span class="brand-name">YB Family 매일묵상<span class="brand-sub">Daily Devotion</span></span>
   </div>
@@ -67,10 +77,6 @@
 </div>
 
 <div class="hero">
-  <div class="hero-title">
-    <span>YB Family Devotion Links</span>
-    YB Family 매일묵상
-  </div>
   <div class="hero-verse">
     "주의 말씀은 내 발에 등이요<br>
     내 길에 빛이니이다"<br>
@@ -344,6 +350,18 @@
 
 </div>
 
+<div class="install-wrap">
+  <button type="button" class="install-btn" id="install-btn">
+    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M10 3v9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
+      <path d="M6 9l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+      <path d="M3.5 15.5h13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
+    </svg>
+    <span id="install-label">설치하기</span>
+  </button>
+  <div class="install-hint" id="install-hint">PC·모바일에 앱으로 설치하면 바탕화면과 작업표시줄에서 바로 열 수 있습니다.</div>
+</div>
+
 <footer class="footer">
   <span class="footer-copy">YOUNGBAE KIM</span>
 </footer>
@@ -356,6 +374,57 @@
     String(d.getMonth()+1).padStart(2,'0') + '. ' +
     String(d.getDate()).padStart(2,'0') +
     ' (' + days[d.getDay()] + ')';
+</script>
+
+<script>
+(function () {
+  var btn   = document.getElementById('install-btn');
+  var label = document.getElementById('install-label');
+  var hint  = document.getElementById('install-hint');
+  var prompt = null;
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function () {});
+    });
+  }
+
+  var standalone = window.matchMedia('(display-mode: standalone)').matches ||
+                   window.navigator.standalone === true;
+  if (standalone) {
+    label.textContent = '설치 완료';
+    btn.disabled = true;
+    btn.style.opacity = '0.6';
+    hint.textContent = '앱으로 실행 중입니다.';
+    return;
+  }
+
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();
+    prompt = e;
+  });
+
+  window.addEventListener('appinstalled', function () {
+    label.textContent = '설치 완료';
+    btn.disabled = true;
+    btn.style.opacity = '0.6';
+    hint.textContent = '바탕화면과 작업표시줄에서 열 수 있습니다.';
+  });
+
+  btn.addEventListener('click', function () {
+    if (prompt) {
+      prompt.prompt();
+      prompt.userChoice.then(function () { prompt = null; });
+      return;
+    }
+    var ua = navigator.userAgent;
+    if (/iPhone|iPad|iPod/.test(ua)) {
+      hint.textContent = 'Safari 하단 공유 버튼을 누른 뒤 "홈 화면에 추가"를 선택하세요.';
+    } else {
+      hint.textContent = '주소창 오른쪽 설치 아이콘을 누르거나, 브라우저 메뉴에서 "앱 설치"를 선택하세요.';
+    }
+  });
+})();
 </script>
 
 </body>
