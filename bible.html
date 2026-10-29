@@ -11,8 +11,10 @@
 <link rel="manifest" href="manifest_bible.json">
 <link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
 <link rel="apple-touch-icon" href="icons/bible-192.png">
+<link rel="apple-touch-icon" sizes="512x512" href="icons/bible-512.png">
 
-<title>YB 1426 다본문 성경</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<title>YB 1426 다본문 성경 ✦</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;500;700;900&family=Nanum+Myeongjo:wght@400;700&family=Nanum+Gothic&family=KoPub+Dotum:wght@300;500&display=swap">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -123,9 +125,9 @@ body.dark .verse-row.hl .verse-text{color:#fff !important}
 body.dark .footnote{color:#94a3b8;border-left-color:#2d3748}
 body.dark .loading{color:#718096}
 body.dark .err-msg{color:#fc8181}
-#theme-btn,#sync-btn{font-size:12px;font-weight:600;padding:4px 10px;border-radius:5px;border:1px solid #d1d5db;background:#f3f4f6;color:#374151;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.2s;font-family:'Noto Sans KR',sans-serif}
-#theme-btn:hover,#sync-btn:hover{background:#e5e7eb}
-body.dark #theme-btn,body.dark #sync-btn{background:#2d3748;border-color:#4a5568;color:#e2e8f0}
+#theme-btn,#sync-btn,#auth-btn{font-size:12px;font-weight:600;padding:4px 10px;border-radius:5px;border:1px solid #d1d5db;background:#f3f4f6;color:#374151;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.2s;font-family:'Noto Sans KR',sans-serif}
+#theme-btn:hover,#sync-btn:hover,#auth-btn:hover{background:#e5e7eb}
+body.dark #theme-btn,body.dark #sync-btn,body.dark #auth-btn{background:#2d3748;border-color:#4a5568;color:#e2e8f0}
 body.dark #theme-btn:hover,body.dark #sync-btn:hover{background:#4a5568}
 
 
@@ -196,7 +198,7 @@ body.dark2 .cl{color:#909090}
 body.dark2 .sval{color:#d0d0d0}
 body.dark2 .sbtn{background:#2e2e2e;border-color:#3a3a3a;color:#b0b0b0}
 body.dark2 .sbtn:hover{background:#383838}
-body.dark2 #theme-btn,body.dark2 #sync-btn,body.dark2 #search-btn{background:#2e2e2e;border-color:#3a3a3a;color:#d0d0d0}
+body.dark2 #theme-btn,body.dark2 #sync-btn,body.dark2 #search-btn,body.dark2 #auth-btn{background:#2e2e2e;border-color:#3a3a3a;color:#d0d0d0}
 body.dark2 #theme-btn:hover,body.dark2 #sync-btn:hover,body.dark2 #search-btn:hover{background:#383838}
 body.dark2 #add-panel-btn{background:#4a90d9;border-color:#3a80c9}
 body.dark2 #add-panel-btn:hover{background:#3a80c9}
@@ -253,7 +255,7 @@ body.bright2 .cl{color:#8a7050}
 body.bright2 .sval{color:#3d2b1a}
 body.bright2 .sbtn{background:#f5f0e4;border-color:#c4b08a;color:#6a5030}
 body.bright2 .sbtn:hover{background:#ede4d0}
-body.bright2 #theme-btn,body.bright2 #sync-btn,body.bright2 #search-btn{background:#f5f0e4;border-color:#c4b08a;color:#3d2b1a}
+body.bright2 #theme-btn,body.bright2 #sync-btn,body.bright2 #search-btn,body.bright2 #auth-btn{background:#f5f0e4;border-color:#c4b08a;color:#3d2b1a}
 body.bright2 #theme-btn:hover,body.bright2 #sync-btn:hover,body.bright2 #search-btn:hover{background:#ede4d0}
 body.bright2 #add-panel-btn{background:#8a6030;border-color:#7a5020}
 body.bright2 #add-panel-btn:hover{background:#7a5020}
@@ -365,14 +367,17 @@ body.bright2 .verse-row.cp,body.bright2 .vi.cp{background:#e0f0ff !important;bor
   .ch-btn{font-size:14px;min-width:32px}
   .ch-item{font-size:14px;padding:6px 2px}
 }
+
 </style>
 </head>
 <body class="bright2">
+
 
 <div id="header">
   <div class="hdr-row1">
     <span class="header-title">1426 다본문 성경</span>
     <div class="hdr-btns">
+      <button id="auth-btn" onclick="authClick()">로그인</button>
       <button id="theme-btn" onclick="toggleTheme()">Bright2</button>
       <button id="sync-btn" onclick="syncPanels()">연동</button>
       <button id="search-btn" onclick="openSearch()">🔍 검색</button>
@@ -442,6 +447,29 @@ function bookLabel(bid, transId) {
     return ab + ' ' + (GRK_BOOKS[idx - ntStart] || '');
   }
   return ab + ' ' + (EN_BOOKS[idx] || '');
+}
+
+const SB_URL='https://unlvmtixzhvzxfexynri.supabase.co';
+const SB_KEY='sb_publishable_JDZtHylyUtZeDjph1aGUbQ_ru-YB_ga';
+
+let authUser=null, authToken=null, authAllowed=false;
+function sbH(){return{'apikey':SB_KEY,'Authorization':'Bearer '+(authToken||SB_KEY),'Content-Type':'application/json','Prefer':'return=minimal'};}
+
+async function sbLoad(trans,book,ch){
+  if(!authUser) return [];
+  try{
+    const r=await fetch(SB_URL+'/rest/v1/bible_highlights?select=verse&trans=eq.'+encodeURIComponent(trans)+'&book=eq.'+encodeURIComponent(book)+'&chapter=eq.'+ch,{headers:sbH()});
+    if(!r.ok)return[];
+    return(await r.json()).map(d=>d.verse);
+  }catch(e){return[];}
+}
+async function sbSave(trans,book,ch,v){
+  if(!authUser||!authAllowed) return;
+  try{await fetch(SB_URL+'/rest/v1/bible_highlights',{method:'POST',headers:sbH(),body:JSON.stringify({trans,book,chapter:ch,verse:v,user_id:authUser.id})});}catch(e){}
+}
+async function sbDel(trans,book,ch,v){
+  if(!authUser) return;
+  try{await fetch(SB_URL+'/rest/v1/bible_highlights?trans=eq.'+encodeURIComponent(trans)+'&book=eq.'+encodeURIComponent(book)+'&chapter=eq.'+ch+'&verse=eq.'+v,{method:'DELETE',headers:sbH()});}catch(e){}
 }
 
 const cache={};
@@ -715,10 +743,10 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
     // Get verse texts from DOM
     const lines=[];
     sorted.forEach(v=>{
-      const span=textDiv.querySelector(`.vi[data-v="${v}"]`);
-      if(span){
-        const vnum=span.querySelector('.vn');
-        let plain=span.innerText||span.textContent||'';
+      const el2=textDiv.querySelector(`[data-v="${v}"]`);
+      if(el2){
+        const vnum=el2.querySelector('.vn');
+        let plain=el2.innerText||el2.textContent||'';
         if(vnum) plain=plain.slice((vnum.innerText||vnum.textContent||'').length).trim();
         lines.push(`${v} ${plain.trim()}`);
       }
@@ -818,6 +846,15 @@ function createPanel(initBook='john', initChapter=3, initTrans='kor'){
         }
         state.targetVerse=null;
       }
+      // ── Load Supabase highlights ──
+      sbLoad(trans,bookId,chapter).then(savedVerses=>{
+        savedVerses.forEach(v=>{
+          state.hl.add(v);
+          const el2=textDiv.querySelector(`[data-v="${v}"]`);
+          if(el2) el2.classList.add('hl');
+        });
+        if(state.hl.size>0) updateCopyBtn();
+      });
     }catch(e){
       textDiv.innerHTML=`<div class="err-msg">${e.message}</div>`;
     }
@@ -956,6 +993,7 @@ if(POPUP){
   createPanel('john',1);
   startBackgroundPreload();
 }
+document.getElementById('wrap-btn').classList.add('active');
 </script>
 
 <script>
@@ -1094,5 +1132,85 @@ if('serviceWorker' in navigator){
     <div id="search-results"></div>
   </div>
 </div>
+
+<script>
+/* ── Google 로그인 ── */
+const sbClient = window.supabase.createClient(SB_URL, SB_KEY, {
+  auth:{ persistSession:true, autoRefreshToken:true, detectSessionInUrl:true }
+});
+
+function authLabel(txt,title){
+  const b=document.getElementById('auth-btn');
+  if(!b) return;
+  b.textContent=txt;
+  b.title=title||'';
+}
+
+async function applySession(session){
+  if(session && session.user){
+    authUser  = session.user;
+    authToken = session.access_token;
+    // 허용 이메일 확인
+    try{
+      const r=await fetch(SB_URL+'/rest/v1/allowed_users?select=email&email=eq.'+encodeURIComponent(authUser.email),{headers:sbH()});
+      const rows = r.ok ? await r.json() : [];
+      authAllowed = Array.isArray(rows) && rows.length>0;
+    }catch(e){ authAllowed=false; }
+
+    if(authAllowed){
+      authLabel('로그아웃', authUser.email);
+    }else{
+      authLabel('로그아웃', authUser.email+' (미등록)');
+      alert('등록되지 않은 계정입니다.\n\n'+authUser.email+'\n\n본문 읽기는 가능하지만 형광펜은 저장되지 않습니다.');
+    }
+  }else{
+    authUser=null; authToken=null; authAllowed=false;
+    authLabel('로그인','');
+  }
+  panels.forEach(p=>p.reload());
+}
+
+async function authClick(){
+  if(authUser){
+    if(!confirm('로그아웃할까요?')) return;
+    await sbClient.auth.signOut();
+    applySession(null);
+    return;
+  }
+  const back = location.origin + location.pathname + location.search;
+  const { error } = await sbClient.auth.signInWithOAuth({
+    provider:'google',
+    options:{ redirectTo: back }
+  });
+  if(error) alert('로그인 실패: '+error.message);
+}
+
+(async function initAuth(){
+  try{
+    const { data } = await sbClient.auth.getSession();
+    await applySession(data.session);
+  }catch(e){ authLabel('로그인',''); }
+  sbClient.auth.onAuthStateChange(function(evt, session){
+    if(evt==='SIGNED_IN'||evt==='SIGNED_OUT'||evt==='TOKEN_REFRESHED') applySession(session);
+  });
+})();
+
+/* verse click → Supabase sync */
+document.getElementById('panels').addEventListener('click',function(e){
+  const row=e.target.closest('.verse-row')||e.target.closest('.vi');
+  if(!row)return;
+  const panelEl=row.closest('.panel');
+  if(!panelEl)return;
+  const pData=panels.find(p=>p.el===panelEl);
+  if(!pData)return;
+  const st=pData.getState();
+  const v=+row.dataset.v;
+  setTimeout(function(){
+    if(row.classList.contains('hl')){sbSave(st.trans,st.bookId,st.chapter,v);}
+    else{sbDel(st.trans,st.bookId,st.chapter,v);}
+  },0);
+},true);
+</script>
+
 </body>
 </html>
