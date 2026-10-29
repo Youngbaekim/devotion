@@ -466,6 +466,12 @@ body.bright2 .help-body tr+tr th,body.bright2 .help-body tr+tr td{border-color:#
 #panels>.panel:first-child{margin-left:auto}
 #panels>.panel:last-child{margin-right:auto}
 #panels>.panel:first-child{border-left-width:1px} /* 색은 테마별 .panel border-color */
+
+/* ── 터치 기기(휴대폰·태블릿): 창 아래 가로 스크롤 막대 숨김(손가락으로 넘기므로 불필요) ── */
+@media (hover:none) and (pointer:coarse){
+  #panels-wrap{scrollbar-width:none}
+  #panels-wrap::-webkit-scrollbar{display:none;height:0}
+}
 /* ── 새 버전 알림 ── */
 .update-toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:9999;display:flex;align-items:center;gap:10px;padding:10px 14px 10px 18px;border-radius:12px;background:#16202b;color:#fff;font-size:14px;font-family:'Pretendard Variable',Pretendard,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.25);white-space:nowrap}
 .update-toast[hidden]{display:none}
@@ -1024,6 +1030,8 @@ function applyThemeMode(mode){
   document.body.classList.remove('dark','dark2','bright2');
   if(cls!=='bright')document.body.classList.add(cls);
   document.documentElement.style.colorScheme=(cls==='dark'||cls==='dark2')?'dark':'light';
+  const tc=document.querySelector('meta[name="theme-color"]');
+  if(tc)tc.content={bright:'#ffffff',bright2:'#f5f0e4',dark:'#1b1e22',dark2:'#1b1e22'}[cls];
   const sel=document.getElementById('theme-sel');if(sel)sel.value=mode;
 }
 function setThemeMode(mode){try{localStorage.setItem(THEME_KEY,mode);}catch(e){}applyThemeMode(mode);}
