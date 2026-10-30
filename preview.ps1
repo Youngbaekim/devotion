@@ -1,5 +1,5 @@
 # preview.ps1 - local preview server for devotion (no install needed)
-# Usage:  .\preview.ps1   -> http://localhost:8765/bible.html
+# Usage:  .\preview.ps1   -> http://localhost:8765/
 # Stop:   Ctrl+C or close the window
 
 param([int]$Port = 8765)
@@ -14,7 +14,7 @@ $mime = @{
 $listener = New-Object System.Net.HttpListener
 $listener.Prefixes.Add($prefix)
 $listener.Start()
-Write-Host "Preview running: ${prefix}bible.html  (Ctrl+C to stop)" -ForegroundColor Green
+Write-Host "Preview running: ${prefix}  (Ctrl+C to stop)" -ForegroundColor Green
 try {
   while ($listener.IsListening) {
     $task = $listener.GetContextAsync()

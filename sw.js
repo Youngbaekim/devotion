@@ -1,8 +1,7 @@
-// devotion service worker (index.html + bible.html share this one worker)
+// devotion service worker (매일묵상 index.html). 성경은 youngbaekim.github.io/bible 로 분리됨
 // VERSION is bumped automatically by deploy.ps1 on every deploy.
-const VERSION = '20261030-004115';
+const VERSION = '20261030-154733';
 const SHELL = 'devotion-shell-' + VERSION;   // pages, icons: replaced every deploy
-const DATA  = 'devotion-data-v1';            // bible / commentary JSON: kept across deploys
 const FONTS = 'devotion-fonts-v1';           // web fonts: kept across deploys
 const BYPASS = ['supabase.co', 'bible-api.com', 'bolls.life', 'accounts.google.com'];
 
@@ -11,7 +10,7 @@ self.addEventListener('install', () => {});  // wait; the page asks before switc
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => ![SHELL, DATA, FONTS].includes(k)).map(k => caches.delete(k))))
+      .then(keys => Promise.all(keys.filter(k => k.startsWith('devotion-') && ![SHELL, FONTS].includes(k)).map(k => caches.delete(k))))  // 같은 주소의 다른 앱(bible, utmost) 저장공간은 건드리지 않음
       .then(() => self.clients.claim())
   );
 });
@@ -50,11 +49,6 @@ self.addEventListener('fetch', e => {
   // pages: latest first, cached copy when offline
   if (req.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname.endsWith('/devotion/')) {
     e.respondWith(networkFirst(req, SHELL));
-    return;
-  }
-  // bible text / commentary
-  if (url.pathname.includes('/bible/') || url.pathname.includes('/commentary/')) {
-    e.respondWith(networkFirst(req, DATA));
     return;
   }
   // icons, manifest etc.

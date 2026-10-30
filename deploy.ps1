@@ -42,4 +42,4 @@ git push
 
 Write-Host ""
 Write-Host "Deployed. Live in 1-2 minutes." -ForegroundColor Green
-Write-Host "https://youngbaekim.github.io/devotion/bible.html" -ForegroundColor Green
+Write-Host "https://youngbaekim.github.io/devotion/" -ForegroundColor Green
