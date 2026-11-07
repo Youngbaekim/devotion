@@ -56,6 +56,11 @@
   .card-url { font-size: 10px; color: var(--text-muted); font-weight: 300; }
   .card-badge { font-size: 9px; font-weight: 500; color: #9bb8f2; background: var(--ssu-blue-light); border-radius: 3px; padding: 2px 7px; letter-spacing: 0.04em; flex-shrink: 0; }
   .card-arrow { color: var(--ssu-blue-mid); font-size: 14px; opacity: 0; transform: translateX(-4px); transition: opacity 0.18s, transform 0.18s; flex-shrink: 0; margin-left: 4px; }
+  .tabs { display: flex; gap: 4px; margin-bottom: 22px; border-bottom: 1px solid var(--border); }
+  .tab { flex: 1; background: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-family: 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: 500; padding: 10px 8px 9px; cursor: pointer; letter-spacing: 0.02em; transition: color 0.15s, border-color 0.15s; margin-bottom: -1px; }
+  .tab:hover { color: var(--text-sub); }
+  .tab.active { color: var(--text-main); border-bottom-color: var(--ssu-accent); font-weight: 700; }
+  .tab-pane[hidden] { display: none; }
   .install-wrap { max-width: 720px; margin: 0 auto; padding: 0 20px 44px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
   .install-btn { display: inline-flex; align-items: center; gap: 9px; background: #2b3341; color: #cdd7e6; border: 1px solid #3c4657; border-radius: 8px; padding: 13px 26px; font-family: 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: background 0.18s, border-color 0.18s; }
   .install-btn:hover { background: #343d4d; border-color: #62a9dd; }
@@ -84,6 +89,14 @@
 
 <div class="main">
 
+  <div class="tabs" role="tablist">
+    <button type="button" class="tab active" data-tab="dev" role="tab">Devotion · 묵상</button>
+    <button type="button" class="tab" data-tab="work" role="tab">Work &amp; Thoughts</button>
+  </div>
+
+  <!-- ════ Devotion 탭 ════ -->
+  <div class="tab-pane" data-pane="dev">
+
   <!-- 성경 묵상 -->
   <div class="section">
     <div class="section-label">성경 묵상 · Bible Reading</div>
@@ -105,23 +118,6 @@
       <span class="card-arrow">→</span>
     </a>
 
-    <!-- 1. YB-EverNote -->
-    <a class="link-card" href="https://youngbaekim.github.io/yb-evernote/" target="_blank" rel="noopener">
-      <div class="card-icon">
-        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M5 3h7l3 3v11H5V3z" stroke="#8fb0f5" stroke-width="1.3" stroke-linejoin="round"></path>
-          <path d="M12 3v3h3" stroke="#8fb0f5" stroke-width="1.1" stroke-linejoin="round"></path>
-          <line x1="7.5" y1="10" x2="12.5" y2="10" stroke="#8fb0f5" stroke-width="1.1" stroke-linecap="round"></line>
-          <line x1="7.5" y1="13" x2="12.5" y2="13" stroke="#8fb0f5" stroke-width="1.1" stroke-linecap="round"></line>
-        </svg>
-      </div>
-      <div class="card-info">
-        <div class="card-name">YB-EverNote</div>
-        <div class="card-url">youngbaekim.github.io/yb-evernote</div>
-      </div>
-      <span class="card-badge">Note</span>
-      <span class="card-arrow">→</span>
-    </a>
 
     <!-- 3. 성경읽기표_30/60/90/180 -->
     <a class="link-card" href="https://script.google.com/macros/s/AKfycbwdJaGZWfM0x6L-vXr35-pLoZSQh7k5jC43xnyyyBMA1Z_kI0_YYGJPqPCqy4NBZ5mZzA/exec" target="_blank" rel="noopener">
@@ -261,9 +257,70 @@
     </a>
   </div>
 
-  <!-- 기타 링크 -->
+
+  </div>
+
+  <!-- ════ Work & Thoughts 탭 ════ -->
+  <div class="tab-pane" data-pane="work" hidden>
+
   <div class="section">
-    <div class="section-label">기타 링크</div>
+    <div class="section-label">기록 · 업무 도구 · Work Tools</div>
+
+    <!-- 1. YB-EverNote -->
+    <a class="link-card" href="https://youngbaekim.github.io/yb-evernote/" target="_blank" rel="noopener">
+      <div class="card-icon">
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 3h7l3 3v11H5V3z" stroke="#8fb0f5" stroke-width="1.3" stroke-linejoin="round"></path>
+          <path d="M12 3v3h3" stroke="#8fb0f5" stroke-width="1.1" stroke-linejoin="round"></path>
+          <line x1="7.5" y1="10" x2="12.5" y2="10" stroke="#8fb0f5" stroke-width="1.1" stroke-linecap="round"></line>
+          <line x1="7.5" y1="13" x2="12.5" y2="13" stroke="#8fb0f5" stroke-width="1.1" stroke-linecap="round"></line>
+        </svg>
+      </div>
+      <div class="card-info">
+        <div class="card-name">YB-EverNote</div>
+        <div class="card-url">youngbaekim.github.io/yb-evernote</div>
+      </div>
+      <span class="card-badge">Note</span>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <a class="link-card" href="https://youngbaekim.github.io/receipt/" target="_blank" rel="noopener">
+      <div class="card-icon">
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 2.5h10v15l-1.7-1.2-1.6 1.2-1.7-1.2-1.7 1.2-1.6-1.2L5 17.5v-15z" stroke="#8fb0f5" stroke-width="1.2" stroke-linejoin="round"></path>
+          <line x1="7.5" y1="6.5" x2="12.5" y2="6.5" stroke="#8fb0f5" stroke-width="1.1" stroke-linecap="round"></line>
+          <line x1="7.5" y1="9.5" x2="12.5" y2="9.5" stroke="#8fb0f5" stroke-width="1.1" stroke-linecap="round"></line>
+          <line x1="7.5" y1="12.5" x2="10.5" y2="12.5" stroke="#8fb0f5" stroke-width="1.1" stroke-linecap="round"></line>
+        </svg>
+      </div>
+      <div class="card-info">
+        <div class="card-name">영수증 관리</div>
+        <div class="card-url">youngbaekim.github.io/receipt</div>
+      </div>
+      <span class="card-badge">Receipt</span>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <a class="link-card" href="https://youngbaekim.github.io/survey/" target="_blank" rel="noopener">
+      <div class="card-icon">
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="3.5" width="12" height="14" rx="1.5" stroke="#8fb0f5" stroke-width="1.2"></rect>
+          <rect x="7.5" y="2" width="5" height="3" rx="0.8" stroke="#8fb0f5" stroke-width="1.1"></rect>
+          <path d="M7 10l1.6 1.6L13 8" stroke="#8fb0f5" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+          <line x1="7" y1="14.5" x2="13" y2="14.5" stroke="#8fb0f5" stroke-width="1.1" stroke-linecap="round"></line>
+        </svg>
+      </div>
+      <div class="card-info">
+        <div class="card-name">교육 전후 설문</div>
+        <div class="card-url">youngbaekim.github.io/survey</div>
+      </div>
+      <span class="card-badge">Survey</span>
+      <span class="card-arrow">→</span>
+    </a>
+  </div>
+
+  <div class="section">
+    <div class="section-label">숭실대 · Campus</div>
 
     <a class="link-card" href="https://oasis.ssu.ac.kr/" target="_blank" rel="noopener">
       <div class="card-icon">
@@ -294,6 +351,10 @@
       <span class="card-badge">생협</span>
       <span class="card-arrow">→</span>
     </a>
+  </div>
+
+  <div class="section">
+    <div class="section-label">여가 · Leisure</div>
 
     <a class="link-card" href="https://youngbaekim.github.io/ssuniss/" target="_blank" rel="noopener">
       <div class="card-icon">
@@ -343,7 +404,8 @@
       <span class="card-badge">Movie & Drama</span>
       <span class="card-arrow">→</span>
    </a>
-    
+  </div>
+
   </div>
 
 </div>
@@ -415,5 +477,21 @@
 })();
 </script>
 
+
+<script>
+// 탭: 마지막에 본 탭을 기기에 기억 (#work 주소로 바로 열기 가능)
+(function(){
+  var tabs=document.querySelectorAll('.tab'), panes=document.querySelectorAll('.tab-pane');
+  function show(name){
+    tabs.forEach(function(t){t.classList.toggle('active',t.dataset.tab===name);});
+    panes.forEach(function(p){p.hidden=p.dataset.pane!==name;});
+    try{localStorage.setItem('devotion_tab',name);}catch(e){}
+  }
+  tabs.forEach(function(t){t.onclick=function(){show(t.dataset.tab);};});
+  var first=location.hash==='#work'?'work':null;
+  try{first=first||localStorage.getItem('devotion_tab');}catch(e){}
+  show(first==='work'?'work':'dev');
+})();
+</script>
 </body>
 </html>
