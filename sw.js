@@ -1,6 +1,6 @@
 // devotion service worker (매일묵상 index.html). 성경은 youngbaekim.github.io/bible 로 분리됨
 // VERSION is bumped automatically by deploy.ps1 on every deploy.
-const VERSION = '20261107-143122';
+const VERSION = '20261108-231423';
 const SHELL = 'devotion-shell-' + VERSION;   // pages, icons: replaced every deploy
 const FONTS = 'devotion-fonts-v1';           // web fonts: kept across deploys
 const BYPASS = ['supabase.co', 'bible-api.com', 'bolls.life', 'accounts.google.com'];
